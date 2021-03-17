@@ -2,13 +2,31 @@ version: '2.4'
 
 services:
   api:
-    image: 
+    build:
+      context: './combigo-api'
+      target: dev
     depends_on:
       - db
+    ports:
+      - 5000:5000
+    volumes:
+      - ./combigo-api:/app
   db:
     image: postgres
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - db-data:/var/lib/postgresql/data
   frontend:
+    build:
+      context: './combigo-ui'
+      target: dev
     depends_on:
       - api
+    ports:
+      - 3000:3000
+      - 8080:8080
+    volumes:
+      - ./combigo-ui:/app
+volumes:
+    db-data:

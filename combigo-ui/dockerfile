@@ -2,24 +2,17 @@
 FROM node:15-alpine3.13 as base
 
 ENV NODE_ENV=production
-EXPOSE 8080
-ENV PORT 8080
+EXPOSE 3000
+ENV PORT 3000
 
 WORKDIR /app
 COPY package*.json ./
 
-RUN mkdir app && chown -R node:node .
-
-USER node
-
 RUN npm config list
 RUN  npm ci \
     && npm cache clean --force
+RUN npm i -g serve
 
-ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
-ENTRYPOINT ["/tini", "--"]
 CMD ["npm", "start"]
 
 # Imagen desarrollo
@@ -32,7 +25,8 @@ CMD ["npm", "start"]
 
 # Imagen productiva
 FROM base as prod
+EXPOSE 8080
+ENV PORT 8080
 COPY . .
-RUN npm i -g serve
 RUN npm run build
 CMD ["serve", "serve -s build -l 8080"]
