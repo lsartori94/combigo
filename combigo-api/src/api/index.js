@@ -2,6 +2,8 @@ const express = require('express');
 
 const emojis = require('./emojis');
 
+const vehicles = require('./vehicles');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -11,5 +13,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/emojis', emojis);
+router.use('/vehicles', vehicles);
 
 module.exports = router;
