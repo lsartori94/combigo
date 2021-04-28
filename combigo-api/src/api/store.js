@@ -52,4 +52,27 @@ const vehicles = [
     }
   ];
 
-module.exports = {users, vehicles};
+  const additionals = [
+  {
+    id: '1',
+    name: 'Caja de 8 chicles de frutilla Beldent',
+  },
+  {
+    id: '2',
+    name: 'Caja de 6 alfajores Jorjito',
+  },
+  { 
+    id: '3',
+    name: 'Caja de 6 conitos Havana',
+  },
+  { 
+    id: '4',
+    name: 'Botella 200ml de Pepsi',
+  },
+  { 
+    id: '5',
+    name: 'Botella 200ml de Coca Cola',
+  }
+];
+
+module.exports = {users, vehicles, additionals};
