@@ -4,23 +4,9 @@ const router = express.Router();
 
 const ID_BASE = 'CGOV';
 
-let vehicles = [
-  {
-    id: 'CGOV1',
-    name: 'Volvo 1',
-    brand: 'Volvo',
-    plate: 'ASDF1234',
-    capacity: 12
-  },
-  {
-    id: 'CGOV2',
-    name: 'Volvo 2',
-    brand: 'Volvo',
-    plate: 'ASDF1234',
-    capacity: 10
-  }
-];
+const vehicles = require('./store');
 
+// Get all vehicles
 router.get('/', (req, res) => {
   res.json(vehicles);
 });
