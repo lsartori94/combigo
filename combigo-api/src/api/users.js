@@ -4,7 +4,7 @@ const router = express.Router();
 
 const ID_BASE = 'CGOU';
 
-const users = require('./store');
+const users = require('./store').users;
 
 // Get all users
 router.get('/', (req, res) => {

@@ -4,7 +4,7 @@ const router = express.Router();
 
 const ID_BASE = 'CGOV';
 
-const vehicles = require('./store');
+const vehicles = require('./store').vehicles;
 
 // Get all vehicles
 router.get('/', (req, res) => {
