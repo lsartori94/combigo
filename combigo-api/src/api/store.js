@@ -1,6 +1,6 @@
 const { ROLES } = require('./constants');
 
-const users = [
+let users = [
   {
     username: 'admin',
     email: 'admin@gmail.com',
@@ -35,24 +35,24 @@ const users = [
   }
 ];
 
-const vehicles = [
-    {
-      id: 'CGOV1',
-      name: 'Volvo 1',
-      brand: 'Volvo',
-      plate: 'ASDF1234',
-      capacity: 12
-    },
-    {
-      id: 'CGOV2',
-      name: 'Volvo 2',
-      brand: 'Volvo',
-      plate: 'FGHI1234',
-      capacity: 10
-    }
-  ];
+let vehicles = [
+  {
+    id: 'CGOV1',
+    name: 'Volvo 1',
+    brand: 'Volvo',
+    plate: 'ASDF1234',
+    capacity: 12
+  },
+  {
+    id: 'CGOV2',
+    name: 'Volvo 2',
+    brand: 'Volvo',
+    plate: 'FGHI1234',
+    capacity: 10
+  }
+];
 
-  const additionals = [
+let additionals = [
   {
     id: '1',
     name: 'Caja de 8 chicles de frutilla Beldent',
@@ -75,4 +75,8 @@ const vehicles = [
   }
 ];
 
-module.exports = {users, vehicles, additionals};
+module.exports = {
+  users,
+  vehicles,
+  additionals
+};

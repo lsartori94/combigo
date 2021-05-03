@@ -28,24 +28,22 @@ router.post('/', (req, res) => {
   const {name, brand, plate, capacity} = req.body;
 
   if (!req.body || !capacity) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = vehicles.find(veh => veh.plate === plate);
 
   if (exists) {
-    res.status(409).send(`Vehicle already exists`);
+    return res.status(409).send(`Vehicle already exists`);
   }
 
-  const newVeh = [...vehicles, {
+  vehicles.push({
     id: `${ID_BASE}${vehicles.length + 1}`,
     name,
     brand,
     plate,
     capacity,
-  }];
-
-  vehicles = newVeh;
+  });
 
   res.send(vehicles);
 });
@@ -56,13 +54,13 @@ router.put('/:id', (req, res) => {
   const {name, brand, plate, capacity} = req.body;
 
   if (!req.body || !capacity) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = vehicles.findIndex(veh => veh.id === id);
 
   if (exists === -1) {
-    res.status(409).send(`Vehicle does not exists`);
+    return res.status(409).send(`Vehicle does not exists`);
   }
 
   vehicles[exists] = {
@@ -82,7 +80,7 @@ router.delete('/:id', (req, res) => {
   const index = vehicles.findIndex(veh => veh.id === id);
 
   if (index === -1) {
-    res.status(404).send(`Vehicle not found`);
+    return res.status(404).send(`Vehicle not found`);
   }
 
   vehicles.splice(index, 1);

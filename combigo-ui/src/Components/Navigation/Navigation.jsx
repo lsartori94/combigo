@@ -19,7 +19,7 @@ export const Navigation = () => {
       >
         <Icon cursor='pointer' icon={MenuIcon} size={30} onClick={() => setIsOpen(true)}/>
         <div className="title-container">
-          <h1>CombiGO</h1>
+          <h1><Link to="/">CombiGO</Link></h1>
         </div>
       </Pane>
       <Pane
@@ -44,6 +44,9 @@ export const Navigation = () => {
             </li>
             <li onClick={() => setIsOpen(false)}>
               <Link to="/profile">Profile</Link>
+            </li>
+            <li onClick={() => setIsOpen(false)}>
+              <Link to="/vehicles">Vehicles</Link>
             </li>
           </ul>
         </nav>

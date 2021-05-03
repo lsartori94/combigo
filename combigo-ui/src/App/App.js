@@ -7,6 +7,8 @@ import {
 import { Navigation } from '../Components/Navigation/Navigation';
 import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
+import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetails";
+import { Vehicles } from '../Screens/Vehicles/Vehicles';
 
 
 function App() {
@@ -19,6 +21,15 @@ function App() {
         <Switch>
           <Route path="/profile">
             <Profile />
+          </Route>
+          <Route path="/vehicles/:vehicleId">
+            <VehicleDetails />
+          </Route>
+          <Route path="/vehicles/add">
+            <VehicleDetails />
+          </Route>
+          <Route path="/vehicles">
+            <Vehicles />
           </Route>
           <Route path="/">
             <Home />

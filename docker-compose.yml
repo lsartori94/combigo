@@ -5,18 +5,18 @@ services:
     build:
       context: './combigo-api'
       target: dev
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     ports:
       - 5000:5000
     volumes:
       - ./combigo-api:/app
-  db:
-    image: postgres
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    volumes:
-      - db-data:/var/lib/postgresql/data
+  # db:
+  #   image: postgres
+  #   environment:
+  #     - POSTGRES_HOST_AUTH_METHOD=trust
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
   frontend:
     build:
       context: './combigo-ui'
@@ -28,5 +28,5 @@ services:
       - 8080:8080
     volumes:
       - ./combigo-ui:/app
-volumes:
-    db-data:
+# volumes:
+#     db-data:

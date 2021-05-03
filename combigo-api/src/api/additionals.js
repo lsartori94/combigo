@@ -2,8 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 
-const vehicles = require('./store').additionals;
-
 // Get all additionals
 router.get('/', (req, res) => {
   res.json(additionals);
