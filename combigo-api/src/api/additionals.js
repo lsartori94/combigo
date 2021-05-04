@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const additionals = require('./store').additionals;
+
 // Get all additionals
 router.get('/', (req, res) => {
   res.json(additionals);
@@ -24,19 +26,19 @@ router.post('/', (req, res) => {
   const {name} = req.body;
 
   if (!req.body) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = additionals.find(additional => additional.name === name);
 
   if (exists) {
-    res.status(409).send(`Aditional already exists`);
+    return res.status(409).send(`Aditional already exists`);
   }
 
-  const newAditionals = [...additionals, {
+  additionals.push({
     id: `${additionals.length + 1}`,
     name,
-  }];
+  });
 
   additionals = newAditionals;
 
@@ -49,13 +51,13 @@ router.put('/:id', (req, res) => {
   const {name} = req.body;
 
   if (!req.body) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = additionals.findIndex(additional => additional.id === id);
 
   if (exists === -1) {
-    res.status(409).send(`Aditional does not exists`);
+    return res.status(409).send(`Aditional does not exists`);
   }
 
   additionals[exists] = {
@@ -72,7 +74,7 @@ router.delete('/:id', (req, res) => {
   const index = additionals.findIndex(additional => additional.id === id);
 
   if (index === -1) {
-    res.status(404).send(`Aditional not found`);
+    return res.status(404).send(`Aditional not found`);
   }
 
   additionals.splice(index, 1);
