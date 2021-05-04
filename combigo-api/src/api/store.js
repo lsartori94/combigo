@@ -52,7 +52,6 @@ const vehicles = [
   }
 ];
 
-<<<<<<< HEAD
   const additionals = [
     {
       id: '1',
@@ -126,7 +125,6 @@ const vehicles = [
       boughtAdditionals: []
     }
   ]
-=======
 let additionals = [
   {
     id: 'CGOA1',
@@ -149,6 +147,5 @@ let additionals = [
     name: 'Botella 200ml de Coca Cola',
   }
 ];
->>>>>>> 70990840dfaf1ccca2d327a91c8f7dcf46312f73
 
 module.exports = {users, vehicles, additionals, routes};
