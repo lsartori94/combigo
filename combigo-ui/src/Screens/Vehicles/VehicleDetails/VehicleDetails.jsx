@@ -93,7 +93,7 @@ export const VehicleDetails = () => {
   const saveCallback = async () => {
     try {
       setLoading(true);
-      if (!noVehicle) {
+      if (creating) {
         await createVehicle(details);
       } else {
         await saveVehiculeDetails(details);
