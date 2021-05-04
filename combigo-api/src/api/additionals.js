@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// Create Additional
+// Create additional
 router.post('/', (req, res) => {
   const {name} = req.body;
 
@@ -45,7 +45,7 @@ router.post('/', (req, res) => {
   res.send(additionals);
 });
 
-// Modify Additional with id 
+// Modify additional with id 
 router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {name} = req.body;
