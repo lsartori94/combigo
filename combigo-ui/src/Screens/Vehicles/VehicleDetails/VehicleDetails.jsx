@@ -93,7 +93,7 @@ export const VehicleDetails = () => {
   const saveCallback = async () => {
     try {
       setLoading(true);
-      if (!noVehicle) {
+      if (creating) {
         await createVehicle(details);
       } else {
         await saveVehiculeDetails(details);
@@ -196,7 +196,7 @@ export const VehicleDetails = () => {
             intent="warning"
             iconBefore={SavedIcon}
             onClick={() => saveCallback()}
-            disabled={!formDirty || formDirty && errors}
+            disabled={(!formDirty) || (formDirty && errors)}
           >
             Guardar
           </Button>

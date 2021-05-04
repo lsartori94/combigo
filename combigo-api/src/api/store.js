@@ -52,6 +52,7 @@ const vehicles = [
   }
 ];
 
+<<<<<<< HEAD
   const additionals = [
     {
       id: '1',
@@ -125,5 +126,29 @@ const vehicles = [
       boughtAdditionals: []
     }
   ]
+=======
+let additionals = [
+  {
+    id: 'CGOA1',
+    name: 'Caja de 8 chicles de frutilla Beldent',
+  },
+  {
+    id: 'CGOA2',
+    name: 'Caja de 6 alfajores Jorjito',
+  },
+  { 
+    id: 'CGOA3',
+    name: 'Caja de 6 conitos Havana',
+  },
+  { 
+    id: 'CGOA4',
+    name: 'Botella 200ml de Pepsi',
+  },
+  { 
+    id: 'CGOA5',
+    name: 'Botella 200ml de Coca Cola',
+  }
+];
+>>>>>>> 70990840dfaf1ccca2d327a91c8f7dcf46312f73
 
 module.exports = {users, vehicles, additionals, routes};

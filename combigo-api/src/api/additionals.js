@@ -2,6 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 
+<<<<<<< HEAD
+=======
+const ID_BASE = 'CGOA';
+
+>>>>>>> 70990840dfaf1ccca2d327a91c8f7dcf46312f73
 const additionals = require('./store').additionals;
 
 // Get all additionals
@@ -9,7 +14,7 @@ router.get('/', (req, res) => {
   res.json(additionals);
 });
 
-// Search for aditional with id
+// Search for additional with id
 router.get('/:id', (req, res) => {
   const {id} = req.params;
   const result = additionals.find(additional => additional.id === id);
@@ -21,7 +26,7 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// Create Aditional
+// Create Additional
 router.post('/', (req, res) => {
   const {name} = req.body;
 
@@ -32,6 +37,7 @@ router.post('/', (req, res) => {
   const exists = additionals.find(additional => additional.name === name);
 
   if (exists) {
+<<<<<<< HEAD
     return res.status(409).send(`Aditional already exists`);
   }
 
@@ -41,11 +47,20 @@ router.post('/', (req, res) => {
   });
 
   additionals = newAditionals;
+=======
+    return res.status(409).send(`Additional already exists`);
+  }
+
+  additionals.push({
+    id: `${ID_BASE}${additionals.length + 1}`,
+    name,
+  });
+>>>>>>> 70990840dfaf1ccca2d327a91c8f7dcf46312f73
 
   res.send(additionals);
 });
 
-// Modify Aditional with id 
+// Modify Additional with id 
 router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {name} = req.body;
@@ -57,7 +72,11 @@ router.put('/:id', (req, res) => {
   const exists = additionals.findIndex(additional => additional.id === id);
 
   if (exists === -1) {
+<<<<<<< HEAD
     return res.status(409).send(`Aditional does not exists`);
+=======
+    return res.status(409).send(`Additional does not exists`);
+>>>>>>> 70990840dfaf1ccca2d327a91c8f7dcf46312f73
   }
 
   additionals[exists] = {
@@ -68,13 +87,17 @@ router.put('/:id', (req, res) => {
   res.send(additionals);
 });
 
-// Delete vehicle with id
+// Delete additional with id
 router.delete('/:id', (req, res) => {
   const {id} = req.params;
   const index = additionals.findIndex(additional => additional.id === id);
 
   if (index === -1) {
+<<<<<<< HEAD
     return res.status(404).send(`Aditional not found`);
+=======
+    return res.status(404).send(`Additional not found`);
+>>>>>>> 70990840dfaf1ccca2d327a91c8f7dcf46312f73
   }
 
   additionals.splice(index, 1);

@@ -48,6 +48,9 @@ export const Navigation = () => {
             <li onClick={() => setIsOpen(false)}>
               <Link to="/vehicles">Vehicles</Link>
             </li>
+            <li onClick={() => setIsOpen(false)}>
+              <Link to="/drivers">Drivers</Link>
+            </li>
           </ul>
         </nav>
       </Pane>
