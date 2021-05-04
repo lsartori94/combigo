@@ -67,7 +67,7 @@ router.get('/:uname', (req, res) => {
 
 // Create user
 router.post('/', (req, res) => {
-  const {username, email, password, name, role} = req.body;
+  const {username, email, password, name, bdate, role} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -93,15 +93,13 @@ router.post('/', (req, res) => {
     role,
   });
 
-  users = newUser;
-
   res.send(users);
 });
 
-// Modify user with username
+// Modify user with username, (no password)
 router.put('/:uname', (req, res) => {
   const {uname} = req.params;
-  const {username, email, password, name, role} = req.body;
+  const {username, email, password, name, bdate, role} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)

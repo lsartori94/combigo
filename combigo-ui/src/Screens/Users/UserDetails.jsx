@@ -67,18 +67,21 @@ export const UserDetails = () => {
     switch (name) {
       case 'username':
         setDetails({...details, username: value});
-        break;
+      break;
+      case 'email':
+        setDetails({...details, email: value});
+      break;
+      case 'password':
+        setDetails({...details, password: value});
+      break;
       case 'name':
         setDetails({...details, name: value});
-        break;
-      case 'email':
-          setDetails({...details, email: value});
-        break;
+      break;
       case 'bdate':
-          setDetails({...details, bdate: value});
-        break;
+        setDetails({...details, bdate: value});
+      break;
       case 'role':
-          setDetails({...details, role: value});
+        setDetails({...details, role: value});
       break;
       default:
       break;
@@ -136,6 +139,7 @@ export const UserDetails = () => {
           <TextInputField
             width={'65vh'}
             required
+            validationMessage="Campo Requerido"
             label="Nombre de usuario"
             description=""
             value={user.username}
@@ -145,19 +149,28 @@ export const UserDetails = () => {
             width={'65vh'}
             required
             validationMessage="Campo Requerido"
-            label="Nombre"
-            placeholder="Nombre"
-            value={user.name}
-            onChange={e => inputCallback(e, 'name')}
+            label="Email"
+            placeholder="Email"
+            value={user.email}
+            onChange={e => inputCallback(e, 'email')}
+          />
+          <TextInputField
+            width={'65vh'}
+            required
+            disabled={!creating}
+            label="Password"
+            placeholder="********"
+            value={user.password}
+            onChange={e => inputCallback(e, 'password')}
           />
           <TextInputField
             width={'65vh'}
             required
             validationMessage="Campo Requerido"
-            label="Email"
-            placeholder="Email"
-            value={user.email}
-            onChange={e => inputCallback(e, 'email')}
+            label="Nombre"
+            placeholder="Nombre"
+            value={user.name}
+            onChange={e => inputCallback(e, 'name')}
           />
           <TextInputField
             width={'65vh'}
