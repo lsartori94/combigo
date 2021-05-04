@@ -14,7 +14,7 @@ import {
   Dialog
 } from 'evergreen-ui';
 
-import { getDrivers, deleteUser } from '../usersStore';
+import { getDrivers, deleteUser } from './usersStore';
 
 export const Drivers = () => {
   const [drivers, setDrivers] = useState([]);
@@ -68,7 +68,7 @@ export const Drivers = () => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/users/${uname}`}><Menu.Item>Editar...</Menu.Item></Link>
+          <Link to={`/drivers/${uname}`}><Menu.Item>Editar...</Menu.Item></Link>
           </Menu.Group>
           <Menu.Divider />
           <Menu.Group>
@@ -120,7 +120,7 @@ export const Drivers = () => {
                 <Table.TextCell>{driver.bdate}</Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(driver.uname)}
+                    content={renderRowMenu(driver.username)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />

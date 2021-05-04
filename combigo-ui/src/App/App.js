@@ -9,7 +9,8 @@ import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
 import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetails";
 import { Vehicles } from '../Screens/Vehicles/Vehicles';
-import { Drivers } from '../Screens/Users/Drivers/Drivers';
+import { Drivers } from '../Screens/Users/Drivers';
+import { UserDetails } from '../Screens/Users/UserDetails';
 
 function App() {
   return (
@@ -30,6 +31,12 @@ function App() {
           </Route>
           <Route path="/vehicles">
             <Vehicles />
+          </Route>
+          <Route path="/drivers/:uname">
+            <UserDetails />
+          </Route>
+          <Route path="/drivers/add">
+            <UserDetails />
           </Route>
           <Route path="/drivers">
             <Drivers />

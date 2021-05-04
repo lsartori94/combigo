@@ -42,7 +42,7 @@ export async function getClients() {
 //CRUD Users
 export async function deleteUser(uname) {
   const response = await fetch(
-    `${API_BASE}/user/${uname}`,
+    `${API_BASE}/users/${uname}`,
     { method: 'DELETE'}
   );
   if (!response.ok) {
@@ -54,7 +54,7 @@ export async function deleteUser(uname) {
 
 export async function createUser(user) {
   const response = await fetch(
-    `${API_BASE}/user`,
+    `${API_BASE}/users`,
     {
       method: 'POST',
       headers: {
@@ -73,7 +73,7 @@ export async function createUser(user) {
 
 export async function saveUserDetails(user) {
   const response = await fetch(
-    `${API_BASE}/user/${user.username}`,
+    `${API_BASE}/users/${user.username}`,
     {
       method: 'PUT',
       headers: {
