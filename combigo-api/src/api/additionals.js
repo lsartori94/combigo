@@ -2,12 +2,16 @@ const express = require('express');
 
 const router = express.Router();
 
+const ID_BASE = 'CGOA';
+
+const additionals = require('./store').additionals;
+
 // Get all additionals
 router.get('/', (req, res) => {
   res.json(additionals);
 });
 
-// Search for aditional with id
+// Search for additional with id
 router.get('/:id', (req, res) => {
   const {id} = req.params;
   const result = additionals.find(additional => additional.id === id);
@@ -19,7 +23,7 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// Create Aditional
+// Create Additional
 router.post('/', (req, res) => {
   const {name} = req.body;
 
@@ -30,20 +34,20 @@ router.post('/', (req, res) => {
   const exists = additionals.find(additional => additional.name === name);
 
   if (exists) {
-    res.status(409).send(`Aditional already exists`);
+    res.status(409).send(`Additional already exists`);
   }
 
-  const newAditionals = [...additionals, {
+  const newAdditionals = [...additionals, {
     id: `${additionals.length + 1}`,
     name,
   }];
 
-  additionals = newAditionals;
+  additionals = newAdditionals;
 
   res.send(additionals);
 });
 
-// Modify Aditional with id 
+// Modify Additional with id 
 router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {name} = req.body;
@@ -55,7 +59,7 @@ router.put('/:id', (req, res) => {
   const exists = additionals.findIndex(additional => additional.id === id);
 
   if (exists === -1) {
-    res.status(409).send(`Aditional does not exists`);
+    res.status(409).send(`Additional does not exists`);
   }
 
   additionals[exists] = {
@@ -66,13 +70,13 @@ router.put('/:id', (req, res) => {
   res.send(additionals);
 });
 
-// Delete vehicle with id
+// Delete additional with id
 router.delete('/:id', (req, res) => {
   const {id} = req.params;
   const index = additionals.findIndex(additional => additional.id === id);
 
   if (index === -1) {
-    res.status(404).send(`Aditional not found`);
+    res.status(404).send(`Additional not found`);
   }
 
   additionals.splice(index, 1);
