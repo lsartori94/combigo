@@ -4,12 +4,54 @@ const router = express.Router();
 
 const ID_BASE = 'CGOU';
 
+const ROLES = require('./constants');
 const users = require('./store').users;
 
 // Get all users
 router.get('/', (req, res) => {
-  res.json(users);
+  let actualRole;
+  let result;
+
+  //switch horrendo
+  if (req.query) {
+    const {role} = req.query;
+    switch(role) {
+      case 'driver':
+        actualRole = 1;
+        break;
+      case 'client':
+        actualRole = 2;
+        break;
+      default:
+        actualRole = 0;
+    }
+  };
+
+  if (actualRole) {
+    result = users.filter(user => user.role === actualRole);
+  } else {
+    result = users;
+  }
+
+  res.json(result);
 });
+
+/** Implementacion de Luca
+router.get('/', (req, res) => {
+
+    const {role} = req.query;
+    const actualRole = ROLES[role.toUpperCase];
+    let result;
+  
+    if (actualRole) {
+      result = users.filter(user => user.role === actualRole);
+    } else {
+      result = users;
+    }
+  
+    res.json(result);
+});
+*/
 
 // Search for user with username
 router.get('/:uname', (req, res) => {

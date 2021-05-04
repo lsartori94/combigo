@@ -9,7 +9,7 @@ import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
 import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetails";
 import { Vehicles } from '../Screens/Vehicles/Vehicles';
-
+import { Drivers } from '../Screens/Users/Drivers/Drivers';
 
 function App() {
   return (
@@ -30,6 +30,9 @@ function App() {
           </Route>
           <Route path="/vehicles">
             <Vehicles />
+          </Route>
+          <Route path="/drivers">
+            <Drivers />
           </Route>
           <Route path="/">
             <Home />
