@@ -27,27 +27,29 @@ router.get('/:uname', (req, res) => {
 router.post('/', (req, res) => {
   const {username, email, password, name, role} = req.body;
 
-  //TODO check empty fields
   if (!req.body) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
-  //check if username already exists
-  const exists = users.find(user => user.username === username);
+  //check if username/email already exists
+  const usernameExists = users.find(user => user.username === username);
+  const emailExists = users.find(user => user.email === email);
 
-  if (exists) {
-    res.status(409).send(`User already exists`);
+  if (usernameExists) {
+    return res.status(409).send(`Username already exists`);
+  }
+  if (emailExists) {
+    return res.status(409).send(`Email already exists`);
   }
 
-  const newUser = [...users, {
-    id: `${ID_BASE}${users.length + 1}`,
+  users.push({
     username,
     email,
     password,
     name,
     bdate,
     role,
-  }];
+  });
 
   users = newUser;
 
@@ -60,13 +62,13 @@ router.put('/:uname', (req, res) => {
   const {username, email, password, name, role} = req.body;
 
   if (!req.body) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = users.findIndex(user => user.username === uname);
 
   if (exists === -1) {
-    res.status(409).send(`User does not exists`);
+    return res.status(409).send(`User does not exists`);
   }
 
   users[exists] = {
@@ -87,7 +89,7 @@ router.delete('/:uname', (req, res) => {
   const index = users.findIndex(user => user.username === uname);
 
   if (index === -1) {
-    res.status(404).send(`User not found`);
+    return res.status(404).send(`User not found`);
   }
 
   users.splice(index, 1);

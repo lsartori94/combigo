@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
   const exists = vehicles.find(veh => veh.plate === plate);
 
   if (exists) {
-    return res.status(409).send(`Vehicle already exists`);
+    return res.status(409).send(`Vehicle plate already exists`);
   }
 
   vehicles.push({

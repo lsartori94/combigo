@@ -28,21 +28,19 @@ router.post('/', (req, res) => {
   const {name} = req.body;
 
   if (!req.body) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = additionals.find(additional => additional.name === name);
 
   if (exists) {
-    res.status(409).send(`Additional already exists`);
+    return res.status(409).send(`Additional already exists`);
   }
 
-  const newAdditionals = [...additionals, {
-    id: `${additionals.length + 1}`,
+  additionals.push({
+    id: `${ID_BASE}${additionals.length + 1}`,
     name,
-  }];
-
-  additionals = newAdditionals;
+  });
 
   res.send(additionals);
 });
@@ -53,13 +51,13 @@ router.put('/:id', (req, res) => {
   const {name} = req.body;
 
   if (!req.body) {
-    res.status(400).send(`Bad Request`)
+    return res.status(400).send(`Bad Request`)
   }
 
   const exists = additionals.findIndex(additional => additional.id === id);
 
   if (exists === -1) {
-    res.status(409).send(`Additional does not exists`);
+    return res.status(409).send(`Additional does not exists`);
   }
 
   additionals[exists] = {
@@ -76,7 +74,7 @@ router.delete('/:id', (req, res) => {
   const index = additionals.findIndex(additional => additional.id === id);
 
   if (index === -1) {
-    res.status(404).send(`Additional not found`);
+    return res.status(404).send(`Additional not found`);
   }
 
   additionals.splice(index, 1);

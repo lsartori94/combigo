@@ -54,23 +54,23 @@ let vehicles = [
 
 let additionals = [
   {
-    id: '1',
+    id: 'CGOA1',
     name: 'Caja de 8 chicles de frutilla Beldent',
   },
   {
-    id: '2',
+    id: 'CGOA2',
     name: 'Caja de 6 alfajores Jorjito',
   },
   { 
-    id: '3',
+    id: 'CGOA3',
     name: 'Caja de 6 conitos Havana',
   },
   { 
-    id: '4',
+    id: 'CGOA4',
     name: 'Botella 200ml de Pepsi',
   },
   { 
-    id: '5',
+    id: 'CGOA5',
     name: 'Botella 200ml de Coca Cola',
   }
 ];
