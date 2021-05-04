@@ -196,7 +196,7 @@ export const VehicleDetails = () => {
             intent="warning"
             iconBefore={SavedIcon}
             onClick={() => saveCallback()}
-            disabled={!formDirty || formDirty && errors}
+            disabled={(!formDirty) || (formDirty && errors)}
           >
             Guardar
           </Button>
