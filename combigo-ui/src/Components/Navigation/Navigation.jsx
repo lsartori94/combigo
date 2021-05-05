@@ -4,9 +4,11 @@ import {
 } from "react-router-dom";
 import { Pane, Icon, MenuIcon, MenuClosedIcon } from 'evergreen-ui';
 import './Navigation.css';
+import {useAuth} from '../../utils/use-auth.js';
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const auth = useAuth();
 
   return (
     <React.Fragment>
@@ -45,12 +47,16 @@ export const Navigation = () => {
             <li onClick={() => setIsOpen(false)}>
               <Link to="/profile">Profile</Link>
             </li>
-            <li onClick={() => setIsOpen(false)}>
-              <Link to="/vehicles">Vehicles</Link>
-            </li>
-            <li onClick={() => setIsOpen(false)}>
-              <Link to="/drivers">Drivers</Link>
-            </li>
+            {auth.user && auth.isAdmin() && (
+              <>
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/vehicles">Vehicles</Link>
+                </li>
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/drivers">Drivers</Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </Pane>

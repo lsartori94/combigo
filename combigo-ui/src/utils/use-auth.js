@@ -1,7 +1,13 @@
 // Hook (use-auth.js)
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext, useReducer } from "react";
 import { API_BASE } from "../constants";
 import { session } from "./session";
+
+const ROLES = {
+  ADMIN: 'ADMIN',
+  DRIVER: 'DRIVER',
+  CLIENT: 'CLIENT'
+}
 
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ...
@@ -48,6 +54,10 @@ function useProvideAuth() {
     setUser(null);
   };
 
+  const isAdmin = () => {
+    return user && user.role === ROLES.ADMIN;
+  }
+
   // Subscribe to user on mount
   // Because this sets state in the callback it will cause any ...
   // ... component that utilizes this hook to re-render with the ...
@@ -67,6 +77,7 @@ function useProvideAuth() {
     user,
     signin,
     signup,
-    signout
+    signout,
+    isAdmin
   };
 }
