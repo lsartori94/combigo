@@ -1,4 +1,5 @@
 // import './App.css';
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,44 +10,51 @@ import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
 import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetails";
 import { Vehicles } from '../Screens/Vehicles/Vehicles';
-import { Drivers } from '../Screens/Users/Drivers';
-import { UserDetails } from '../Screens/Users/UserDetails';
+import { Drivers } from '../Screens/Drivers/Drivers';
+import { DriverDetails } from '../Screens/Drivers/DriverDetails';
+import { ProvideAuth } from '../utils/use-auth';
 
 function App() {
+  useEffect(() => {
+    document.title = 'CombiGO';
+  },[]);
+
   return (
-    <Router>
-      <div className="app-container">
-        <Navigation />
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/profile">
-            <Profile />
-          </Route>
-          <Route path="/vehicles/:vehicleId">
-            <VehicleDetails />
-          </Route>
-          <Route path="/vehicles/add">
-            <VehicleDetails />
-          </Route>
-          <Route path="/vehicles">
-            <Vehicles />
-          </Route>
-          <Route path="/drivers/:uname">
-            <UserDetails />
-          </Route>
-          <Route path="/drivers/add">
-            <UserDetails />
-          </Route>
-          <Route path="/drivers">
-            <Drivers />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <ProvideAuth>
+      <Router>
+        <div className="app-container">
+          <Navigation />
+          {/* A <Switch> looks through its children <Route>s and
+              renders the first one that matches the current URL. */}
+          <Switch>
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/vehicles/:vehicleId">
+              <VehicleDetails />
+            </Route>
+            <Route path="/vehicles/add">
+              <VehicleDetails />
+            </Route>
+            <Route path="/vehicles">
+              <Vehicles />
+            </Route>
+            <Route path="/drivers/:uname">
+              <DriverDetails />
+            </Route>
+            <Route path="/drivers/add">
+              <DriverDetails />
+            </Route>
+            <Route path="/drivers">
+              <Drivers />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </ProvideAuth>
   );
 }
 

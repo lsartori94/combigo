@@ -7,12 +7,13 @@ import {
   Button,
   BackButton,
   SmallCrossIcon,
-  SavedIcon
+  SavedIcon,
+  FormField
 } from 'evergreen-ui';
 
-import { getUserDetails, saveUserDetails, createUser } from './usersStore';
+import { getDriverDetails, saveUserDetails, createDriver } from './driversStore';
 
-export const UserDetails = () => {
+export const DriverDetails = () => {
   let { uname } = useParams();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({});
@@ -34,7 +35,7 @@ export const UserDetails = () => {
     async function initialize() {
       try {
         setLoading(true);
-        const response = await getUserDetails(uname);
+        const response = await getDriverDetails(uname);
         setNoUser(false);
         setDetails(response);
         setOldDetails(response);
@@ -96,7 +97,7 @@ export const UserDetails = () => {
     try {
       setLoading(true);
       if (creating) {
-        await createUser(details);
+        await createDriver(details);
       } else {
         await saveUserDetails(details);
       }
@@ -172,24 +173,21 @@ export const UserDetails = () => {
             value={user.name}
             onChange={e => inputCallback(e, 'name')}
           />
-          <TextInputField
+          <FormField
             width={'65vh'}
+            marginBottom={20}
             required
             validationMessage="Campo Requerido"
             label="Fecha de nacimiento"
-            placeholder="DD/MM/YYYY"
-            value={user.bdate}
-            onChange={e => inputCallback(e, 'bdate')}
-          />
-          <TextInputField
-            width={'65vh'}
-            required
-            validationMessage="Campo Requerido"
-            label="Rol"
-            placeholder="Cliente/Chofer/Admin"
-            onChange={e => inputCallback(e, 'role')}
-            value={user.role}
-          />
+          >
+            <input
+              type="date"
+              value={user.bdate}
+              onChange={e => inputCallback(e, 'bdate')}
+              min="1960-01-01"
+              max="2018-12-31"
+            />
+          </FormField>
           <Button
             width={'65vh'}
             display="flex"

@@ -2,35 +2,39 @@ const { ROLES } = require('./constants');
 
 let users = [
   {
+    id: 'CGOU0',
     username: 'admin',
     email: 'admin@gmail.com',
     name: 'Admin',
-    password: 'admin123',
+    password: 'admin',
     bdate: '', 
     role: ROLES.ADMIN
   },
   {
+    id: 'CGOU1',
     username: 'jose.traffic',
     email: 'joset@gmail.com',
     name: 'Jose',
     password: 'jose123',
-    bdate: '12/12/1960',
+    bdate: '1960-12-12',
     role: ROLES.DRIVER
   },
-  { 
+  {
+    id: 'CGOU2',
     username: 'juan.perez',
     email: 'juanp@gmail.com',
     name: 'Juan',
     password: 'juan123',
-    bdate: '12/11/1990',
+    bdate: '1990-11-12',
     role: ROLES.CLIENT
   },
-  { 
+  {
+    id: 'CGOU3',
     username: 'diego.sosa',
     email: 'diegod@gmail.com',
     name: 'Diego',
     password: 'diego123',
-    bdate: '12/10/1995',
+    bdate: '1995-10-12',
     role: ROLES.CLIENT
   }
 ];

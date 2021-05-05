@@ -1,7 +1,7 @@
 const ROLES = {
-  ADMIN: 0,
-  DRIVER: 1,
-  CLIENT: 2
+  ADMIN: 'ADMIN',
+  DRIVER: 'DRIVER',
+  CLIENT: 'CLIENT'
 }
 
 module.exports = {

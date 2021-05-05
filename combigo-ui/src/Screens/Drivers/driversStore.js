@@ -1,8 +1,8 @@
 import { API_BASE } from '../../constants';
 
-//Get users
-export async function getUsers() {
-  const response = await fetch(`${API_BASE}/users`);
+//Get drivers
+export async function getDrivers() {
+  const response = await fetch(`${API_BASE}/users?role=driver`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -10,7 +10,7 @@ export async function getUsers() {
   return result;
 }
 
-export async function getUserDetails(uname) {
+export async function getDriverDetails(uname) {
   const response = await fetch(`${API_BASE}/users/${uname}`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -19,26 +19,6 @@ export async function getUserDetails(uname) {
   return result;
 }
 
-//Get drivers
-export async function getDrivers() {
-    const response = await fetch(`${API_BASE}/users?role=driver`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result;
-  }
-
-//Get clients
-export async function getClients() {
-    const response = await fetch(`${API_BASE}/users?role=client`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result;
-  }
-  
 //CRUD Users
 export async function deleteUser(uname) {
   const response = await fetch(
@@ -52,7 +32,8 @@ export async function deleteUser(uname) {
   return result;
 }
 
-export async function createUser(user) {
+export async function createDriver(user) {
+  user.role = 'DRIVER';
   const response = await fetch(
     `${API_BASE}/users`,
     {

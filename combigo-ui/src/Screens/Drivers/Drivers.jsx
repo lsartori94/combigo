@@ -14,7 +14,7 @@ import {
   Dialog
 } from 'evergreen-ui';
 
-import { getDrivers, deleteUser } from './usersStore';
+import { getDrivers, deleteUser } from './driversStore';
 
 export const Drivers = () => {
   const [drivers, setDrivers] = useState([]);
