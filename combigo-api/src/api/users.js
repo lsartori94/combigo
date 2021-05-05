@@ -107,4 +107,25 @@ router.delete('/:uname', (req, res) => {
   res.json(users);
 });
 
+// Login user
+router.post('/login', (req, res) => {
+  const {email, password} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const result = users.find(user => user.email === email);
+
+  if (!result) {
+    res.status(404).send(`User not found`);
+  }
+
+  if (result.password !== password) {
+    return res.status(401).send(`Not Authorized`)
+  }
+
+  res.json(result);
+});
+
 module.exports = router;
