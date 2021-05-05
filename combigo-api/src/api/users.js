@@ -7,7 +7,7 @@ const ID_BASE = 'CGOU';
 const CONSTANTS = require('./constants');
 const users = require('./store').users;
 
-// Get all users
+// Get all users by role
 router.get('/', (req, res) => {
     const {role} = req.query;
     const actualRole = CONSTANTS.ROLES[role.toUpperCase()];
@@ -42,15 +42,15 @@ router.post('/', (req, res) => {
     return res.status(400).send(`Bad Request`)
   }
 
-  //check if username/email already exists
+  // check if username/email already exists
   const usernameExists = users.find(user => user.username === username);
   const emailExists = users.find(user => user.email === email);
 
   if (usernameExists) {
-    return res.status(409).send(`Username already exists`);
+    return res.status(409).send(`El nombre de usuario ya existe`);
   }
   if (emailExists) {
-    return res.status(409).send(`Email already exists`);
+    return res.status(409).send(`El email ya existe`);
   }
 
   users.push({
@@ -66,7 +66,7 @@ router.post('/', (req, res) => {
   res.send(users);
 });
 
-// Modify user with username, (no password)
+// Modify user with username
 router.put('/:uname', (req, res) => {
   const {uname} = req.params;
   const {username, email, password, name, bdate, role} = req.body;
@@ -79,6 +79,13 @@ router.put('/:uname', (req, res) => {
 
   if (exists === -1) {
     return res.status(409).send(`User does not exists`);
+  }
+
+  // check if email already exists 
+  const emailExists = users.find(user => (user.email === email) && (user.username != uname));
+
+  if (emailExists) {
+    return res.status(409).send(`El email ya existe`);
   }
 
   users[exists] = {

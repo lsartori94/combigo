@@ -61,7 +61,18 @@ export const Drivers = () => {
   }
 
   const renderPlaceholder = () => (
-    <div>No hay Choferes</div>
+    // mejorar style
+    <div>No hay Choferes
+      <IconButton
+          alignSelf="flex-end"
+          marginRight="30px"
+          appearance="minimal"
+          icon={PlusIcon}
+          iconSize={40}
+          intent="success"
+          onClick={() => addCallback()}
+        />
+    </div>
   );
   
   const renderRowMenu = (uname) => {

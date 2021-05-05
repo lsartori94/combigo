@@ -26,7 +26,8 @@ export async function deleteUser(uname) {
     { method: 'DELETE'}
   );
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const error = await response.text();
+    throw new Error(error);
   }
   const result = await response.json();
   return result;
@@ -46,7 +47,8 @@ export async function createDriver(user) {
     }
   );
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const error = await response.text();
+    throw new Error(error);
   }
   const result = await response.json();
   return result;
@@ -65,7 +67,8 @@ export async function saveUserDetails(user) {
     }
   );
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const error = await response.text();
+    throw new Error(error);
   }
   const result = await response.json();
   return result;

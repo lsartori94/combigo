@@ -23,6 +23,7 @@ export const DriverDetails = () => {
   const [formDirty, setFormDirty] = useState(false);
   const [errors, setErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [apiError, setApiError] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -81,9 +82,6 @@ export const DriverDetails = () => {
       case 'bdate':
         setDetails({...details, bdate: value});
       break;
-      case 'role':
-        setDetails({...details, role: value});
-      break;
       default:
       break;
     }
@@ -102,17 +100,16 @@ export const DriverDetails = () => {
         await saveUserDetails(details);
       }
       setLoading(false);
-      history.push(history.goBack());
+      history.push('/drivers');
     } catch (e) {
-      console.error(e);
+      setApiError(e.message)
       setSaveError(true);
       setLoading(false);
     }
   }
 
-  //goBack() medio raro, pero es para poder seguir usando UserDetails para Clients y Drivers
   const backCallback = () => {
-    history.push(history.goBack());
+    history.push('/drivers');
   }
 
   const renderDetails = (user) => {
@@ -135,13 +132,15 @@ export const DriverDetails = () => {
         >
           Volver
         </BackButton>
-        {saveError && (<div>Error al guardar</div>)}
+        {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
           <TextInputField
             width={'65vh'}
+            disabled={!creating}
             required
             validationMessage="Campo Requerido"
             label="Nombre de usuario"
+            placeholder="Username"
             description=""
             value={user.username}
             onChange={e => inputCallback(e, 'username')}
@@ -158,7 +157,7 @@ export const DriverDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            disabled={!creating}
+            validationMessage="Campo Requerido"
             label="Password"
             placeholder="********"
             value={user.password}
