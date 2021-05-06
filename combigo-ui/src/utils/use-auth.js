@@ -1,5 +1,5 @@
 // Hook (use-auth.js)
-import React, { useState, useEffect, useContext, createContext, useReducer } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { API_BASE } from "../constants";
 import { session } from "./session";
 

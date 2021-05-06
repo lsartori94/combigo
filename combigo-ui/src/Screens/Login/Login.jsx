@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import {
   TextInputField,
   Button,
+  Pane,
 } from 'evergreen-ui';
 
 import { useAuth } from "../../utils/use-auth";
@@ -37,7 +38,11 @@ export const Login = () => {
   }
 
   return (
-    <div>
+    <Pane
+      display="flex"
+      justifyContent="center"
+      paddingTop={100}
+    >
       <div>
         <TextInputField
           width={'65vh'}
@@ -67,6 +72,6 @@ export const Login = () => {
             Iniciar Sesion
           </Button>
       </div>
-    </div>
+    </Pane>
   );
 }

@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import { Footer } from '../Components/Footer/Footer';
 import { Navigation } from '../Components/Navigation/Navigation';
 import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
@@ -56,6 +57,7 @@ function App() {
               <Home />
             </Route>
           </Switch>
+          <Footer />
         </div>
       </Router>
     </ProvideAuth>

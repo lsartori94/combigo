@@ -1,0 +1,8 @@
+.footer-content {
+  bottom: 5px;
+  color: #444343;
+  line-height: 20px;
+  max-width: 50vw;
+  padding: 8px;
+  position: fixed;
+}
