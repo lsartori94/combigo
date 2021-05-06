@@ -1,18 +1,18 @@
 const express = require('express');
 
-const travelr = express.travelr();
+const router = express.Router();
 
 const ID_BASE = 'CGOT';
 
 const travels = require('./store').travels;
 
 // Get all travels
-travelr.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.json(travels);
 });
 
 // Search for travel with id
-travelr.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   const {id} = req.params;
   const result = travels.find(travel => travel.id === id);
 
@@ -23,7 +23,7 @@ travelr.get('/:id', (req, res) => {
 });
 
 // Create travel, con id, y DateAndTime, ¿vehiculo y chofer? Como cheqeuamos?
-travelr.post('/', (req, res) => {
+router.post('/', (req, res) => {
   const {dateAndTime, vehicle, driver} = req.body;
 
   if (!req.body) {
@@ -45,7 +45,7 @@ travelr.post('/', (req, res) => {
 });
 
 // Modify travel with id. Creo que todo deberia tener un setter porque todo cambia demasiado
-travelr.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {dateAndTime, vehicle, driver} = req.body;
 
@@ -70,7 +70,7 @@ travelr.put('/:id', (req, res) => {
 });
 
 // Add passenger
-travelr.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {passenger} = req.body;
 
@@ -90,7 +90,7 @@ travelr.put('/:id', (req, res) => {
 });
 
 // Add possibleAdditional
-travelr.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {additional} = req.body;
 
@@ -110,7 +110,7 @@ travelr.put('/:id', (req, res) => {
 });
 
 // Add boughtAdditional // Esto se podria hacer muy distinto para que lleve cuenta de la cantidad de cada adicional...
-travelr.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const {id} = req.params;
   const {additional} = req.body;
 
@@ -130,7 +130,7 @@ travelr.put('/:id', (req, res) => {
 });
 
 // Delete travel with id
-travelr.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   const {id} = req.params;
   
   const index = travels.findIndex(travel => travel.id === id);
@@ -143,4 +143,4 @@ travelr.delete('/:id', (req, res) => {
   res.json(travels);
 });
 
-module.exports = travelr;
+module.exports = router;

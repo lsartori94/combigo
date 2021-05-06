@@ -48,11 +48,11 @@ router.get('/:destination', (req, res) => {
 router.get('/:originDestination', (req, res) => {
   const {origin, destination} = req.params;
 
-  const result = routes.filter(route => route.origin === origin);
+  let result = routes.filter(route => route.origin === origin);
   if (!result) {
     res.status(404).send(`No routes not found`);
   }
-  const result = routes.filter(route => route.destination === destination);
+  result = routes.filter(route => route.destination === destination);
   if (!result) {
     res.status(404).send(`No routes not found`);
   }
@@ -68,11 +68,11 @@ router.post('/', (req, res) => {
     return res.status(400).send(`Bad Request`)
   }
 
-  const exists = routes.find( route => route.origin === origin);
+  let exists = routes.find( route => route.origin === origin);
   if (exists) {
     return res.status(409).send(`route already exists`);
   }
-  const exists = exists.find( route => route.destination === destination);
+  exists = exists.find( route => route.destination === destination);
   if (exists) {
     return res.status(409).send(`route already exists`);
   }
