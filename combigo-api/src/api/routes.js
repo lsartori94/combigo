@@ -53,7 +53,7 @@ router.get('/:originDestination', (req, res) => {
     res.status(404).send(`No routes not found`);
   }
   result = routes.filter(route => route.destination === destination);
-  if (!result2) {
+  if (!result) {
     res.status(404).send(`No routes not found`);
   }
 
