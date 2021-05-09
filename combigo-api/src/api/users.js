@@ -10,7 +10,8 @@ const users = require('./store').users;
 // Get all users by role
 router.get('/', (req, res) => {
     const {role} = req.query;
-    const actualRole = CONSTANTS.ROLES[role.toUpperCase()];
+    console.log("ASAASAS", role);
+    const actualRole = role && CONSTANTS.ROLES[role.toUpperCase()];
     let result;
 
     if (actualRole) {
@@ -36,7 +37,7 @@ router.get('/:uname', (req, res) => {
 
 // Create user
 router.post('/', (req, res) => {
-  const {username, email, password, name, bdate, role} = req.body;
+  const {username, email, password, dni, name, bdate, role} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -45,6 +46,7 @@ router.post('/', (req, res) => {
   // check if username/email already exists
   const usernameExists = users.find(user => user.username === username);
   const emailExists = users.find(user => user.email === email);
+  const dniExists = users.find(user => user.dni === dni);
 
   if (usernameExists) {
     return res.status(409).send(`El nombre de usuario ya existe`);
@@ -52,18 +54,24 @@ router.post('/', (req, res) => {
   if (emailExists) {
     return res.status(409).send(`El email ya existe`);
   }
+  if (dniExists) {
+    return res.status(409).send(`El dni ya existe`);
+  }
 
-  users.push({
+  const newUser = {
     id: `${ID_BASE}${users.length + 1}`,
     username,
     email,
     password,
     name,
     bdate,
+    dni,
     role,
-  });
+  }
 
-  res.send(users);
+  users.push(newUser);
+
+  res.send(newUser);
 });
 
 // Modify user with username

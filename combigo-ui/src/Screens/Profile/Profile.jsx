@@ -33,8 +33,14 @@ export const Profile = () => {
             />
             <TextInputField
               width={'65vh'}
-              label="Rol"
-              value={auth.user.role}
+              label="Fecha de Nacimiento"
+              value={auth.user.bdate}
+              disabled
+            />
+            <TextInputField
+              width={'65vh'}
+              label="DNI"
+              value={auth.user.dni}
               disabled
             />
             <TextInputField

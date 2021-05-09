@@ -39,8 +39,9 @@ export const Drivers = () => {
 
   const deleteDriver = async (uname) =>{
     try {
-      const response = await deleteUser(uname);
-      setDrivers(response);
+      await deleteUser(uname);
+      const response = await getDrivers();
+        setDrivers(response);
     } catch (e) {
       console.error(e);
     }
@@ -117,6 +118,9 @@ export const Drivers = () => {
               Nombre
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
+              DNI
+            </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
               Email
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
@@ -127,6 +131,7 @@ export const Drivers = () => {
             {drivers.map(driver => (
               <Table.Row key={driver.username}>
                 <Table.TextCell>{driver.name}</Table.TextCell>
+                <Table.TextCell>{driver.dni}</Table.TextCell>
                 <Table.TextCell>{driver.email}</Table.TextCell>
                 <Table.TextCell>{driver.bdate}</Table.TextCell>
                 <Table.Cell flex="none">

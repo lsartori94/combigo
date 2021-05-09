@@ -43,15 +43,37 @@ function useProvideAuth() {
     }
     const result = await response.json();
     setUser(result);
+    session.setUser(result);
     return result;
   };
 
-  const signup = (email, password) => {
-    
+  const signup = async (user) => {
+    user.role = 'CLIENT';
+    const response = await fetch(
+      `${API_BASE}/users`,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      }
+    );
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
+    }
+    const result = await response.json();
+    debugger;
+    setUser(result);
+    session.setUser(result);
+    return result;
   };
 
   const signout = () => {
     setUser(null);
+    session.clear();
   };
 
   const isAdmin = () => {

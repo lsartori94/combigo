@@ -21,7 +21,7 @@ export const Navigation = () => {
         alignItems="center"
         paddingX={20}
         height={"10vh"}
-        maxHeigth={100}
+        maxHeight={100}
       >
         <Icon cursor='pointer' icon={MenuIcon} size={30} onClick={() => setIsOpen(true)}/>
         <div className="title-container">

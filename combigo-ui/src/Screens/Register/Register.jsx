@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router';
+import React, { useDebugValue, useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Pane,
   TextInputField,
-  Spinner,
   Button,
-  BackButton,
   SmallCrossIcon,
   SavedIcon,
   FormField
 } from 'evergreen-ui';
 
-import { getDriverDetails, saveUserDetails, createDriver } from './driversStore';
+import { useAuth } from '../../utils/use-auth';
 
-export const DriverDetails = () => {
-  let { uname } = useParams();
-  const [loading, setLoading] = useState(true);
+export const Register = () => {
   const [details, setDetails] = useState({
     username: "",
     email: "",
@@ -24,9 +20,14 @@ export const DriverDetails = () => {
     dni: "",
     bdate: ""
   });
-  const [oldDetails, setOldDetails] = useState({});
-  const [noUser, setNoUser] = useState(true);
-  const [creating, setCreating] = useState(false);
+  const [oldDetails, setOldDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+    name: "",
+    dni: "",
+    bdate: ""
+  });
   const [formDirty, setFormDirty] = useState(false);
   const [errors, setErrors] = useState({
     username: false,
@@ -40,29 +41,7 @@ export const DriverDetails = () => {
   const [saveError, setSaveError] = useState(false);
   const [apiError, setApiError] = useState(null);
   const history = useHistory();
-
-  useEffect(() => {
-    if (uname === 'add') {
-      setNoUser(false);
-      setCreating(true);
-      setLoading(false);
-      return;
-    };
-    async function initialize() {
-      try {
-        setLoading(true);
-        const response = await getDriverDetails(uname);
-        setNoUser(false);
-        setDetails(response);
-        setOldDetails(response);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    initialize();
-  }, [uname]);
+  const auth = useAuth();
   
   useEffect(() => {
     const prev = JSON.stringify(oldDetails);
@@ -74,7 +53,10 @@ export const DriverDetails = () => {
         switch (key) {
           case 'email':
             auxErrors.email = !validateEmail(value);
-            break;
+          break;
+          case 'password':
+            auxErrors.password = !validatePassword(value);
+          break;
           default:
             if (!value) {
               auxErrors[key] = true;
@@ -109,7 +91,7 @@ export const DriverDetails = () => {
         if (!isNaN(+value)) {
           setDetails({...details, dni: value});
         }
-        break;
+      break;
       case 'bdate':
         setDetails({...details, bdate: value});
       break;
@@ -120,6 +102,11 @@ export const DriverDetails = () => {
 
   const restoreForm = () => {
     setDetails(oldDetails);
+  }
+
+  const validatePassword = (psswd) => {
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(psswd);
   }
 
   const validateEmail = (email) => {
@@ -134,53 +121,35 @@ export const DriverDetails = () => {
     } else {
       setShowErrors(false);
     }
+    debugger;
     try {
-      setLoading(true);
-      if (creating) {
-        await createDriver(details);
-      } else {
-        await saveUserDetails(details);
-      }
-      setLoading(false);
-      history.push('/drivers');
+      await auth.signup(details);
+      history.push('/profile');
     } catch (e) {
       setApiError(e.message)
       setSaveError(true);
-      setLoading(false);
     }
-  }
-
-  const backCallback = () => {
-    history.push('/drivers');
   }
 
   const renderDetails = (details) => {
-    if (noUser) {
-      return (<div>No existe Usuario</div>)
-    }
+    const date = new Date();
+    const month = (String(date.getMonth() + 1).length > 1) ? date.getMonth() + 1 : `0${date.getMonth() + 1}`;
+    const day = (String(date.getDate()).length > 1) ? date.getDate() : `0${date.getDate()}`;
+    const dateLimit = `${date.getFullYear() - 18}-${month}-${day}`;
     return (
       <Pane
         marginTop={20}
+        marginBottom={20}
         display="flex"
         alignItems="center"
         flexDirection="column"
       >
-        <BackButton
-          appearance="minimal"
-          alignSelf="flex-start"
-          marginLeft={10}
-          marginBottom={10}
-          onClick={() => backCallback()}
-        >
-          Volver
-        </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
           <TextInputField
             width={'65vh'}
-            disabled={!creating}
             required
-            validationMessage={showErrors && errors.username ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.username ? "Campo Requerido o Invalido" : null}
             label="Nombre de usuario"
             placeholder="Username"
             description=""
@@ -190,24 +159,26 @@ export const DriverDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.email ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.email ? "Campo Requerido o Invalido" : null}
             label="Email"
             placeholder="Email"
+            description="El email debe ser una direccion valida"
             value={details.email}
             onChange={e => inputCallback(e, 'email')}
           />
           <TextInputField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.password ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.password ? "Campo Requerido o Invalido" : null}
             label="Password"
+            description="La contraseña debe tener un dígito, una mayúscula, un símbolo, y al menos 8 caracteres"
             value={details.password}
             onChange={e => inputCallback(e, 'password')}
           />
           <TextInputField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.name ? "Campo Requerido o Invalido" : null}
             label="Nombre"
             placeholder="Nombre"
             value={details.name}
@@ -215,9 +186,8 @@ export const DriverDetails = () => {
           />
           <TextInputField
             width={'65vh'}
-            disabled={!creating}
             required
-            validationMessage={showErrors && errors.dni ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.dni ? "Campo Requerido o Invalido" : null}
             label="DNI"
             placeholder="24356785"
             value={details.dni}
@@ -227,15 +197,16 @@ export const DriverDetails = () => {
             width={'65vh'}
             marginBottom={20}
             required
-            validationMessage={showErrors && errors.bdate ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.bdate ? "Campo Requerido o Invalido" : null}
             label="Fecha de nacimiento"
+            description="Debe ser mayor de edad para usar el sistema"
           >
             <input
               type="date"
               value={details.bdate}
               onChange={e => inputCallback(e, 'bdate')}
               min="1960-01-01"
-              max="2018-12-31"
+              max={dateLimit}
             />
           </FormField>
           <Button
@@ -268,9 +239,15 @@ export const DriverDetails = () => {
   };
 
   return (
-    <div>
-      { loading && <Spinner /> }
-      { !loading &&  renderDetails(details) }
-    </div>
+    <Pane
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
+      {renderDetails(details)}
+      {!saveError && (<Pane>
+        Ya Tenes Cuenta? <Link to="/login"><span>Inicia Sesion</span></Link>
+      </Pane>)}
+    </Pane>
   );
 };

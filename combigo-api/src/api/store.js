@@ -17,6 +17,7 @@ let users = [
     name: 'Jose',
     password: 'jose123',
     bdate: '1960-12-12',
+    dni: '34506758',
     role: ROLES.DRIVER
   },
   {
@@ -26,6 +27,7 @@ let users = [
     name: 'Juan',
     password: 'juan123',
     bdate: '1990-11-12',
+    dni: '375023845',
     role: ROLES.CLIENT
   },
   {
@@ -35,6 +37,7 @@ let users = [
     name: 'Diego',
     password: 'diego123',
     bdate: '1995-10-12',
+    dni: '23405678',
     role: ROLES.CLIENT
   }
 ];
