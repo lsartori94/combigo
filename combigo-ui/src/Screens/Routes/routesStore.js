@@ -1,8 +1,8 @@
 import { API_BASE } from '../../constants';
 
-//Get drivers
-export async function getDrivers() {
-  const response = await fetch(`${API_BASE}/users?role=driver`);
+//Get Routes
+export async function getRoutes() {
+  const response = await fetch(`${API_BASE}/routes`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -10,8 +10,8 @@ export async function getDrivers() {
   return result;
 }
 
-export async function getDriverDetails(uname) {
-  const response = await fetch(`${API_BASE}/users/${uname}`);
+export async function getRouteDetails(routeId) {
+  const response = await fetch(`${API_BASE}/routes/${routeId}`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -20,9 +20,9 @@ export async function getDriverDetails(uname) {
 }
 
 //CRUD Users
-export async function deleteUser(uname) {
+export async function deleteRoute(routeId) {
   const response = await fetch(
-    `${API_BASE}/users/${uname}`,
+    `${API_BASE}/routes/${routeId}`,
     { method: 'DELETE'}
   );
   if (!response.ok) {
@@ -33,17 +33,16 @@ export async function deleteUser(uname) {
   return result;
 }
 
-export async function createDriver(user) {
-  user.role = 'DRIVER';
+export async function createRoute(route) {
   const response = await fetch(
-    `${API_BASE}/users`,
+    `${API_BASE}/routes`,
     {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(route)
     }
   );
   if (!response.ok) {
@@ -54,16 +53,16 @@ export async function createDriver(user) {
   return result;
 }
 
-export async function saveUserDetails(user) {
+export async function saveRouteDetails(route) {
   const response = await fetch(
-    `${API_BASE}/users/${user.username}`,
+    `${API_BASE}/routes/${route.id}`,
     {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(route)
     }
   );
   if (!response.ok) {

@@ -1,4 +1,4 @@
-const { ROLES } = require('./constants');
+const { ROLES, TRAVEL_STATES, LEGAL_STATUS } = require('./constants');
 
 let users = [
   {
@@ -18,6 +18,7 @@ let users = [
     password: 'jose123',
     bdate: '1960-12-12',
     dni: '34506758',
+    completedTravels: [],
     role: ROLES.DRIVER
   },
   {
@@ -28,6 +29,7 @@ let users = [
     password: 'juan123',
     bdate: '1990-11-12',
     dni: '375023845',
+    travelHistory: [],
     role: ROLES.CLIENT
   },
   {
@@ -37,7 +39,13 @@ let users = [
     name: 'Diego',
     password: 'diego123',
     bdate: '1995-10-12',
-    dni: '23405678',
+    dni: '',
+    travelHistory: [
+      {
+        travelDetails: {},
+        boughtAdditionals: []
+      }
+    ],
     role: ROLES.CLIENT
   }
 ];
@@ -64,30 +72,40 @@ let routes = [
     id: 'CGOR1',
     origin: 'La Plata',
     destination: 'Buenos Aires',
-    travels: [],
+    distanceKm: 30,
+    durationMin: 40,
+    travels: [
+      {
+        id: 'CGOT1'
+      }
+    ],
   },
   {
     id: 'CGOR2',
     origin: 'Buenos Aires',
     destination: 'Cordoba',
+    distanceKm: 600,
+    durationMin: 400,
     travels: [],
   },
   {
     id: 'CGOR3',
     origin: 'Buenos Aires',
     destination: 'La Plata',
-    travels: [],
-  },
-  {
-    id: 'CGOR4',
-    origin: 'La Plata',
-    destination: 'Mar del Plata',
-    travels: [],
+    distanceKm: 30,
+    durationMin: 40,
+    travels: [
+      {
+        id: 'CGOT2'
+      }
+    ],
   },
   { 
-    id: 'CGOR5',
+    id: 'CGOR4',
     origin: 'Buenos Aires',
     destination: 'Cordoba',
+    distanceKm: 600,
+    durationMin: 400,
     travels: [],
   }
 ];
@@ -96,22 +114,39 @@ let travels = [
   {
     id: 'CGOT1',
     dateAndTime: new Date(2021,7,20,7,30,0,0),
-    passengers: [],
-    driver: 'un chofer',
-    vehicle: 'un vehiculo',
-    state: 'Not started', //not started, ongoing, finished
-    posibleAdditionals: [],
-    boughtAdditionals: []
+    route: "CGOR1",
+    passengers: [
+      {
+        id: "CGOU3",
+        legalStatus: LEGAL_STATUS.PENDING
+      }
+    ],
+    driver: 'CGOU1',
+    vehicle: 'CGOV1',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      "CGOA1",
+      "CGOA3"
+    ]
   },
   {
     id: 'CGOT2',
     dateAndTime: new Date(2021,0,10,10,30,0,0),
-    passengers: [],
-    driver: 'un chofer 2',
-    vehicle: 'un vehiculo 2',
-    state: 'Finished', //not started, ongoing, finished
-    posibleAdditionals: [],
-    boughtAdditionals: []
+    route: "CGOR3",
+    passengers: [
+      {
+        id: "CGOU3",
+        legalStatus: LEGAL_STATUS.APPROVED
+      }
+    ],
+    driver: 'CGOU1',
+    vehicle: 'CGOV1',
+    status: TRAVEL_STATES.FINISHED,
+    availableAdditionals: [
+      "CGOA2",
+      "CGOA4",
+      "CGOA5"
+    ]
   }
 ];
 

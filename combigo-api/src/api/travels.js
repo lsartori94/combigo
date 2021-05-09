@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
     passengers: [],
     driver: driver,
     vehicle: vehicle,
-    state: 'not started',
+    status: TRAVEL_STATES.NOT_STARTED,
     posibleAdditionals: [],
     boughtAdditionals: []
   });
@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
 // Modify travel with id. Creo que todo deberia tener un setter porque todo cambia demasiado
 router.put('/:id', (req, res) => {
   const {id} = req.params;
-  const {dateAndTime, vehicle, driver} = req.body;
+  const {route, passengers, dateAndTime, vehicle, driver, availableAdditionals} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -63,7 +63,11 @@ router.put('/:id', (req, res) => {
     id: id,
     dateAndTime: dateAndTime,
     driver: driver,
-    vehicle: vehicle
+    vehicle: vehicle,
+    route,
+    passengers,
+    availableAdditionals,
+    status: travels[exists].status
   };
 
   res.send(travels);

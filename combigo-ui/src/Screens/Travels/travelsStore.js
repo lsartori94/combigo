@@ -1,8 +1,11 @@
 import { API_BASE } from '../../constants';
+import { getDrivers } from '../Drivers/driversStore';
+import { getAdditionals } from '../Additionals/additionalsStore';
+import { getVehicles } from '../Vehicles/vehiclesStore';
 
-//Get drivers
-export async function getDrivers() {
-  const response = await fetch(`${API_BASE}/users?role=driver`);
+//Get Routes
+export async function getTravels() {
+  const response = await fetch(`${API_BASE}/travels`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -10,8 +13,8 @@ export async function getDrivers() {
   return result;
 }
 
-export async function getDriverDetails(uname) {
-  const response = await fetch(`${API_BASE}/users/${uname}`);
+export async function getTravelDetails(travelId) {
+  const response = await fetch(`${API_BASE}/travels/${travelId}`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -19,10 +22,9 @@ export async function getDriverDetails(uname) {
   return result;
 }
 
-//CRUD Users
-export async function deleteUser(uname) {
+export async function deleteTravel(travelId) {
   const response = await fetch(
-    `${API_BASE}/users/${uname}`,
+    `${API_BASE}/travels/${travelId}`,
     { method: 'DELETE'}
   );
   if (!response.ok) {
@@ -33,17 +35,16 @@ export async function deleteUser(uname) {
   return result;
 }
 
-export async function createDriver(user) {
-  user.role = 'DRIVER';
+export async function createTravel(travel) {
   const response = await fetch(
-    `${API_BASE}/users`,
+    `${API_BASE}/travels`,
     {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(travel)
     }
   );
   if (!response.ok) {
@@ -54,16 +55,16 @@ export async function createDriver(user) {
   return result;
 }
 
-export async function saveUserDetails(user) {
+export async function saveTravelDetails(travel) {
   const response = await fetch(
-    `${API_BASE}/users/${user.username}`,
+    `${API_BASE}/travels/${travel.id}`,
     {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(travel)
     }
   );
   if (!response.ok) {
@@ -72,4 +73,16 @@ export async function saveUserDetails(user) {
   }
   const result = await response.json();
   return result;
+}
+
+export function getAvailableAditionals() {
+  return getAdditionals();
+}
+
+export function getAvailableDrivers() {
+  return getDrivers();
+}
+
+export function getAvailableVehicles() {
+  return getVehicles();
 }

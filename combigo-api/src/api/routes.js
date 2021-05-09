@@ -44,43 +44,31 @@ router.get('/:destination', (req, res) => {
   res.json(result);
 });
 
-// Search for route by origin and destination
-router.get('/:originDestination', (req, res) => {
-  const {origin, destination} = req.params;
-
-  let result = routes.filter(route => route.origin === origin);
-  if (!result) {
-    res.status(404).send(`No routes not found`);
-  }
-  result = routes.filter(route => route.destination === destination);
-  if (!result) {
-    res.status(404).send(`No routes not found`);
-  }
-
-  res.json(result);
-});
-
 // Create route
 router.post('/', (req, res) => {
-  const {origin, destination} = req.body;
+  const {origin, destination, distanceKm, durationMin} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
   }
 
-  let exists = routes.find( route => route.origin === origin);
-  if (exists) {
-    return res.status(409).send(`route already exists`);
+  if (origin === destination) {
+    return res.status(409).send(`Routes can't have same origin and destination`);
   }
-  exists = exists.find( route => route.destination === destination);
+
+  const exists = routes.find( route =>
+    route.origin === origin &&  route.destination === destination
+  );
   if (exists) {
-    return res.status(409).send(`route already exists`);
+    return res.status(409).send(`Route already exists`);
   }
 
   routes.push({
     id: `${ID_BASE}${routes.length + 1}`,
-    origin: origin,
-    destination: destination,
+    origin,
+    destination,
+    distanceKm,
+    durationMin,
     travels: [],
   });
 
@@ -88,9 +76,9 @@ router.post('/', (req, res) => {
 });
 
 // Add a Travel
-router.put('/:id', (req, res) => {
+router.put('/:id/travels', (req, res) => {
   const {id} = req.params;
-  const {aTravel} = req.body;
+  const {travel} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -103,13 +91,13 @@ router.put('/:id', (req, res) => {
   }
 
   //Que no cargen el mismo viaje dos veces a su ruta
-  const repeated = routes.travels.find(trav => trav.id === aTravel.id);
+  const repeated = routes.travels.find(trav => trav.id === travel.id);
 
   if (repeated) {
     return res.status(409).send(`travel already exists`);
   }
 
-  routes[exists].travels.push(aTravel);
+  routes[exists].travels.push(travel);
 
   res.send(routes);
 });
@@ -117,7 +105,7 @@ router.put('/:id', (req, res) => {
 // Modify route with id
 router.put('/:id', (req, res) => {
   const {id} = req.params;
-  const {origin, destination} = req.body;
+  const {origin, destination, durationMin, distanceKm} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -130,9 +118,11 @@ router.put('/:id', (req, res) => {
   }
 
   routes[exists] = {
-    id: id,
-    origin: origin,
-    destination: destination,
+    id,
+    origin,
+    destination,
+    durationMin,
+    distanceKm
   };
 
   res.send(routes);

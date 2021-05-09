@@ -15,11 +15,17 @@ import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetail
 import { Vehicles } from '../Screens/Vehicles/Vehicles';
 import { Drivers } from '../Screens/Drivers/Drivers';
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';
+import { RouteDetails } from '../Screens/Routes/RouteDetails';
+import { Routes } from '../Screens/Routes/Routes';
+import { Travels } from '../Screens/Travels/Travels';
+import { TravelDetails } from '../Screens/Travels/TravelDetails';
+import { Additionals } from '../Screens/Additionals/Additionals';
+import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
 import { ProvideAuth } from '../utils/use-auth';
 
 function App() {
   useEffect(() => {
-    document.title = 'CombiGO';
+    document.title = 'Combi-19';
   },[]);
 
   return (
@@ -56,6 +62,33 @@ function App() {
             </Route>
             <Route path="/drivers">
               <Drivers />
+            </Route>
+            <Route path="/routes/:routeId">
+              <RouteDetails />
+            </Route>
+            <Route path="/routes/add">
+              <RouteDetails />
+            </Route>
+            <Route path="/routes">
+              <Routes />
+            </Route>
+            <Route path="/travels/:travelId">
+              <TravelDetails />
+            </Route>
+            <Route path="/travels/add">
+              <TravelDetails />
+            </Route>
+            <Route path="/travels">
+              <Travels />
+            </Route>
+            <Route path="/additionals/:addId">
+              <AdditionalDetails />
+            </Route>
+            <Route path="/additionals/add">
+              <AdditionalDetails />
+            </Route>
+            <Route path="/additionals">
+              <Additionals />
             </Route>
             <Route path="/">
               <Home />

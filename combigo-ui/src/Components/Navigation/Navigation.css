@@ -13,10 +13,18 @@ li {
   margin-left: 35px;
 }
 
-a {
-  text-decoration: none;
+.title-container span {
+  color:black;
 }
 
-a, a:visited {
+.title-container h1 a {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+a,
+a:visited {
+  text-decoration: none;
   color: black;
 }

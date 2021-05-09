@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {
   Link
 } from "react-router-dom";
-import { Pane, Icon, MenuIcon, MenuClosedIcon, LogInIcon, PersonIcon } from 'evergreen-ui';
+import { Avatar, Pane, Icon, MenuIcon, MenuClosedIcon, LogInIcon, PersonIcon } from 'evergreen-ui';
 import './Navigation.css';
 import {useAuth} from '../../utils/use-auth.js';
 
@@ -25,7 +25,16 @@ export const Navigation = () => {
       >
         <Icon cursor='pointer' icon={MenuIcon} size={30} onClick={() => setIsOpen(true)}/>
         <div className="title-container">
-          <h1><Link to="/">CombiGO</Link></h1>
+          <h1>
+            <Link to="/">
+              <Avatar
+                src="/logo_is.png"
+                name="Combi-19"
+                size={40}
+              />
+              <span>Combi-19</span>
+            </Link>
+          </h1>
         </div>
         {auth.user && (
           <Link to="/profile">
@@ -66,17 +75,29 @@ export const Navigation = () => {
             </li>
             <hr />
             <li onClick={() => setIsOpen(false)}>
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile">Perfil</Link>
             </li>
             {auth.user && auth.isAdmin() && (
               <>
                 <hr />
                 <li onClick={() => setIsOpen(false)}>
-                  <Link to="/vehicles">Vehicles</Link>
+                  <Link to="/vehicles">Vehiculos</Link>
                 </li>
                 <hr />
                 <li onClick={() => setIsOpen(false)}>
-                  <Link to="/drivers">Drivers</Link>
+                  <Link to="/drivers">Choferes</Link>
+                </li>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/routes">Rutas</Link>
+                </li>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/travels">Viajes</Link>
+                </li>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/additionals">Adicionales</Link>
                 </li>
               </>
             )}
