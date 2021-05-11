@@ -10,7 +10,7 @@
  - [x] DNI desaparece del listado al editar/crear
 
  Adicionales
-  - [ ] Validar que nombre sea unico al editar
+  - [x] Validar que nombre sea unico al editar
 
   Rutas
   - [ ] Validar que nombre sea unico al editar
