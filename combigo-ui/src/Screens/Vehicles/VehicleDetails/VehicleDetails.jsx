@@ -22,6 +22,7 @@ export const VehicleDetails = () => {
   const [formDirty, setFormDirty] = useState(false);
   const [errors, setErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [apiError, setApiError] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -101,7 +102,7 @@ export const VehicleDetails = () => {
       setLoading(false);
       history.push('/vehicles');
     } catch (e) {
-      console.error(e);
+      setApiError(e.message)
       setSaveError(true);
       setLoading(false);
     }
@@ -131,7 +132,7 @@ export const VehicleDetails = () => {
         >
           Volver
         </BackButton>
-        {saveError && (<div>Error al guardar</div>)}
+        {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
           <TextInputField
             width={'65vh'}

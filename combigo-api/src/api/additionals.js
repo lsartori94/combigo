@@ -31,9 +31,9 @@ router.post('/', (req, res) => {
     return res.status(400).send(`Bad Request`)
   }
 
-  const exists = additionals.find(additional => additional.name === name);
+  const nameExists = additionals.find(additional => additional.name === name);
 
-  if (exists) {
+  if (nameExists) {
     return res.status(409).send(`Additional already exists`);
   }
 
@@ -55,9 +55,15 @@ router.put('/:id', (req, res) => {
   }
 
   const exists = additionals.findIndex(additional => additional.id === id);
-
+  
   if (exists === -1) {
     return res.status(409).send(`Additional does not exists`);
+  }
+
+  const nameExists = additionals.find(additional => additional.name === name);
+
+  if (nameExists) {
+    return res.status(409).send(`Additional already exists`);
   }
 
   additionals[exists] = {

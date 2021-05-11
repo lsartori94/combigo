@@ -59,10 +59,10 @@ router.post('/', (req, res) => {
   }
 
   const exists = routes.find( route =>
-    route.origin === origin &&  route.destination === destination
-  );
+    route.origin === origin &&  route.destination === destination);
+
   if (exists) {
-    return res.status(409).send(`Route already exists`);
+    return res.status(409).send(`La Ruta con "origen-destino" ingresados ya existe`);
   }
 
   routes.push({
@@ -89,7 +89,7 @@ router.put('/:id/travels', (req, res) => {
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`route does not exists`);
+    return res.status(409).send(`Route does not exists`);
   }
 
   //Que no cargen el mismo viaje dos veces a su ruta
@@ -119,6 +119,13 @@ router.put('/:id', (req, res) => {
 
   if (exists === -1) {
     return res.status(409).send(`route does not exists`);
+  }
+
+  const originDestExists = routes.find( route => 
+    route.origin === origin && route.destination === destination);
+
+  if (originDestExists) {
+    return res.status(409).send(`La Ruta con "origen-destino" ingresados ya existe`);
   }
 
   routes[exists] = {

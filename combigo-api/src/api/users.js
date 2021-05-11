@@ -49,13 +49,13 @@ router.post('/', (req, res) => {
   const dniExists = users.find(user => user.dni === dni);
 
   if (usernameExists) {
-    return res.status(409).send(`El nombre de usuario ya existe`);
+    return res.status(409).send(`El Nombre de Usuario ya existe`);
   }
   if (emailExists) {
-    return res.status(409).send(`El email ya existe`);
+    return res.status(409).send(`El Email ya existe`);
   }
   if (dniExists) {
-    return res.status(409).send(`El dni ya existe`);
+    return res.status(409).send(`El DNI ya existe`);
   }
 
   const newUser = {
@@ -77,7 +77,7 @@ router.post('/', (req, res) => {
 // Modify user with username
 router.put('/:uname', (req, res) => {
   const {uname} = req.params;
-  const {username, email, password, name, bdate, role} = req.body;
+  const {username, email, password, name, bdate, dni, role} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -102,6 +102,7 @@ router.put('/:uname', (req, res) => {
     password,
     name,
     bdate,
+    dni,
     role,
   };
 
