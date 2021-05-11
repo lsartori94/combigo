@@ -59,7 +59,7 @@ export const Travels = () => {
   }
 
   const addCallback = () => {
-    history.push('/routes/add');
+    history.push('/travels/add');
   }
 
   const renderPlaceholder = () => (

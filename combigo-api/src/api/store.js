@@ -4,7 +4,7 @@ let users = [
   {
     id: 'CGOU0',
     username: 'admin',
-    email: 'admin@gmail.com',
+    email: 'admin',
     name: 'Admin',
     password: 'admin',
     bdate: '', 
@@ -15,7 +15,7 @@ let users = [
     username: 'jose.traffic',
     email: 'joset@gmail.com',
     name: 'Jose',
-    password: 'jose123',
+    password: '123@Pass',
     bdate: '1960-12-12',
     dni: '34506758',
     completedTravels: [],
@@ -26,7 +26,7 @@ let users = [
     username: 'juan.perez',
     email: 'juanp@gmail.com',
     name: 'Juan',
-    password: 'juan123',
+    password: '123@Pass',
     bdate: '1990-11-12',
     dni: '375023845',
     travelHistory: [],
@@ -37,7 +37,7 @@ let users = [
     username: 'diego.sosa',
     email: 'diegod@gmail.com',
     name: 'Diego',
-    password: 'diego123',
+    password: '123@Pass',
     bdate: '1995-10-12',
     dni: '',
     travelHistory: [
@@ -103,9 +103,9 @@ let routes = [
   { 
     id: 'CGOR4',
     origin: 'Buenos Aires',
-    destination: 'Cordoba',
-    distanceKm: 600,
-    durationMin: 400,
+    destination: 'Rosario',
+    distanceKm: 300,
+    durationMin: 200,
     travels: [],
   }
 ];
