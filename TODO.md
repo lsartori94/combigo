@@ -6,7 +6,7 @@
  - [ ] Falta feedback "campo invalido" en formulario (email, fecha de nacimiento) 
  - [ ] Fecha de nacimiento siempre es válida en editar
  - [ ] Fecha de nacimiento nunca es válida en crear
- - [ ] Validar password
+ - [x] Validar password
  - [x] DNI desaparece del listado al editar/crear
 
  Adicionales
