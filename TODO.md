@@ -13,7 +13,7 @@
   - [x] Validar que nombre sea unico al editar
 
   Rutas
-  - [ ] Validar que nombre sea unico al editar
+  - [x] Validar que nombre sea unico al editar
 
   Viajes
   - [ ] Validar fecha
