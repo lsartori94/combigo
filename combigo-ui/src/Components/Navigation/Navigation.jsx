@@ -32,7 +32,7 @@ export const Navigation = () => {
                 name="Combi-19"
                 size={40}
               />
-              <span>Combi-19</span>
+              <span>&nbsp;Combi-19</span>
             </Link>
           </h1>
         </div>

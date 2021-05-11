@@ -24,6 +24,7 @@ export const VehicleDetails = () => {
   const [saveError, setSaveError] = useState(false);
   const [apiError, setApiError] = useState(null);
   const history = useHistory();
+  const plateRegex = /^[a-z0-9]{0,8}$/i;
 
   useEffect(() => {
     if (vehicleId === 'add') {
@@ -73,7 +74,7 @@ export const VehicleDetails = () => {
         setDetails({...details, brand: value});
         break;
       case 'plate':
-        if (value.length <= 8) {
+        if (plateRegex.test(value)) {
           setDetails({...details, plate: value});
         }
         break;
@@ -147,6 +148,7 @@ export const VehicleDetails = () => {
             validationMessage="Campo Requerido"
             label="Nombre"
             placeholder="Nombre"
+            description="Nombre del vehículo"
             value={veh.name}
             onChange={e => inputCallback(e, 'name')}
           />
@@ -156,6 +158,7 @@ export const VehicleDetails = () => {
             validationMessage="Campo Requerido"
             label="Marca"
             placeholder="Marca"
+            description="Marca del vehículo"
             value={veh.brand}
             onChange={e => inputCallback(e, 'brand')}
           />
@@ -165,6 +168,7 @@ export const VehicleDetails = () => {
             validationMessage="Campo Requerido"
             label="Patente"
             placeholder="AAAA0000"
+            description="Solo caracteres alfanumericos, maxima longitud de 8 caracteres"
             value={veh.plate}
             onChange={e => inputCallback(e, 'plate')}
           />
@@ -174,6 +178,7 @@ export const VehicleDetails = () => {
             validationMessage="Campo Requerido"
             label="Capacidad"
             placeholder="5"
+            description="Cantidad de asientos para pasajeros"
             onChange={e => inputCallback(e, 'capacity')}
             value={veh.capacity}
           />

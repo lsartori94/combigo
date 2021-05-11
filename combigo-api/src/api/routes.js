@@ -118,7 +118,7 @@ router.put('/:id', (req, res) => {
   }
 
   const originDestExists = routes.find( route => 
-    route.origin === origin && route.destination === destination);
+    (route.origin === origin) && (route.destination === destination) && (route.id != id));
 
   if (originDestExists) {
     return res.status(409).send(`La Ruta con "origen-destino" ingresados ya existe`);
