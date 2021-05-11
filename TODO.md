@@ -1,6 +1,6 @@
 - Vehicles
  - [ ] Validar que patente sean solo numeros y letras, feedback "Patente no válida"
- - [ ] Validar que patente sea única, feedback "Patente ya existente"
+ - [x] Validar que patente sea única, feedback "Patente ya existente"
 
  Chofer
  - [ ] Falta feedback "campo invalido" en formulario (email, fecha de nacimiento) 
