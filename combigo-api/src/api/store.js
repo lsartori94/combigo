@@ -111,6 +111,7 @@ let routes = [
 ];
 
 let travels = [
+  //Agregar Bought additionals mas adelante
   {
     id: 'CGOT1',
     dateAndTime: new Date(2021,7,20,7,30,0,0),
