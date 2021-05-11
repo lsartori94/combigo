@@ -60,14 +60,13 @@ export const Additionals = () => {
   const addCallback = () => {
     history.push('/additionals/add');
   }
-
   const renderPlaceholder = () => (
-    // mejorar style
-    <div>No hay Choferes
+    <div style={{padding: "30px"}}>No hay Adicionales
       <IconButton
           alignSelf="flex-end"
-          marginRight="30px"
+          marginLeft="20px"
           appearance="minimal"
+          padding="30px"
           icon={PlusIcon}
           iconSize={40}
           intent="success"

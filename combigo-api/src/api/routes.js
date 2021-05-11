@@ -17,29 +17,29 @@ router.get('/:id', (req, res) => {
   const result = routes.find(route => route.id === id);
 
   if (!result) {
-    res.status(404).send(`route not found`);
+    res.status(404).send(`Route not found`);
   }
   res.json(result);
 });
 
-// Search for route by origin
+// Search for routes by origin
 router.get('/:origin', (req, res) => {
   const {origin} = req.params;
   const result = routes.filter(route => route.origin === origin);
 
   if (!result) {
-    res.status(404).send(`No routes not found`);
+    res.status(404).send(`No routes for origin`);
   }
   res.json(result);
 });
 
-// Search for route by destination
+// Search for routes by destination
 router.get('/:destination', (req, res) => {
   const {destination} = req.params;
   const result = routes.filter(route => route.destination === destination);
 
   if (!result) {
-    res.status(404).send(`No routes not found`);
+    res.status(404).send(`No routes for destination`);
   }
   res.json(result);
 });
@@ -114,7 +114,7 @@ router.put('/:id', (req, res) => {
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`route does not exists`);
+    return res.status(409).send(`Route does not exists`);
   }
 
   const originDestExists = routes.find( route => 
@@ -141,7 +141,7 @@ router.delete('/:id', (req, res) => {
   
   const index = routes.findIndex(route => route.id === id);
   if (index === -1) {
-    return res.status(404).send(`route not found`);
+    return res.status(404).send(`Route not found`);
   }
 
   routes.splice(index, 1);
