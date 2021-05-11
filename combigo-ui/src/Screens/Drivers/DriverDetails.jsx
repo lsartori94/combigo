@@ -152,7 +152,7 @@ export const DriverDetails = () => {
       setLoading(false);
       history.push('/drivers');
     } catch (e) {
-      setApiError(e.message)
+      setApiError(e.message);
       setSaveError(true);
       setLoading(false);
     }

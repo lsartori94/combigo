@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
   const exists = vehicles.find(veh => veh.plate === plate);
 
   if (exists) {
-    return res.status(409).send(`Vehicle plate already exists`);
+    return res.status(409).send(`Vehiculo con patente ingresada ya existe`);
   }
 
   vehicles.push({
@@ -63,8 +63,13 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`Vehicle does not exists`);
   }
 
+  const plateExists = vehicles.find(veh => veh.plate === plate);
+
+  if (plateExists) {
+    return res.status(409).send(`Vehiculo con patente ingresada ya existe`);
+  }
+
   vehicles[exists] = {
-    id,
     name,
     brand,
     plate,
