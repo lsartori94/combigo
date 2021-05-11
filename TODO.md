@@ -6,14 +6,14 @@
  - [ ] Falta feedback "campo invalido" en formulario (email, fecha de nacimiento) 
  - [ ] Fecha de nacimiento siempre es válida en editar
  - [ ] Fecha de nacimiento nunca es válida en crear
- - [ ] Validar password
- - [ ] DNI desaparece del listado al editar/crear
+ - [x] Validar password
+ - [x] DNI desaparece del listado al editar/crear
 
  Adicionales
-  - [ ] Validar que nombre sea unico al editar
+  - [x] Validar que nombre sea unico al editar
 
   Rutas
-  - [ ] Validar que nombre sea unico al editar
+  - [x] Validar que nombre sea unico al editar
 
   Viajes
   - [ ] Validar fecha
