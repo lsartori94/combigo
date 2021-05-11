@@ -241,7 +241,6 @@ export const DriverDetails = () => {
           />
           <TextInputField
             width={'65vh'}
-            disabled={!creating}
             required
             validationMessage={showErrors && errors.dni ? "Campo Requerido" : null}
             label="DNI"

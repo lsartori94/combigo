@@ -74,7 +74,6 @@ export const Login = () => {
             <TextInputField
               width={'65vh'}
               required
-              validationMessage="Campo Requerido"
               label="Email"
               placeholder="Email"
               value={email}
