@@ -7,7 +7,7 @@
  - [ ] Fecha de nacimiento siempre es válida en editar
  - [ ] Fecha de nacimiento nunca es válida en crear
  - [ ] Validar password
- - [ ] DNI desaparece del listado al editar/crear
+ - [x] DNI desaparece del listado al editar/crear
 
  Adicionales
   - [ ] Validar que nombre sea unico al editar
