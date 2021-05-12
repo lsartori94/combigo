@@ -322,7 +322,7 @@ export const TravelDetails = () => {
             validationMessage={showErrors && errors.status ? "Campo Requerido" : null}
             label="Estado"
             placeholder="Pendiente"
-            value={TRAVEL_STATES[details.status]}
+            value={details.status}
             onChange={e => inputCallback(e, 'status')}
           />
           <Button

@@ -136,7 +136,7 @@ export const RouteDetails = () => {
   }
 
   const backCallback = () => {
-    history.push('/routes');
+    history.push(history.goBack());
   }
 
   const renderDetails = (details) => {

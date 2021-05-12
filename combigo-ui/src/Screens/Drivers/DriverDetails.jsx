@@ -174,7 +174,7 @@ export const DriverDetails = () => {
   }
 
   const backCallback = () => {
-    history.push('/drivers');
+    history.push(history.goBack());
   }
 
   const renderDetails = (details) => {
