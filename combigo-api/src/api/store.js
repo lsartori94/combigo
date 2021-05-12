@@ -148,6 +148,25 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ]
+  },
+  {
+    id: 'CGOT3',
+    dateAndTime: new Date(2022,0,10,10,30,0,0),
+    route: "CGOR3",
+    passengers: [
+      {
+        id: "CGOU3",
+        legalStatus: LEGAL_STATUS.APPROVED
+      }
+    ],
+    driver: 'CGOU1',
+    vehicle: 'CGOV1',
+    status: TRAVEL_STATES.FINISHED,
+    availableAdditionals: [
+      "CGOA2",
+      "CGOA4",
+      "CGOA5"
+    ]
   }
 ];
 
