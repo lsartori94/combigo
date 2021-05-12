@@ -1,6 +1,7 @@
 import './home.css';
-import React from "react";
-import { Pane } from 'evergreen-ui';
+import React, { useEffect, useState } from "react";
+import { Pane, Combobox, FormField } from 'evergreen-ui';
+import { getRoutes } from './homeStore';
 
 import { useAuth } from "../../utils/use-auth";
 
@@ -8,6 +9,42 @@ import { useAuth } from "../../utils/use-auth";
 export const Home = () => {
   const auth = useAuth();
 
+  const [routes, setRoutes] = useState([]);
+  
+  useEffect(() => { 
+    async function initialize() {
+      try {
+        const response = await getRoutes();
+        const set = new Set(response.map(item => item.origin));
+        setRoutes(Array.from(set));
+      } catch(e) {
+        console.error(e);
+      }
+    }
+    initialize();
+  }, []);
+
+
+  // const inputCallback = (e, name, skipValidation) => {
+  //   if (skipValidation) {
+  //     setDetails({...details, [name]: e});
+  //   } else {
+  //     const {value} = e.target;
+  //     switch (name) {
+  //       case 'origin':
+  //         setDetails({...details, origin: value});
+  //       break;
+  //       case 'destination':
+  //         setDetails({...details, destination: value});
+  //       break;
+  //       default:
+  //       break;
+  //     }
+  //   }
+  // }
+
+
+  
   return (
     <Pane
       className="home-container"
@@ -41,8 +78,36 @@ export const Home = () => {
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Pane>Elegi Tu Destino</Pane>
-        <Pane>TODO PANEL</Pane>
+        <Pane>Elegi Tu Destino
+          <Pane>
+          <FormField
+            width={'65vh'}
+            required
+            marginBottom={20}
+            label="Origen"
+          >
+            <Combobox
+              items={routes}
+              // onChange={value => inputCallback(value.id, 'route', true)}
+              placeholder="Origen"
+              itemToString={item => item}
+            />
+          </FormField>
+          <FormField
+            width={'65vh'}
+            required
+            marginBottom={20}
+            label="Destino"
+          >
+            <Combobox
+              items={routes}
+              // onChange={value => inputCallback(value.id, 'route', true)}
+              placeholder="Destino"
+              itemToString={item => item}
+            />
+          </FormField>
+          </Pane>
+        </Pane>
       </Pane>
     </Pane>
   );
