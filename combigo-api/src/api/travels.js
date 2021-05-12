@@ -25,7 +25,7 @@ router.get('/:id', (req, res) => {
 
 // Create travel, con id, y DateAndTime, ¿vehiculo y chofer? Como cheqeuamos?
 router.post('/', (req, res) => {
-  const {dateAndTime, vehicle, driver} = req.body;
+  const {dateAndTime, vehicle, driver, route} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -36,10 +36,11 @@ router.post('/', (req, res) => {
     dateAndTime: dateAndTime,
     passengers: [],
     driver: driver,
+    route: route,
     vehicle: vehicle,
     status: TRAVEL_STATES.NOT_STARTED,
-    posibleAdditionals: [],
-    boughtAdditionals: []
+    availableAdditionals: [],
+    boughtAdditionals: [],
   });
 
   res.send(travels);
