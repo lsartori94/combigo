@@ -26,26 +26,26 @@ router.get('/:id', (req, res) => {
 
 // Create travel, con id, y DateAndTime, ¿vehiculo y chofer? Como cheqeuamos?
 router.post('/', (req, res) => {
-  const {dateAndTime, vehicle, driver, route} = req.body;
+  const {dateAndTime, availableAdditionals, vehicle, driver, route} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
   }
 
   const routeExists = routes.find(route => route.id === route);
-  if (!routeExists) { 
-    return res.status(400).send(`La ruta ingresada no existe`);
+  if (routeExists === -1) { 
+    return res.status(409).send(`La ruta ingresada no existe`);
   }
 
   travels.push({
     id: `${ID_BASE}${travels.length + 1}`,
-    dateAndTime: dateAndTime,
+    dateAndTime,
     passengers: [],
     driver: driver,
     route: route,
     vehicle: vehicle,
     status: TRAVEL_STATES.NOT_STARTED,
-    availableAdditionals: [],
+    availableAdditionals,
     boughtAdditionals: [],
   });
 
@@ -68,8 +68,8 @@ router.put('/:id', (req, res) => {
   }
 
   travels[exists] = {
-    id: id,
-    dateAndTime: dateAndTime,
+    id,
+    dateAndTime,
     driver: driver,
     vehicle: vehicle,
     route,
@@ -147,7 +147,7 @@ router.delete('/:id', (req, res) => {
   
   const index = travels.findIndex(travel => travel.id === id);
   if (index === -1) {
-    return res.status(404).send(`travel not found`);
+    return res.status(404).send(`Travel not found`);
   }
 
   travels.splice(index, 1);

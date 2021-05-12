@@ -113,7 +113,7 @@ let routes = [
 let travels = [
   {
     id: 'CGOT1',
-    dateAndTime: new Date(2021,7,20,7,30,0,0),
+    dateAndTime: "2021-06-01T08:30",
     route: "CGOR1",
     passengers: [
       {
@@ -132,7 +132,7 @@ let travels = [
   },
   {
     id: 'CGOT2',
-    dateAndTime: new Date(2021,0,10,10,30,0,0),
+    dateAndTime: "2021-07-01T08:30",
     route: "CGOR3",
     passengers: [
       {
@@ -152,7 +152,7 @@ let travels = [
   },
   {
     id: 'CGOT3',
-    dateAndTime: new Date(2022,0,10,10,30,0,0),
+    dateAndTime: "2021-07-01T08:30",
     route: "CGOR3",
     passengers: [
       {

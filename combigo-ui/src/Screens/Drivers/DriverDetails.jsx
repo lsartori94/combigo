@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import {
   Pane,
   TextInputField,
@@ -11,10 +11,15 @@ import {
   FormField
 } from 'evergreen-ui';
 
-import { getDriverDetails, saveUserDetails, createDriver } from './driversStore';
+import { getDriverDetails, saveUserDetails, createDriver, getDriverUsername } from './driversStore';
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search); 
+} 
 
 export const DriverDetails = () => {
   let { uname } = useParams();
+  let query = useQuery();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
     username: "",
@@ -51,10 +56,15 @@ export const DriverDetails = () => {
     async function initialize() {
       try {
         setLoading(true);
-        const response = await getDriverDetails(uname);
+        let response;
+        if (query.get("isId")) {
+          response = await getDriverUsername(uname);
+        } else {
+          response = await getDriverDetails(uname);
+        }
         setNoUser(false);
         setDetails(response);
-        setOldDetails(response);
+        setOldDetails(response);       
       } catch (e) {
         console.error(e);
       } finally {

@@ -21,7 +21,8 @@ import {
   createTravel,
   getAvailableDrivers,
   getAvailableAditionals,
-  getAvailableVehicles
+  getAvailableVehicles,
+  getAvailableRoutes
 } from './travelsStore';
 
 export const TravelDetails = () => {
@@ -45,6 +46,7 @@ export const TravelDetails = () => {
   const [availableDrivers, setAvailableDrivers] = useState([]);
   const [availableAdditionals, setAvailableAdditionals] = useState([]);
   const [availableVehicles, setAvailableVehicles] = useState([]);
+  const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);
@@ -72,9 +74,11 @@ export const TravelDetails = () => {
       const drivers = await getAvailableDrivers();
       const additionals = await getAvailableAditionals();
       const vehicles = await getAvailableVehicles();
+      const routes = await getAvailableRoutes();
       setAvailableDrivers(drivers);
       setAvailableAdditionals(additionals);
       setAvailableVehicles(vehicles);
+      setAvailableRoutes(routes);
     }
     if (travelId === 'add') {
       setNoTravel(false);
@@ -247,32 +251,40 @@ export const TravelDetails = () => {
             description="Autogenerada por el sistema"
             value={details.id}
           />
-          <TextInputField
+
+          <FormField
             width={'65vh'}
+            marginBottom={20}
             required
-            validationMessage={showErrors && errors.dateAndTime ? "Campo Requerido" : null}
+            validationMessage={showErrors && errors.bdate ? "Campo Requerido o Invalido" : null}
             label="Fecha y Hora"
-            value={details.dateAndTime}
-            onChange={e => inputCallback(e, 'dateAndTime')}
-          />
-          <TextInputField
+          >
+            <input
+              type="datetime-local"
+              value={details.dateAndTime}
+              onChange={e => inputCallback(e, 'dateAndTime')}
+              min="2021-01-01T00:00"
+              max="2025-31-12T00:00"
+            />
+          </FormField>
+
+          <FormField
             width={'65vh'}
             required
             validationMessage={showErrors && errors.route ? "Campo Requerido" : null}
+            marginBottom={20}
             label="Ruta"
             description="La Ruta ya debe existir en el sistema"
-            value={details.route}
-            onChange={e => inputCallback(e, 'route')}
-          />
-          <TextInputField
-            width={'65vh'}
-            //required
-            //validationMessage={showErrors && errors.passengers ? "Campo Requerido" : null}
-            label="Pasajeros"
-            disabled
-            value={details.passengers}
-            onChange={e => inputCallback(e, 'passengers')}
-          />
+          >
+            <Combobox
+              items={availableRoutes}
+              initialSelectedItem={availableRoutes.find(elem => elem.id === details.route)}
+              label="Ruta"
+              onChange={value => inputCallback(value.id, 'route', true)}
+              placeholder="Ruta"
+              itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}
+            />
+          </FormField>
           <FormField
             width={'65vh'}
             marginBottom={20}
@@ -323,7 +335,7 @@ export const TravelDetails = () => {
             validationMessage={showErrors && errors.status ? "Campo Requerido" : null}
             label="Estado"
             placeholder="Pendiente"
-            value={details.status}
+            value={TRAVEL_STATES[details.status]}
             onChange={e => inputCallback(e, 'status')}
           />
           <Button

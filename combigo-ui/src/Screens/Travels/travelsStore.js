@@ -2,6 +2,7 @@ import { API_BASE } from '../../constants';
 import { getDrivers } from '../Drivers/driversStore';
 import { getAdditionals } from '../Additionals/additionalsStore';
 import { getVehicles } from '../Vehicles/vehiclesStore';
+import { getRoutes } from '../Routes/routesStore';
 
 //Get Routes
 export async function getTravels() {
@@ -85,4 +86,8 @@ export function getAvailableDrivers() {
 
 export function getAvailableVehicles() {
   return getVehicles();
+}
+
+export function getAvailableRoutes() {
+  return getRoutes();
 }
