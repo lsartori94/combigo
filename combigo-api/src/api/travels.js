@@ -130,7 +130,7 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`travel does not exists`);
   }
 
-  travels[exists].boughtAdditionals.push( additional )
+  travels[exists].boughtAdditionals.push( additional );
 
   res.send(additional);
 });

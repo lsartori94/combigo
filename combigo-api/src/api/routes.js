@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const { TRAVEL_STATES } = require('./constants');
+
 const ID_BASE = 'CGOR';
 
 const routes = require('./store').routes;
@@ -75,7 +77,7 @@ router.post('/', (req, res) => {
   res.send(routes);
 });
 
-// Add a Travel
+// Add a Travel with the id of a route
 router.put('/:id/travels', (req, res) => {
   const {id} = req.params;
   const {travel} = req.body;
@@ -96,6 +98,8 @@ router.put('/:id/travels', (req, res) => {
   if (repeated) {
     return res.status(409).send(`travel already exists`);
   }
+
+  //Que no cargen dos viajes al mismo tiempo
 
   routes[exists].travels.push(travel);
 
@@ -135,7 +139,7 @@ router.put('/:id', (req, res) => {
   res.send(routes);
 });
 
-// Delete route with id
+// Delete route with id 
 router.delete('/:id', (req, res) => {
   const {id} = req.params;
   
@@ -143,6 +147,9 @@ router.delete('/:id', (req, res) => {
   if (index === -1) {
     return res.status(404).send(`Route not found`);
   }
+
+  //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS
+  routes.travels.forEach( element => { if ( element.status == TRAVEL_STATES.NOT_STARTED ) {element.status = TRAVEL_STATES.CANCELED}})
 
   routes.splice(index, 1);
 
