@@ -151,7 +151,7 @@ export const Travels = () => {
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/users/${travel.driver}`}>{travel.driver}</Link>
+                  <Link to={`/drivers/${travel.driver}`}>{travel.driver}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
                   {TRAVEL_STATES[travel.status]}
