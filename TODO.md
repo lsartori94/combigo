@@ -1,22 +1,9 @@
-- Vehicles
- - [x] Validar que patente sean solo numeros y letras, feedback "Patente no válida"
- - [x] Validar que patente sea única, feedback "Patente ya existente"
-
  Chofer
  - [ ] Feedback "campo invalido" en formulario (email, fecha de nacimiento) 
- - [x] Fecha de nacimiento siempre es válida en editar
- - [x] Fecha de nacimiento nunca es válida en crear
- - [x] Validar password
- - [x] DNI desaparece del listado al editar/crear
- - [ ] En las HUs se puede editar email/dni
 
- Adicionales
-  - [x] Validar que nombre sea unico al editar
+ Viajes
+ - [ ] Validar fecha
 
-  Rutas
-  - [x] Validar que nombre sea unico al editar
-
-  Viajes
-  - [ ] Validar fecha
-
- 
+ Rutas
+ - [ ] (Admin) Ver viajes para una ruta
+ - [ ] (Cliente) Lista desplegable

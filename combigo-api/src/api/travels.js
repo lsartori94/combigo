@@ -5,6 +5,7 @@ const router = express.Router();
 const ID_BASE = 'CGOT';
 
 const travels = require('./store').travels;
+const TRAVEL_STATES = require('./constants').TRAVEL_STATES;
 
 // Get all travels
 router.get('/', (req, res) => {
