@@ -89,11 +89,16 @@ router.put('/:uname', (req, res) => {
     return res.status(409).send(`User does not exists`);
   }
 
-  // check if email already exists 
+  // check if email/dni already exists 
   const emailExists = users.find(user => (user.email === email) && (user.username != uname));
+  const dniExists = users.find(user => (user.dni === dni) && (user.username != uname));
 
   if (emailExists) {
     return res.status(409).send(`El email ya existe`);
+  }
+
+  if (dniExists) {
+    return res.status(409).send(`El DNI ya existe`);
   }
 
   users[exists] = {

@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
   const result = routes.find(route => route.id === id);
 
   if (!result) {
-    res.status(404).send(`route not found`);
+    res.status(404).send(`Route not found`);
   }
   res.json(result);
 });
@@ -30,7 +30,7 @@ router.get('/:origin', (req, res) => {
   const result = routes.filter(route => route.origin === origin);
 
   if (!result) {
-    res.status(404).send(`No routes not found`);
+    res.status(404).send(`No routes for origin`);
   }
   res.json(result);
 });
@@ -41,7 +41,7 @@ router.get('/:destination', (req, res) => {
   const result = routes.filter(route => route.destination === destination);
 
   if (!result) {
-    res.status(404).send(`No routes not found`);
+    res.status(404).send(`No routes for destination`);
   }
   res.json(result);
 });
@@ -118,11 +118,11 @@ router.put('/:id', (req, res) => {
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`route does not exists`);
+    return res.status(409).send(`Route does not exists`);
   }
 
   const originDestExists = routes.find( route => 
-    route.origin === origin && route.destination === destination);
+    (route.origin === origin) && (route.destination === destination) && (route.id != id));
 
   if (originDestExists) {
     return res.status(409).send(`La Ruta con "origen-destino" ingresados ya existe`);
@@ -145,7 +145,7 @@ router.delete('/:id', (req, res) => {
   
   const index = routes.findIndex(route => route.id === id);
   if (index === -1) {
-    return res.status(404).send(`route not found`);
+    return res.status(404).send(`Route not found`);
   }
 
   //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS

@@ -156,7 +156,7 @@ export const AdditionalDetails = () => {
             validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
             label="Nombre de Adicional"
             placeholder="Nombre"
-            description=""
+            description="Debe ser único en el sistema"
             value={details.name}
             onChange={e => inputCallback(e, 'name')}
           />

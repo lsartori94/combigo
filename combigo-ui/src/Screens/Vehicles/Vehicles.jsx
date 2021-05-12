@@ -61,7 +61,18 @@ export const Vehicles = () => {
   }
 
   const renderPlaceholder = () => (
-    <div>No Hay Vehiculos</div>
+    <div style={{padding: "30px"}}>No hay Vehiculos
+      <IconButton
+          alignSelf="flex-end"
+          marginLeft="20px"
+          appearance="minimal"
+          padding="30px"
+          icon={PlusIcon}
+          iconSize={40}
+          intent="success"
+          onClick={() => addCallback()}
+        />
+    </div>
   );
   
   const renderRowMenu = (id) => {

@@ -57,6 +57,9 @@ export const Register = () => {
           case 'password':
             auxErrors.password = !validatePassword(value);
           break;
+          case 'bdate':
+            auxErrors.bdate = !validateBdate(value);
+          break;
           default:
             if (!value) {
               auxErrors[key] = true;
@@ -114,6 +117,17 @@ export const Register = () => {
     return re.test(String(email).toLowerCase());
   }
 
+  const validateBdate = (bdate) => {
+    var today = new Date();
+    var birthDate = new Date(bdate);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return ((age >= 18) && (age < 110));
+  };
+
   const saveCallback = async () => {
     if (Object.values(errors).find(val => val)) {
       setShowErrors(true);
@@ -132,10 +146,10 @@ export const Register = () => {
   }
 
   const renderDetails = (details) => {
-    const date = new Date();
+    /**const date = new Date();
     const month = (String(date.getMonth() + 1).length > 1) ? date.getMonth() + 1 : `0${date.getMonth() + 1}`;
     const day = (String(date.getDate()).length > 1) ? date.getDate() : `0${date.getDate()}`;
-    const dateLimit = `${date.getFullYear() - 18}-${month}-${day}`;
+    const dateLimit = `${date.getFullYear() - 18}-${month}-${day}`;**/
     return (
       <Pane
         marginTop={20}
@@ -205,8 +219,8 @@ export const Register = () => {
               type="date"
               value={details.bdate}
               onChange={e => inputCallback(e, 'bdate')}
-              min="1960-01-01"
-              max={dateLimit}
+              min="1920-01-01"
+              max="2018-31-12"
             />
           </FormField>
           <Button

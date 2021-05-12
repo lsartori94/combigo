@@ -78,6 +78,9 @@ export const DriverDetails = () => {
           case 'password':
             auxErrors.password = !validatePassword(value);
           break;
+          case 'bdate':
+            auxErrors.bdate = !validateBdate(value);
+          break;
           default:
             if (!value) {
               auxErrors[key] = true;
@@ -135,6 +138,18 @@ export const DriverDetails = () => {
     return re.test(psswd);
   }
 
+  const validateBdate = (bdate) => {
+    var today = new Date();
+    var birthDate = new Date(bdate);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return ((age >= 18) && (age < 110));
+  };
+  
+
   const saveCallback = async () => {
     if (Object.values(errors).find(val => val)) {
       setShowErrors(true);
@@ -190,7 +205,7 @@ export const DriverDetails = () => {
             required
             validationMessage={showErrors && errors.username ? "Campo Requerido" : null}
             label="Nombre de usuario"
-            placeholder="Username"
+            placeholder="username"
             description=""
             value={details.username}
             onChange={e => inputCallback(e, 'username')}
@@ -200,7 +215,8 @@ export const DriverDetails = () => {
             required
             validationMessage={showErrors && errors.email ? "Campo Requerido" : null}
             label="Email"
-            placeholder="Email"
+            placeholder="username@domain.com"
+            description="El email debe ser una direccion valida"
             value={details.email}
             onChange={e => inputCallback(e, 'email')}
           />
@@ -209,6 +225,8 @@ export const DriverDetails = () => {
             required
             validationMessage={showErrors && errors.password ? "Campo Requerido" : null}
             label="Password"
+            placeholder="********"
+            description="La contraseña debe tener un dígito, una mayúscula, un símbolo, y al menos 8 caracteres"
             value={details.password}
             onChange={e => inputCallback(e, 'password')}
           />
@@ -223,7 +241,6 @@ export const DriverDetails = () => {
           />
           <TextInputField
             width={'65vh'}
-            disabled={!creating}
             required
             validationMessage={showErrors && errors.dni ? "Campo Requerido" : null}
             label="DNI"
@@ -236,13 +253,14 @@ export const DriverDetails = () => {
             marginBottom={20}
             required
             validationMessage={showErrors && errors.bdate ? "Campo Requerido" : null}
+            description="Debe ser mayor de edad para usar el sistema"
             label="Fecha de nacimiento"
           >
             <input
               type="date"
               value={details.bdate}
               onChange={e => inputCallback(e, 'bdate')}
-              min="1960-01-01"
+              min="1920-01-01"
               max="2018-12-31"
             />
           </FormField>

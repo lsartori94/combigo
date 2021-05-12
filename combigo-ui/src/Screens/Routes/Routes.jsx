@@ -62,12 +62,12 @@ export const Routes = () => {
   }
 
   const renderPlaceholder = () => (
-    // mejorar style
-    <div>No hay Rutas
+    <div style={{padding: "30px"}}>No hay Rutas
       <IconButton
           alignSelf="flex-end"
-          marginRight="30px"
+          marginLeft="20px"
           appearance="minimal"
+          padding="30px"
           icon={PlusIcon}
           iconSize={40}
           intent="success"

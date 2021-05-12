@@ -27,8 +27,12 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   const {name, brand, plate, capacity} = req.body;
 
-  if (!req.body || !capacity) {
+  if (!req.body) {
     return res.status(400).send(`Bad Request`)
+  }
+
+  if (!capacity) {
+    return res.status(409).send(`Capacidad inválida`)
   }
 
   const exists = vehicles.find(veh => veh.plate === plate);
@@ -63,13 +67,14 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`Vehicle does not exists`);
   }
 
-  const plateExists = vehicles.find(veh => veh.plate === plate);
+  const plateExists = vehicles.find(veh => (veh.plate === plate) && (veh.id != id));
 
   if (plateExists) {
     return res.status(409).send(`Vehiculo con patente ingresada ya existe`);
   }
 
   vehicles[exists] = {
+    id,
     name,
     brand,
     plate,
