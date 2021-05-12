@@ -266,9 +266,10 @@ export const TravelDetails = () => {
           />
           <TextInputField
             width={'65vh'}
-            required
-            validationMessage={showErrors && errors.passengers ? "Campo Requerido" : null}
+            //required
+            //validationMessage={showErrors && errors.passengers ? "Campo Requerido" : null}
             label="Pasajeros"
+            disabled
             value={details.passengers}
             onChange={e => inputCallback(e, 'passengers')}
           />
