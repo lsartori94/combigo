@@ -111,7 +111,6 @@ let routes = [
 ];
 
 let travels = [
-  //Agregar Bought additionals mas adelante
   {
     id: 'CGOT1',
     dateAndTime: new Date(2021,7,20,7,30,0,0),
@@ -128,7 +127,8 @@ let travels = [
     availableAdditionals: [
       "CGOA1",
       "CGOA3"
-    ]
+    ],
+    boughtAdditionals: []
   },
   {
     id: 'CGOT2',
@@ -147,7 +147,8 @@ let travels = [
       "CGOA2",
       "CGOA4",
       "CGOA5"
-    ]
+    ],
+    boughtAdditionals: []
   },
   {
     id: 'CGOT3',
@@ -166,7 +167,8 @@ let travels = [
       "CGOA2",
       "CGOA4",
       "CGOA5"
-    ]
+    ],
+    boughtAdditionals: [],
   }
 ];
 

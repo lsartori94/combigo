@@ -5,6 +5,7 @@ const router = express.Router();
 const ID_BASE = 'CGOT';
 
 const travels = require('./store').travels;
+const routes = require('./store').routes;
 const TRAVEL_STATES = require('./constants').TRAVEL_STATES;
 
 // Get all travels
@@ -29,6 +30,11 @@ router.post('/', (req, res) => {
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
+  }
+
+  const routeExists = routes.find(route => route.id === route);
+  if (!routeExists) { 
+    return res.status(400).send(`La ruta ingresada no existe`);
   }
 
   travels.push({
