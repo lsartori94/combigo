@@ -28,7 +28,7 @@ let users = [
     name: 'Juan',
     password: '123@Pass',
     bdate: '1990-11-12',
-    dni: '375023845',
+    dni: '37502385',
     travelHistory: [],
     role: ROLES.CLIENT
   },
