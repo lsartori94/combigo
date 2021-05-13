@@ -39,7 +39,7 @@ let users = [
     name: 'Diego',
     password: '123@Pass',
     bdate: '1995-10-12',
-    dni: '',
+    dni: '42357195',
     travelHistory: [
       {
         travelDetails: {},
