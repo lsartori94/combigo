@@ -256,7 +256,7 @@ export const TravelDetails = () => {
             width={'65vh'}
             marginBottom={20}
             required
-            validationMessage={showErrors && errors.bdate ? "Campo Requerido o Invalido" : null}
+            validationMessage={showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null}
             label="Fecha y Hora"
           >
             <input
@@ -290,6 +290,7 @@ export const TravelDetails = () => {
             marginBottom={20}
             label="Chofer"
             description="El Chofer ya debe existir en el sistema"
+            validationMessage={showErrors && errors.driver ? "Campo Requerido" : null}
             required
           >
             <Combobox
@@ -306,6 +307,7 @@ export const TravelDetails = () => {
             marginBottom={20}
             label="Vehiculo"
             description="El vehiculo ya debe existir en el sistema"
+            validationMessage={showErrors && errors.vehicle ? "Campo Requerido" : null}
             required
           >
             <Combobox
