@@ -72,7 +72,7 @@ export const DriverDetails = () => {
       }
     }
     initialize();
-  }, [uname]);
+  }, [uname, query]);
   
   useEffect(() => {
     const prev = JSON.stringify(oldDetails);
