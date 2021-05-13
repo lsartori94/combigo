@@ -110,7 +110,8 @@ export const Routes = () => {
           confirmLabel="Eliminar"
           cancelLabel="Cancelar"
         >
-          Las Rutas Eliminadas no pueden recuperarse. Esta seguro de que quiere eliminar?
+          Las Rutas Eliminadas no pueden recuperarse. Los viajes pendientes de esta ruta se cancelaran automaticamente.
+          Esta seguro de que quiere eliminar?
         </Dialog>
         <Table width={"95%"}>
           <Table.Head>

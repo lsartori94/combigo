@@ -6,7 +6,7 @@ const { TRAVEL_STATES } = require('./constants');
 
 const ID_BASE = 'CGOR';
 
-const routes = require('./store').routes;
+const {routes, travels} = require('./store');
 
 // Get all routes
 router.get('/', (req, res) => {
@@ -149,9 +149,10 @@ router.delete('/:id', (req, res) => {
   }
 
   //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS
-  routes[index].travels.forEach( element => { 
-    if ( element.status == TRAVEL_STATES.NOT_STARTED ) {
-      element.status = TRAVEL_STATES.CANCELED
+  routes[index].travels.forEach(travel => {
+    const travelIndex = travels.findIndex(item => item.id === travel.id);
+    if (travelIndex > -1 && travels[travelIndex].status == TRAVEL_STATES.NOT_STARTED) {
+      travels[travelIndex].status = TRAVEL_STATES.CANCELED;
     }
   })
 
