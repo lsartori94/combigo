@@ -280,7 +280,7 @@ export const TravelDetails = () => {
               items={availableRoutes}
               selectedItem={availableRoutes.find(elem => elem.id === details.route)}
               label="Ruta"
-              onChange={value => inputCallback(value.id, 'route', true)}
+              onChange={value => value ? inputCallback(value.id, 'route', true) : ''}
               placeholder="Ruta"
               itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}
             />
@@ -296,7 +296,7 @@ export const TravelDetails = () => {
               items={availableDrivers}
               selectedItem={availableDrivers.find(elem => elem.id === details.driver)}
               label="Chofer"
-              onChange={value => inputCallback(value.id, 'driver', true)}
+              onChange={value => value ? inputCallback(value.id, 'driver', true) : ''}
               placeholder="Chofer"
               itemToString={item => item ? `${item.name} (${item.id})` : ''}
             />
@@ -311,7 +311,7 @@ export const TravelDetails = () => {
             <Combobox
               items={availableVehicles}
               selectedItem={availableVehicles.find(elem => elem.id === details.vehicle)}
-              onChange={value => inputCallback(value.id, 'vehicle', true)}
+              onChange={value => value ? inputCallback(value.id, 'vehicle', true) : ''}
               placeholder="Vehiculo"
               itemToString={item => item ? `${item.name} (${item.id})` : ''}
             />
