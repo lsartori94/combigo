@@ -256,7 +256,7 @@ export const TravelDetails = () => {
             width={'65vh'}
             marginBottom={20}
             required
-            validationMessage={showErrors && errors.bdate ? "Campo Requerido o Invalido" : null}
+            validationMessage={showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null}
             label="Fecha y Hora"
           >
             <input
@@ -280,7 +280,7 @@ export const TravelDetails = () => {
               items={availableRoutes}
               selectedItem={availableRoutes.find(elem => elem.id === details.route)}
               label="Ruta"
-              onChange={value => inputCallback(value.id, 'route', true)}
+              onChange={value => value ? inputCallback(value.id, 'route', true) : ''}
               placeholder="Ruta"
               itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}
             />
@@ -290,13 +290,14 @@ export const TravelDetails = () => {
             marginBottom={20}
             label="Chofer"
             description="El Chofer ya debe existir en el sistema"
+            validationMessage={showErrors && errors.driver ? "Campo Requerido" : null}
             required
           >
             <Combobox
               items={availableDrivers}
               selectedItem={availableDrivers.find(elem => elem.id === details.driver)}
               label="Chofer"
-              onChange={value => inputCallback(value.id, 'driver', true)}
+              onChange={value => value ? inputCallback(value.id, 'driver', true) : ''}
               placeholder="Chofer"
               itemToString={item => item ? `${item.name} (${item.id})` : ''}
             />
@@ -306,12 +307,13 @@ export const TravelDetails = () => {
             marginBottom={20}
             label="Vehiculo"
             description="El vehiculo ya debe existir en el sistema"
+            validationMessage={showErrors && errors.vehicle ? "Campo Requerido" : null}
             required
           >
             <Combobox
               items={availableVehicles}
               selectedItem={availableVehicles.find(elem => elem.id === details.vehicle)}
-              onChange={value => inputCallback(value.id, 'vehicle', true)}
+              onChange={value => value ? inputCallback(value.id, 'vehicle', true) : ''}
               placeholder="Vehiculo"
               itemToString={item => item ? `${item.name} (${item.id})` : ''}
             />
