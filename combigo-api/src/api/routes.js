@@ -149,7 +149,11 @@ router.delete('/:id', (req, res) => {
   }
 
   //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS
-  routes.travels.forEach( element => { if ( element.status == TRAVEL_STATES.NOT_STARTED ) {element.status = TRAVEL_STATES.CANCELED}})
+  routes[index].travels.forEach( element => { 
+    if ( element.status == TRAVEL_STATES.NOT_STARTED ) {
+      element.status = TRAVEL_STATES.CANCELED
+    }
+  })
 
   routes.splice(index, 1);
 
