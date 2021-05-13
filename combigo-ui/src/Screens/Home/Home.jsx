@@ -11,9 +11,9 @@ export const Home = () => {
   const [loading, setLoading] = useState(true);
   const [routes, setRoutes] = useState([]);
   const [origins, setOrigins] = useState([]);
-  const [selectedOrigin, setSelectedOrigin] = useState("");
+  const [selectedOrigin, setSelectedOrigin] = useState(null);
   const [destinations, setDestinations] = useState([]);
-  const [selectedDestination, setSelectedDestination] = useState("");
+  const [selectedDestination, setSelectedDestination] = useState(null);
   
   useEffect(() => { 
     async function initialize() {
@@ -29,18 +29,42 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    setOrigins(Array.from(new Set(routes.map(item => item.origin))));
+    filterOrigins();
   }, [routes]);
 
+  useEffect(() => {
+    filterDestinations(selectedOrigin);
+  }, [selectedOrigin]);
 
-  function handleOrigins(value) {
-    setSelectedOrigin(value);
-    filterDestinations(value);
+  useEffect(() => {
+    setSelectedDestination(null);
+  }, [destinations]);
+
+  function filterOrigins() {
+    const originBuffer = [];
+    routes.forEach(route => {
+      if (!originBuffer.find(item => item.origin === route.origin)) {
+        originBuffer.push(route);
+      }
+    });
+    setOrigins(originBuffer);
   }
 
   function filterDestinations(selection) {
-    const filter = routes.filter(item => item.origin === selection).map(item => item.destination);
-    setDestinations(filter);
+    if (!selection) {
+      setDestinations(null);
+      return;
+    }
+    const {origin} = selection;
+    const destinationBuffer = [];
+    routes
+      .filter(route => route.origin === origin)
+      .forEach(route => {
+      if (!destinationBuffer.find(item => item.destination === route.destination)) {
+        destinationBuffer.push(route);
+      }
+    });
+    setDestinations(destinationBuffer);
   }
 
   const renderSearch = () => (
@@ -53,11 +77,13 @@ export const Home = () => {
         label="Origen"
       >
         <Combobox
+          openOnFocus
           items={origins}
-          onChange={value => handleOrigins(value)}
+          selectedItem={selectedOrigin}
+          onChange={value => setSelectedOrigin(value)}
           placeholder="Origen"
           initialSelectedItem={selectedOrigin}
-          itemToString={item => item}
+          itemToString={item => item ? item.origin : ''}
         />
       </FormField>
       <FormField
@@ -67,12 +93,14 @@ export const Home = () => {
         label="Destino"
       >
         <Combobox
+          openOnFocus
           disabled={!selectedOrigin}
+          selectedItem={selectedDestination}
+          placeholder={"Destino"}
           items={destinations}
           onChange={value => setSelectedDestination(value)}
           placeholder="Destino"
-          initialSelectedItem={selectedDestination}
-          itemToString={item => item}
+          itemToString={item => item ? item.destination : ''}
         />
       </FormField>
       <Button
