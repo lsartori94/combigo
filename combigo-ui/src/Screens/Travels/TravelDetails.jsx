@@ -244,14 +244,6 @@ export const TravelDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
-          <TextInputField
-            width={'65vh'}
-            label="ID"
-            disabled
-            description="Autogenerada por el sistema"
-            value={details.id}
-          />
-
           <FormField
             width={'65vh'}
             marginBottom={20}
