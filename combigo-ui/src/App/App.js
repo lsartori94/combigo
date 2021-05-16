@@ -11,7 +11,7 @@ import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
 import { Login } from '../Screens/Login/Login';
 import { Register } from '../Screens/Register/Register';
-import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetails";
+import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails";
 import { Vehicles } from '../Screens/Vehicles/Vehicles';
 import { Drivers } from '../Screens/Drivers/Drivers';
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';

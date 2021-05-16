@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
   const result = additionals.find(additional => additional.id === id);
 
   if (!result) {
-    res.status(404).send(`Aditional not found`);
+    res.status(404).send(`Adicional no encontrado`);
   }
 
   res.json(result);
@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
   const nameExists = additionals.find(additional => additional.name === name);
 
   if (nameExists) {
-    return res.status(409).send(`Additional already exists`);
+    return res.status(409).send(`El adicional ya existe`);
   }
 
   additionals.push({
@@ -57,13 +57,13 @@ router.put('/:id', (req, res) => {
   const exists = additionals.findIndex(additional => additional.id === id);
   
   if (exists === -1) {
-    return res.status(409).send(`Additional does not exists`);
+    return res.status(409).send(`Adicional no encontrado`);
   }
 
   const nameExists = additionals.find(additional => additional.name === name);
 
   if (nameExists) {
-    return res.status(409).send(`Additional already exists`);
+    return res.status(409).send(`El adicional ya existe`);
   }
 
   additionals[exists] = {
@@ -80,7 +80,7 @@ router.delete('/:id', (req, res) => {
   const index = additionals.findIndex(additional => additional.id === id);
 
   if (index === -1) {
-    return res.status(404).send(`Additional not found`);
+    return res.status(404).send(`Adicional no encontrado`);
   }
 
   additionals.splice(index, 1);

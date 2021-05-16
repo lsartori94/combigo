@@ -29,7 +29,7 @@ router.get('/:uname', (req, res) => {
   const result = users.find(user => user.username === uname);
 
   if (!result) {
-    res.status(404).send(`User not found`);
+    res.status(404).send(`Usuario no encontrado`);
   }
 
   res.json(result);
@@ -41,7 +41,7 @@ router.get('/id/:id', (req, res) => {
   const result = users.find(user => user.id === id);
 
   if (!result) {
-    res.status(404).send(`User not found`);
+    res.status(404).send(`Usuario no encontrado`);
   }
 
   res.json(result);
@@ -98,7 +98,7 @@ router.put('/:uname', (req, res) => {
   const exists = users.findIndex(user => user.username === uname);
 
   if (exists === -1) {
-    return res.status(409).send(`User does not exists`);
+    return res.status(409).send(`Usuario no encontrado`);
   }
 
   // check if email/dni already exists 
@@ -132,7 +132,7 @@ router.delete('/:uname', (req, res) => {
   const index = users.findIndex(user => user.username === uname);
 
   if (index === -1) {
-    return res.status(404).send(`User not found`);
+    return res.status(404).send(`Usuario no encontrado`);
   }
 
   users.splice(index, 1);
@@ -151,11 +151,11 @@ router.post('/login', (req, res) => {
   const result = users.find(user => user.email === email);
 
   if (!result) {
-    res.status(404).send(`User not found`);
+    res.status(404).send(`Usuario no encontrado`);
   }
 
   if (result.password !== password) {
-    return res.status(401).send(`Not Authorized`)
+    return res.status(401).send(`No autorizado`)
   }
 
   res.json(result);

@@ -145,13 +145,6 @@ export const AdditionalDetails = () => {
         {!saveError && (<div>
           <TextInputField
             width={'65vh'}
-            disabled
-            description="Autogenerada por el sistema"
-            label="ID"
-            value={details.id}
-          />
-          <TextInputField
-            width={'65vh'}
             required
             validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
             label="Nombre de Adicional"

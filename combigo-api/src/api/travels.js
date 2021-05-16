@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
   const result = travels.find(travel => travel.id === id);
 
   if (!result) {
-    res.status(404).send(`travel not found`);
+    res.status(404).send(`Viaje no encontrado`);
   }
   res.json(result);
 });
@@ -64,7 +64,7 @@ router.put('/:id', (req, res) => {
   const exists = travels.findIndex(travel => travel.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`travel does not exists`);
+    return res.status(409).send(`El viaje no existe`);
   }
 
   travels[exists] = {
@@ -93,7 +93,7 @@ router.put('/:id', (req, res) => {
   const exists = travels.findIndex(travel => travel.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`travel does not exists`);
+    return res.status(409).send(`El viaje no existe`);
   }
 
   travels[exists].passengers.push( passenger )
@@ -113,7 +113,7 @@ router.put('/:id', (req, res) => {
   const exists = travels.findIndex(travel => travel.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`travel does not exists`);
+    return res.status(409).send(`El viaje no existe`);
   }
 
   travels[exists].posibleAdditionals.push( additional )
@@ -133,7 +133,7 @@ router.put('/:id', (req, res) => {
   const exists = travels.findIndex(travel => travel.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`travel does not exists`);
+    return res.status(409).send(`El viaje no existe`);
   }
 
   travels[exists].boughtAdditionals.push( additional );
@@ -147,7 +147,7 @@ router.delete('/:id', (req, res) => {
   
   const index = travels.findIndex(travel => travel.id === id);
   if (index === -1) {
-    return res.status(404).send(`Travel not found`);
+    return res.status(404).send(`Viaje no encontrado`);
   }
 
   travels.splice(index, 1);

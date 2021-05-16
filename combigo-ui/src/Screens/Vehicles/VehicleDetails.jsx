@@ -10,7 +10,7 @@ import {
   SavedIcon
 } from 'evergreen-ui';
 
-import { getVehicleDetails, saveVehiculeDetails, createVehicle } from '../vehiclesStore';
+import { getVehicleDetails, saveVehiculeDetails, createVehicle } from './vehiclesStore';
 
 export const VehicleDetails = () => {
   let { vehicleId } = useParams();
@@ -135,13 +135,6 @@ export const VehicleDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
-          <TextInputField
-            width={'65vh'}
-            label="ID"
-            description="Autogenerado por el sistema"
-            disabled
-            value={veh.id}
-          />
           <TextInputField
             width={'65vh'}
             required

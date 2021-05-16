@@ -163,13 +163,6 @@ export const RouteDetails = () => {
         {!saveError && (<div>
           <TextInputField
             width={'65vh'}
-            label="ID"
-            disabled
-            description="Autogenerada por el sistema"
-            value={details.id}
-          />
-          <TextInputField
-            width={'65vh'}
             required
             validationMessage={showErrors && errors.origin ? "Campo Requerido" : null}
             label="Ciudad Origen"
