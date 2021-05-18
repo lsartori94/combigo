@@ -24,9 +24,9 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// Create travel, con id, y DateAndTime, ¿vehiculo y chofer? Como cheqeuamos?
+// Create travel with ID
 router.post('/', (req, res) => {
-  const {dateAndTime, availableAdditionals, vehicle, driver, route} = req.body;
+  const {dateAndTime, route, availableAdditionals} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -40,12 +40,12 @@ router.post('/', (req, res) => {
   travels.push({
     id: `${ID_BASE}${travels.length + 1}`,
     dateAndTime,
-    passengers: [],
-    driver: driver,
-    route: route,
-    vehicle: vehicle,
+    route,
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals,
+    driver: "",
+    vehicle: "",
+    passengers: [],
     boughtAdditionals: [],
   });
 
@@ -55,7 +55,7 @@ router.post('/', (req, res) => {
 // Modify travel with id. Creo que todo deberia tener un setter porque todo cambia demasiado
 router.put('/:id', (req, res) => {
   const {id} = req.params;
-  const {route, passengers, dateAndTime, vehicle, driver, availableAdditionals} = req.body;
+  const {dateAndTime, route, vehicle, driver, availableAdditionals, passengers, status} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -70,12 +70,12 @@ router.put('/:id', (req, res) => {
   travels[exists] = {
     id,
     dateAndTime,
-    driver: driver,
-    vehicle: vehicle,
     route,
-    passengers,
+    driver,
+    vehicle,
     availableAdditionals,
-    status: travels[exists].status
+    passengers,
+    status,
   };
 
   res.send(travels);

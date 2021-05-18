@@ -72,15 +72,11 @@ export const TravelAssigns = () => {
     if (prev !== act) {
       setFormDirty(true);
       for (const [key, value] of Object.entries(details)) {
-        switch (key) {
-          default:
-            if (!value) {
+        if (key === assign && !value) {
               auxErrors[key] = true;
             } else {
               auxErrors[key] = false;
             }
-            break;
-        }
       }
       setErrors({...auxErrors});
     } else {
@@ -193,7 +189,7 @@ export const TravelAssigns = () => {
             />
           </FormField>
           )}
-          
+
           <Button
             width={'65vh'}
             display="flex"

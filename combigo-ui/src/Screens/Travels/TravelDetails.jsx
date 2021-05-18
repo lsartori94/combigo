@@ -127,14 +127,11 @@ export const TravelDetails = () => {
         case 'route':
           setDetails({...details, route: value});
         break;
-        case 'passengers':
-          setDetails({...details, passengers: value});
-        break;
-        case 'status':
-          setDetails({...details, status: value});
-        break;
         case 'availableAdditionals':
           setDetails({...details, availableAdditionals: value});
+        break;
+        case 'passengers':
+          setDetails({...details, passengers: value});
         break;
         default:
         break;
@@ -273,7 +270,7 @@ export const TravelDetails = () => {
               </ul>
             </Pane>
           </FormField>
-          
+
           <TextInputField
             width={'65vh'}
             disabled
@@ -281,7 +278,6 @@ export const TravelDetails = () => {
             label="Estado"
             placeholder="Pendiente"
             value={TRAVEL_STATES[details.status]}
-            onChange={e => inputCallback(e, 'status')}
           />
           <Button
             width={'65vh'}
