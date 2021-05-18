@@ -13,7 +13,7 @@ import {
   Checkbox
 } from 'evergreen-ui';
 
-import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
+import { TRAVEL_STATES } from '../../constants.js';
 
 import {
   getTravelDetails,
@@ -29,12 +29,7 @@ export const TravelDetails = () => {
   const [details, setDetails] = useState({
     dateAndTime: "",
     route: "",
-    passengers: [
-      {
-        id: "",
-        legalStatus: LEGAL_STATUS.PENDING
-      }
-    ],
+    passengers: [],
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: []
   });
@@ -47,12 +42,7 @@ export const TravelDetails = () => {
   const [errors, setErrors] = useState({
     dateAndTime: "",
     route: "",
-    passengers: [
-      {
-        id: "",
-        legalStatus: LEGAL_STATUS.PENDING
-      }
-    ],
+    passengers: [],
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: []
   });
@@ -227,10 +217,11 @@ export const TravelDetails = () => {
             width={'65vh'}
             marginBottom={20}
             required
-            validationMessage={showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null}
+            validationMessage={(showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null) || (details.passengers.length ? "Hay pasajes vendidos para el viaje" : null)}
             label="Fecha y Hora"
           >
             <input
+              disabled={details.passengers.length}
               type="datetime-local"
               value={details.dateAndTime}
               onChange={e => inputCallback(e, 'dateAndTime')}
@@ -242,7 +233,7 @@ export const TravelDetails = () => {
           <FormField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.route ? "Campo Requerido" : null}
+            validationMessage={(showErrors && errors.route ? "Campo Requerido" : null) || (details.passengers.length ? "Hay pasajes vendidos para el viaje" : null)}
             marginBottom={20}
             label="Ruta"
             description="La Ruta ya debe existir en el sistema"
@@ -251,6 +242,7 @@ export const TravelDetails = () => {
               items={availableRoutes}
               selectedItem={availableRoutes.find(elem => elem.id === details.route)}
               label="Ruta"
+              disabled={details.passengers.length}
               onChange={value => value ? inputCallback(value.id, 'route', true) : ''}
               placeholder="Ruta"
               itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}
