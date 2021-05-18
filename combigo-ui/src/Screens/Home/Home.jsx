@@ -30,11 +30,11 @@ export const Home = () => {
 
   useEffect(() => {
     filterOrigins();
-  }, [routes]);
+  }, [routes]); // eslint-disable-line 
 
   useEffect(() => {
     filterDestinations(selectedOrigin);
-  }, [selectedOrigin]);
+  }, [selectedOrigin]); // eslint-disable-line
 
   useEffect(() => {
     setSelectedDestination(null);
@@ -99,7 +99,6 @@ export const Home = () => {
           placeholder={"Destino"}
           items={destinations}
           onChange={value => setSelectedDestination(value)}
-          placeholder="Destino"
           itemToString={item => item ? item.destination : ''}
         />
       </FormField>

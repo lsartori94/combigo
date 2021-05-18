@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link,useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Table,
   Popover,
@@ -161,12 +161,12 @@ export const Travels = () => {
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.driver && 
-                    <Link to={`/drivers/${travel.driver}?isId=true`}>{travel.driver}</Link> || "No asignado"}
+                  {(travel.driver && 
+                    <Link to={`/drivers/${travel.driver}?isId=true`}>{travel.driver}</Link>) || "No asignado"}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.vehicle && 
-                    <Link to={`/vehicles/${travel.vehicle}`}>{travel.vehicle}</Link> || "No asignado"}
+                  {(travel.vehicle && 
+                    <Link to={`/vehicles/${travel.vehicle}`}>{travel.vehicle}</Link>) || "No asignado"}
                 </Table.TextCell>
                 <Table.TextCell>
                   {TRAVEL_STATES[travel.status]}

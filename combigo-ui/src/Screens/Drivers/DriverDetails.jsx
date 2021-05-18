@@ -72,7 +72,7 @@ export const DriverDetails = () => {
       }
     }
     initialize();
-  }, [uname]);
+  }, [uname]); // eslint-disable-line
   
   useEffect(() => {
     const prev = JSON.stringify(oldDetails);

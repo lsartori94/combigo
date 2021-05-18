@@ -20,7 +20,7 @@ export const Register = () => {
     dni: "",
     bdate: ""
   });
-  const [oldDetails, setOldDetails] = useState({
+  const [oldDetails, setOldDetails] = useState({ // eslint-disable-line
     username: "",
     email: "",
     password: "",

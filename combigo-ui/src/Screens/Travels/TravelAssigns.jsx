@@ -63,7 +63,7 @@ export const TravelAssigns = () => {
     }
     initialize();
     initializeExtras();
-  }, [travelId]);
+  }, [travelId])
   
   useEffect(() => {
     const prev = JSON.stringify(oldDetails);
@@ -82,7 +82,7 @@ export const TravelAssigns = () => {
     } else {
       setFormDirty(false);
     }
-  }, [details, oldDetails]);
+  }, [details, oldDetails]); // eslint-disable-line
 
   const inputCallback = (e, name, skipValidation) => {
     if (skipValidation) {
