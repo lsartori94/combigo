@@ -110,7 +110,7 @@ export const VehicleDetails = () => {
   }
 
   const backCallback = () => {
-    history.push('/vehicles');
+    history.push(history.goBack());
   }
 
   const renderDetails = (veh) => {

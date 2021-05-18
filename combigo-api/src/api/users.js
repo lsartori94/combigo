@@ -10,7 +10,6 @@ const users = require('./store').users;
 // Get all users by role
 router.get('/', (req, res) => {
     const {role} = req.query;
-    console.log("ASAASAS", role);
     const actualRole = role && CONSTANTS.ROLES[role.toUpperCase()];
     let result;
 
