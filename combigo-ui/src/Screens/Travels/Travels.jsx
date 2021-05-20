@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link,useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Table,
   Popover,
@@ -85,6 +85,13 @@ export const Travels = () => {
           </Menu.Group>
           <Menu.Divider />
           <Menu.Group>
+          <Link to={`/travels/${travelId}/driver`}><Menu.Item>Asignar chofer</Menu.Item></Link>
+          </Menu.Group>
+          <Menu.Group>
+          <Link to={`/travels/${travelId}/vehicle`}><Menu.Item>Asignar vehiculo</Menu.Item></Link>
+          </Menu.Group>
+          <Menu.Divider />
+          <Menu.Group>
             <Menu.Item intent="danger" onClick={() => promptDelete(travelId)}>Eliminar...</Menu.Item>
           </Menu.Group>
         </Menu>
@@ -129,6 +136,9 @@ export const Travels = () => {
               Chofer
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
+              Vehiculo
+            </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
               Estado
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
@@ -151,7 +161,12 @@ export const Travels = () => {
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/drivers/${travel.driver}?isId=true`}>{travel.driver}</Link>
+                  {(travel.driver && 
+                    <Link to={`/drivers/${travel.driver}?isId=true`}>{travel.driver}</Link>) || "No asignado"}
+                </Table.TextCell>
+                <Table.TextCell>
+                  {(travel.vehicle && 
+                    <Link to={`/vehicles/${travel.vehicle}`}>{travel.vehicle}</Link>) || "No asignado"}
                 </Table.TextCell>
                 <Table.TextCell>
                   {TRAVEL_STATES[travel.status]}

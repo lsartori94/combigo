@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
   const result = routes.find(route => route.id === id);
 
   if (!result) {
-    res.status(404).send(`Route not found`);
+    res.status(404).send(`Ruta no encontrada`);
   }
   res.json(result);
 });
@@ -30,7 +30,7 @@ router.get('/:origin', (req, res) => {
   const result = routes.filter(route => route.origin === origin);
 
   if (!result) {
-    res.status(404).send(`No routes for origin`);
+    res.status(404).send(`No hay rutas para el origen especificado`);
   }
   res.json(result);
 });
@@ -41,7 +41,7 @@ router.get('/:destination', (req, res) => {
   const result = routes.filter(route => route.destination === destination);
 
   if (!result) {
-    res.status(404).send(`No routes for destination`);
+    res.status(404).send(`No hay rutas para el destino especificado`);
   }
   res.json(result);
 });
@@ -55,14 +55,14 @@ router.post('/', (req, res) => {
   }
 
   if (origin === destination) {
-    return res.status(409).send(`Routes can't have same origin and destination`);
+    return res.status(409).send(`La ruta no puede tener un origen y destino iguales`);
   }
 
   const exists = routes.find( route =>
     route.origin === origin &&  route.destination === destination);
 
   if (exists) {
-    return res.status(409).send(`La Ruta con "origen-destino" ingresados ya existe`);
+    return res.status(409).send(`La ruta con "Origen-Destino" ingresados ya existe`);
   }
 
   routes.push({
@@ -89,14 +89,14 @@ router.put('/:id/travels', (req, res) => {
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`Route does not exists`);
+    return res.status(409).send(`La ruta no existe`);
   }
 
   //Que no cargen el mismo viaje dos veces a su ruta
   const repeated = routes.travels.find(trav => trav.id === travel.id);
 
   if (repeated) {
-    return res.status(409).send(`travel already exists`);
+    return res.status(409).send(`El viaje ya existe en la ruta`);
   }
 
   //Que no cargen dos viajes al mismo tiempo
@@ -115,17 +115,21 @@ router.put('/:id', (req, res) => {
     return res.status(400).send(`Bad Request`)
   }
 
+  if (origin === destination) {
+    return res.status(409).send(`La ruta no puede tener un origen y destino iguales.`);
+  }
+
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`Route does not exists`);
+    return res.status(409).send(`La ruta no existe`);
   }
 
   const originDestExists = routes.find( route => 
     (route.origin === origin) && (route.destination === destination) && (route.id != id));
 
   if (originDestExists) {
-    return res.status(409).send(`La Ruta con "origen-destino" ingresados ya existe`);
+    return res.status(409).send(`La ruta con "Origen-Destino" ingresados ya existe.`);
   }
 
   routes[exists] = {
@@ -145,7 +149,7 @@ router.delete('/:id', (req, res) => {
   
   const index = routes.findIndex(route => route.id === id);
   if (index === -1) {
-    return res.status(404).send(`Route not found`);
+    return res.status(404).send(`La ruta no existe`);
   }
 
   //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS

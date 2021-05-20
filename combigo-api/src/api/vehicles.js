@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
   const result = vehicles.find(veh => veh.id === id);
 
   if (!result) {
-    res.status(404).send(`Vehicle not found`);
+    res.status(404).send(`Vehiculo no encontrado`);
   }
 
   res.json(result);
@@ -64,7 +64,7 @@ router.put('/:id', (req, res) => {
   const exists = vehicles.findIndex(veh => veh.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`Vehicle does not exists`);
+    return res.status(409).send(`Vehiculo no existe`);
   }
 
   const plateExists = vehicles.find(veh => (veh.plate === plate) && (veh.id != id));
@@ -90,7 +90,7 @@ router.delete('/:id', (req, res) => {
   const index = vehicles.findIndex(veh => veh.id === id);
 
   if (index === -1) {
-    return res.status(404).send(`Vehicle not found`);
+    return res.status(404).send(`Vehiculo no encontrado`);
   }
 
   vehicles.splice(index, 1);

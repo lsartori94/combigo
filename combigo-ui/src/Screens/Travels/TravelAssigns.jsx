@@ -2,28 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router';
 import {
   Pane,
-  TextInputField,
   Spinner,
   Button,
   BackButton,
   SmallCrossIcon,
-  SavedIcon
+  SavedIcon,
+  Combobox,
+  FormField,
 } from 'evergreen-ui';
 
-import { getAdditionalDetails, saveAdditionalDetails, createAdditional } from './additionalsStore';
+import {
+  getTravelDetails,
+  saveTravelDetails,
+  getAvailableDrivers,
+  getAvailableVehicles,
+} from './travelsStore';
 
-export const AdditionalDetails = () => {
-  let { addId: additionalId } = useParams();
+
+export const TravelAssigns = () => {
+  let { travelId } = useParams();
+  let { assign } = useParams();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
-    name: ""
+    driver: "",
+    vehicle: "",
   });
   const [oldDetails, setOldDetails] = useState({});
-  const [noAdditional, setNoAdditional] = useState(true);
-  const [creating, setCreating] = useState(false);
+  const [availableDrivers, setAvailableDrivers] = useState([]);
+  const [availableVehicles, setAvailableVehicles] = useState([]);
+  const [noTravel, setNoTravel] = useState(true);
   const [formDirty, setFormDirty] = useState(false);
   const [errors, setErrors] = useState({
-    name: ""
+    driver: "",
+    vehicle: "",
   });
   const [showErrors, setShowErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
@@ -31,17 +42,17 @@ export const AdditionalDetails = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (additionalId === 'add') {
-      setNoAdditional(false);
-      setCreating(true);
-      setLoading(false);
-      return;
-    };
+    async function initializeExtras() {
+      const drivers = await getAvailableDrivers();
+      const vehicles = await getAvailableVehicles();
+      setAvailableDrivers(drivers);
+      setAvailableVehicles(vehicles);
+    }
     async function initialize() {
       try {
         setLoading(true);
-        const response = await getAdditionalDetails(additionalId);
-        setNoAdditional(false);
+        const response = await getTravelDetails(travelId);
+        setNoTravel(false);
         setDetails(response);
         setOldDetails(response);
       } catch (e) {
@@ -51,7 +62,8 @@ export const AdditionalDetails = () => {
       }
     }
     initialize();
-  }, [additionalId]);
+    initializeExtras();
+  }, [travelId])
   
   useEffect(() => {
     const prev = JSON.stringify(oldDetails);
@@ -60,33 +72,33 @@ export const AdditionalDetails = () => {
     if (prev !== act) {
       setFormDirty(true);
       for (const [key, value] of Object.entries(details)) {
-        switch (key) {
-          default:
-            if (!value) {
+        if (key === assign && !value) {
               auxErrors[key] = true;
             } else {
               auxErrors[key] = false;
             }
-            break;
-        }
       }
       setErrors({...auxErrors});
     } else {
       setFormDirty(false);
     }
-  }, [details, oldDetails]);
+  }, [details, oldDetails]); // eslint-disable-line
 
-  const inputCallback = (e, name) => {
-    const {value} = e.target;
-    switch (name) {
-      case 'name':
-        setDetails({...details, name: value});
-      break;
-      case 'bdate':
-        setDetails({...details, bdate: value});
-      break;
-      default:
-      break;
+  const inputCallback = (e, name, skipValidation) => {
+    if (skipValidation) {
+      setDetails({...details, [name]: e});
+    } else {
+      const {value} = e.target;
+      switch (name) {
+        case 'driver':
+          setDetails({...details, driver: value});
+        break;
+        case 'vehicle':
+          setDetails({...details, vehicle: value});
+        break;
+        default:
+        break;
+      }
     }
   }
 
@@ -103,13 +115,9 @@ export const AdditionalDetails = () => {
     }
     try {
       setLoading(true);
-      if (creating) {
-        await createAdditional(details);
-      } else {
-        await saveAdditionalDetails(details);
-      }
+      await saveTravelDetails(details);
       setLoading(false);
-      history.push('/additionals');
+      history.push('/travels');
     } catch (e) {
       setApiError(e.message)
       setSaveError(true);
@@ -118,16 +126,17 @@ export const AdditionalDetails = () => {
   }
 
   const backCallback = () => {
-    history.push('/additionals');
+    history.push('/travels');
   }
 
   const renderDetails = (details) => {
-    if (noAdditional) {
-      return (<div>No existe Adicional</div>)
+    if (noTravel) {
+      return (<div>No existe Ruta</div>)
     }
     return (
       <Pane
         marginTop={20}
+        marginBottom={100}
         display="flex"
         alignItems="center"
         flexDirection="column"
@@ -143,16 +152,44 @@ export const AdditionalDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
-          <TextInputField
+
+          {assign === "driver" && (  
+          <FormField
             width={'65vh'}
-            required
-            validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
-            label="Nombre de Adicional"
-            placeholder="Nombre"
-            description="Debe ser único en el sistema"
-            value={details.name}
-            onChange={e => inputCallback(e, 'name')}
-          />
+            marginBottom={20}
+            label="Chofer"
+            description="El Chofer ya debe existir en el sistema"
+            validationMessage={showErrors && errors.driver ? "Campo Requerido" : null}
+          >
+            <Combobox
+              items={availableDrivers}
+              selectedItem={availableDrivers.find(elem => elem.id === details.driver)}
+              label="Chofer"
+              onChange={value => value ? inputCallback(value.id, 'driver', true) : ''}
+              placeholder="Chofer"
+              itemToString={item => item ? `${item.name} (${item.id})` : ''}
+            />
+          </FormField>
+
+          )}
+          {assign === "vehicle" && (
+          <FormField
+            width={'65vh'}
+            marginBottom={20}
+            label="Vehiculo"
+            description="El vehiculo ya debe existir en el sistema"
+            validationMessage={showErrors && errors.vehicle ? "Campo Requerido" : null}
+          >
+            <Combobox
+              items={availableVehicles}
+              selectedItem={availableVehicles.find(elem => elem.id === details.vehicle)}
+              onChange={value => value ? inputCallback(value.id, 'vehicle', true) : ''}
+              placeholder="Vehiculo"
+              itemToString={item => item ? `${item.name} (${item.id})` : ''}
+            />
+          </FormField>
+          )}
+
           <Button
             width={'65vh'}
             display="flex"

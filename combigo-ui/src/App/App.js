@@ -11,7 +11,7 @@ import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
 import { Login } from '../Screens/Login/Login';
 import { Register } from '../Screens/Register/Register';
-import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails/VehicleDetails";
+import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails";
 import { Vehicles } from '../Screens/Vehicles/Vehicles';
 import { Drivers } from '../Screens/Drivers/Drivers';
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';
@@ -19,6 +19,7 @@ import { RouteDetails } from '../Screens/Routes/RouteDetails';
 import { Routes } from '../Screens/Routes/Routes';
 import { Travels } from '../Screens/Travels/Travels';
 import { TravelDetails } from '../Screens/Travels/TravelDetails';
+import { TravelAssigns } from '../Screens/Travels/TravelAssigns';
 import { Additionals } from '../Screens/Additionals/Additionals';
 import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
 import { ProvideAuth } from '../utils/use-auth';
@@ -71,6 +72,9 @@ function App() {
             </Route>
             <Route path="/routes">
               <Routes />
+            </Route>
+            <Route path="/travels/:travelId/:assign">
+              <TravelAssigns />
             </Route>
             <Route path="/travels/:travelId">
               <TravelDetails />

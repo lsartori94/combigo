@@ -13,15 +13,13 @@ import {
   Checkbox
 } from 'evergreen-ui';
 
-import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
+import { TRAVEL_STATES } from '../../constants.js';
 
 import {
   getTravelDetails,
   saveTravelDetails,
   createTravel,
-  getAvailableDrivers,
   getAvailableAditionals,
-  getAvailableVehicles,
   getAvailableRoutes
 } from './travelsStore';
 
@@ -31,21 +29,12 @@ export const TravelDetails = () => {
   const [details, setDetails] = useState({
     dateAndTime: "",
     route: "",
-    passengers: [
-      {
-        id: "",
-        legalStatus: LEGAL_STATUS.PENDING
-      }
-    ],
-    driver: "",
-    vehicle: "",
+    passengers: [],
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: []
   });
   const [oldDetails, setOldDetails] = useState({});
-  const [availableDrivers, setAvailableDrivers] = useState([]);
   const [availableAdditionals, setAvailableAdditionals] = useState([]);
-  const [availableVehicles, setAvailableVehicles] = useState([]);
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -53,14 +42,7 @@ export const TravelDetails = () => {
   const [errors, setErrors] = useState({
     dateAndTime: "",
     route: "",
-    passengers: [
-      {
-        id: "",
-        legalStatus: LEGAL_STATUS.PENDING
-      }
-    ],
-    driver: "",
-    vehicle: "",
+    passengers: [],
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: []
   });
@@ -71,13 +53,9 @@ export const TravelDetails = () => {
 
   useEffect(() => {
     async function initializeExtras() {
-      const drivers = await getAvailableDrivers();
       const additionals = await getAvailableAditionals();
-      const vehicles = await getAvailableVehicles();
       const routes = await getAvailableRoutes();
-      setAvailableDrivers(drivers);
       setAvailableAdditionals(additionals);
-      setAvailableVehicles(vehicles);
       setAvailableRoutes(routes);
     }
     if (travelId === 'add') {
@@ -139,20 +117,11 @@ export const TravelDetails = () => {
         case 'route':
           setDetails({...details, route: value});
         break;
-        case 'passengers':
-          setDetails({...details, passengers: value});
-        break;
-        case 'driver':
-          setDetails({...details, driver: value});
-        break;
-        case 'vehicle':
-          setDetails({...details, vehicle: value});
-        break;
-        case 'status':
-          setDetails({...details, status: value});
-        break;
         case 'availableAdditionals':
           setDetails({...details, availableAdditionals: value});
+        break;
+        case 'passengers':
+          setDetails({...details, passengers: value});
         break;
         default:
         break;
@@ -244,22 +213,15 @@ export const TravelDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
-          <TextInputField
-            width={'65vh'}
-            label="ID"
-            disabled
-            description="Autogenerada por el sistema"
-            value={details.id}
-          />
-
           <FormField
             width={'65vh'}
             marginBottom={20}
             required
-            validationMessage={showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null}
+            validationMessage={(showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null) || (details.passengers.length ? "Hay pasajes vendidos para el viaje" : null)}
             label="Fecha y Hora"
           >
             <input
+              disabled={details.passengers.length}
               type="datetime-local"
               value={details.dateAndTime}
               onChange={e => inputCallback(e, 'dateAndTime')}
@@ -271,7 +233,7 @@ export const TravelDetails = () => {
           <FormField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.route ? "Campo Requerido" : null}
+            validationMessage={(showErrors && errors.route ? "Campo Requerido" : null) || (details.passengers.length ? "Hay pasajes vendidos para el viaje" : null)}
             marginBottom={20}
             label="Ruta"
             description="La Ruta ya debe existir en el sistema"
@@ -280,44 +242,13 @@ export const TravelDetails = () => {
               items={availableRoutes}
               selectedItem={availableRoutes.find(elem => elem.id === details.route)}
               label="Ruta"
+              disabled={details.passengers.length}
               onChange={value => value ? inputCallback(value.id, 'route', true) : ''}
               placeholder="Ruta"
               itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}
             />
           </FormField>
-          <FormField
-            width={'65vh'}
-            marginBottom={20}
-            label="Chofer"
-            description="El Chofer ya debe existir en el sistema"
-            validationMessage={showErrors && errors.driver ? "Campo Requerido" : null}
-            required
-          >
-            <Combobox
-              items={availableDrivers}
-              selectedItem={availableDrivers.find(elem => elem.id === details.driver)}
-              label="Chofer"
-              onChange={value => value ? inputCallback(value.id, 'driver', true) : ''}
-              placeholder="Chofer"
-              itemToString={item => item ? `${item.name} (${item.id})` : ''}
-            />
-          </FormField>
-          <FormField
-            width={'65vh'}
-            marginBottom={20}
-            label="Vehiculo"
-            description="El vehiculo ya debe existir en el sistema"
-            validationMessage={showErrors && errors.vehicle ? "Campo Requerido" : null}
-            required
-          >
-            <Combobox
-              items={availableVehicles}
-              selectedItem={availableVehicles.find(elem => elem.id === details.vehicle)}
-              onChange={value => value ? inputCallback(value.id, 'vehicle', true) : ''}
-              placeholder="Vehiculo"
-              itemToString={item => item ? `${item.name} (${item.id})` : ''}
-            />
-          </FormField>
+
           <FormField
             width={'65vh'}
             marginBottom={20}
@@ -331,6 +262,7 @@ export const TravelDetails = () => {
               </ul>
             </Pane>
           </FormField>
+
           <TextInputField
             width={'65vh'}
             disabled
@@ -338,7 +270,6 @@ export const TravelDetails = () => {
             label="Estado"
             placeholder="Pendiente"
             value={TRAVEL_STATES[details.status]}
-            onChange={e => inputCallback(e, 'status')}
           />
           <Button
             width={'65vh'}
