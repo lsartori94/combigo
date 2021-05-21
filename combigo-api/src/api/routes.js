@@ -8,9 +8,10 @@ const ID_BASE = 'CGOR';
 
 const {routes, travels} = require('./store');
 
-// Get all routes
+// Get active routes
 router.get('/', (req, res) => {
-  const activeRoutes = routes.filter(routes => routes.active === true );
+  const activeRoutes = routes.filter(route => route.active === true );
+
   res.json(activeRoutes);
 });
 
@@ -27,8 +28,9 @@ router.get('/:id', (req, res) => {
 
 // Search for routes by origin
 router.get('/:origin', (req, res) => {
-  const activeRoutes = routes.filter(routes => routes.active === true );
   const {origin} = req.params;
+
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const result = activeRoutes.filter(route => route.origin === origin);
 
   if (!result) {
@@ -39,8 +41,9 @@ router.get('/:origin', (req, res) => {
 
 // Search for routes by destination
 router.get('/:destination', (req, res) => {
-  const activeRoutes = routes.filter(routes => routes.active === true );
   const {destination} = req.params;
+
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const result = activeRoutes.filter(route => route.destination === destination);
 
   if (!result) {
@@ -51,7 +54,6 @@ router.get('/:destination', (req, res) => {
 
 // Create route
 router.post('/', (req, res) => {
-  const activeRoutes = routes.filter(routes => routes.active === true );
   const {origin, destination, distanceKm, durationMin} = req.body;
 
   if (!req.body) {
@@ -62,6 +64,7 @@ router.post('/', (req, res) => {
     return res.status(409).send(`La ruta no puede tener un origen y destino iguales`);
   }
 
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const exists = activeRoutes.find( route =>
     route.origin === origin &&  route.destination === destination);
 
@@ -120,7 +123,7 @@ router.put('/:id/travels', (req, res) => {
 // Modify route with id
 router.put('/:id', (req, res) => {
   const {id} = req.params;
-  const {origin, destination, durationMin, distanceKm} = req.body;
+  const {origin, destination, durationMin, distanceKm, travels, active} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -136,7 +139,9 @@ router.put('/:id', (req, res) => {
     return res.status(404).send(`La ruta no existe`);
   }
 
-  const originDestExists = routes.find( route => 
+  const activeRoutes = routes.filter(routes => routes.active === true );
+
+  const originDestExists = activeRoutes.find( route => 
     (route.origin === origin) && (route.destination === destination) && (route.id != id));
 
   if (originDestExists) {
@@ -149,7 +154,8 @@ router.put('/:id', (req, res) => {
     destination,
     durationMin,
     distanceKm,
-    active: true,
+    travels,
+    active
   };
 
   res.send(routes);
@@ -158,12 +164,13 @@ router.put('/:id', (req, res) => {
 // Delete route with id 
 router.delete('/:id', (req, res) => {
   const {id} = req.params;
-  
+  console.log("api1");
   const index = routes.findIndex(route => route.id === id);
+
   if (index === -1) {
     return res.status(404).send(`La ruta no existe`);
   }
-
+  console.log("ap21");
   //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS
   routes[index].travels.forEach(travel => {
     const travelIndex = travels.findIndex(item => item.id === travel.id);
@@ -172,7 +179,6 @@ router.delete('/:id', (req, res) => {
     }
   });
 
-  //routes.splice(index, 1);
   routes[index].active = false;
 
   res.json(routes);

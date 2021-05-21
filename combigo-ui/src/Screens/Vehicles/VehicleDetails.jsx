@@ -15,16 +15,28 @@ import { getVehicleDetails, saveVehiculeDetails, createVehicle } from './vehicle
 export const VehicleDetails = () => {
   let { vehicleId } = useParams();
   const [loading, setLoading] = useState(true);
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState({
+    name: "",
+    brand: "",
+    plate: "",
+    capacity: ""
+  });
   const [oldDetails, setOldDetails] = useState({});
   const [noVehicle, setNoVehicle] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);
-  const [errors, setErrors] = useState(false);
+  const [errors, setErrors] = useState({
+    name: false,
+    brand: false,
+    plate: false,
+    capacity: false
+  });
+  const [showErrors, setShowErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [apiError, setApiError] = useState(null);
   const history = useHistory();
   const plateRegex = /^[a-z0-9]{0,8}$/i;
+  const capacityRegex = /^[0-9]{0,3}$/i;
 
   useEffect(() => {
     if (vehicleId === 'add') {
@@ -79,8 +91,8 @@ export const VehicleDetails = () => {
         }
         break;
       case 'capacity':
-        if (!isNaN(+value)) {
-          setDetails({...details, capacity: +value});
+        if (capacityRegex.test(value)) {
+          setDetails({...details, capacity: value});
         }
         break;
       default:
@@ -93,6 +105,12 @@ export const VehicleDetails = () => {
   }
 
   const saveCallback = async () => {
+    if (Object.values(errors).find(val => val)) {
+      setShowErrors(true);
+      return;
+    } else {
+      setShowErrors(false);
+    }
     try {
       setLoading(true);
       if (creating) {
@@ -103,7 +121,7 @@ export const VehicleDetails = () => {
       setLoading(false);
       history.push('/vehicles');
     } catch (e) {
-      setApiError(e.message)
+      setApiError(e.message);
       setSaveError(true);
       setLoading(false);
     }
@@ -138,7 +156,7 @@ export const VehicleDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage="Campo Requerido"
+            validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
             label="Nombre"
             placeholder="Nombre"
             description="Nombre del vehículo"
@@ -148,7 +166,7 @@ export const VehicleDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage="Campo Requerido"
+            validationMessage={showErrors && errors.brand ? "Campo Requerido" : null}
             label="Marca"
             placeholder="Marca"
             description="Marca del vehículo"
@@ -158,7 +176,7 @@ export const VehicleDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage="Campo Requerido"
+            validationMessage={showErrors && errors.plate ? "Campo Requerido" : null}
             label="Patente"
             placeholder="AAAA0000"
             description="Solo caracteres alfanumericos, maxima longitud de 8 caracteres"
@@ -168,7 +186,7 @@ export const VehicleDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage="Campo Requerido"
+            validationMessage={showErrors && errors.capacity ? "Campo Requerido" : null}
             label="Capacidad"
             placeholder="5"
             description="Cantidad de asientos para pasajeros"

@@ -69,7 +69,15 @@ let vehicles = [
     brand: 'Volvo',
     plate: 'FGHI1234',
     capacity: 10,
-    active: false,
+    active: true,
+  },
+  {
+    id: 'CGOV3',
+    name: 'Mercedes 1',
+    brand: 'Mercedes Benz',
+    plate: 'JKML5678',
+    capacity: 20,
+    active: true,
   }
 ];
 

@@ -9,10 +9,11 @@ const vehicles = require('./store').vehicles;
 // Get all vehicles
 router.get('/', (req, res) => {
   const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
+
   res.json(activeVehicles);
 });
 
-// Search for vehicle with id
+// Search for vehicle with ID
 router.get('/:id', (req, res) => {
   const {id} = req.params;
   const result = vehicles.find(veh => veh.id === id);
@@ -26,7 +27,6 @@ router.get('/:id', (req, res) => {
 
 // Create vehicle
 router.post('/', (req, res) => {
-  const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
   const {name, brand, plate, capacity} = req.body;
 
   if (!req.body) {
@@ -36,7 +36,8 @@ router.post('/', (req, res) => {
   if (!capacity) {
     return res.status(409).send(`Capacidad inválida`)
   }
-
+  
+  const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
   const exists = activeVehicles.find(veh => veh.plate === plate);
 
   if (exists) {
@@ -57,14 +58,14 @@ router.post('/', (req, res) => {
 
 // Modify vehicle with id
 router.put('/:id', (req, res) => {
-  const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
   const {id} = req.params;
-  const {name, brand, plate, capacity} = req.body;
+  const {name, brand, plate, capacity, active} = req.body;
 
   if (!req.body || !capacity) {
     return res.status(400).send(`Bad Request`)
   }
 
+  const activeVehicles = vehicles.filter(veh => veh.active === true );
   const exists = vehicles.findIndex(veh => veh.id === id);
 
   if (exists === -1) {
@@ -87,7 +88,7 @@ router.put('/:id', (req, res) => {
     brand,
     plate,
     capacity,
-    active: true,
+    active
   };
 
   res.send(vehicles);
@@ -95,8 +96,6 @@ router.put('/:id', (req, res) => {
 
 // Delete vehicle with id
 router.delete('/:id', (req, res) => {
-  return res.status(404).send(`Vehiculo no encontrado`);
-
   const {id} = req.params;
   const index = vehicles.findIndex(veh => veh.id === id);
 
@@ -104,7 +103,6 @@ router.delete('/:id', (req, res) => {
     return res.status(404).send(`Vehiculo no encontrado`);
   }
 
-  //vehicles.splice(index, 1);
   vehicles[index].active = false;
 
   res.json(vehicles);

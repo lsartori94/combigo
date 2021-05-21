@@ -39,8 +39,9 @@ export const Vehicles = () => {
 
   const deleteVeh = async (id) =>{
     try {
-      const response = await deleteVehicle(id);
-      setVehicles(response);
+      await deleteVehicle(id);
+      const response = await getVehicles();
+        setVehicles(response);
     } catch (e) {
       console.error(e);
     }
