@@ -103,7 +103,7 @@ export const Home = () => {
         />
       </FormField>
       <Button
-        disabled={!selectedDestination || (selectedOrigin == selectedDestination)} //Cambie esto
+        disabled={!selectedDestination || (selectedOrigin === selectedDestination)} //Cambie esto
       >Buscar</Button>
       </Pane>
     </Pane>

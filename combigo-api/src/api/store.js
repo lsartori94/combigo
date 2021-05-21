@@ -195,7 +195,7 @@ let additionals = [
   },
   {
     id: 'CGOA2',
-    name: 'Caja de 6 alfajores Jorjito',
+    name: 'Caja de 6 alfajores Jorgito',
     price: 500,
     sold: false,
     active: true
@@ -222,9 +222,9 @@ let additionals = [
     active: true
   },
   { 
-    id: 'CGOA5',
+    id: 'CGOA6',
     name: 'Botella 200ml de Manaos',
-    price: 125,
+    price: 100,
     sold: true,
     active: false
   }

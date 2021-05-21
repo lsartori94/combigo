@@ -16,14 +16,16 @@ export const AdditionalDetails = () => {
   let { addId: additionalId } = useParams();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
-    name: ""
+    name: "",
+    price: ""
   });
   const [oldDetails, setOldDetails] = useState({});
   const [noAdditional, setNoAdditional] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);
   const [errors, setErrors] = useState({
-    name: ""
+    name: "",
+    price: ""
   });
   const [showErrors, setShowErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
@@ -62,7 +64,7 @@ export const AdditionalDetails = () => {
       for (const [key, value] of Object.entries(details)) {
         switch (key) {
           default:
-            if (!value) {
+            if (value === "") {
               auxErrors[key] = true;
             } else {
               auxErrors[key] = false;
@@ -82,9 +84,6 @@ export const AdditionalDetails = () => {
       case 'name':
         setDetails({...details, name: value});
       break;
-      //case 'bdate':
-      //  setDetails({...details, bdate: value});
-      //break;
       case 'price':
         setDetails({...details, price: value});
       break;
@@ -149,7 +148,8 @@ export const AdditionalDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
+            disabled={details.sold}
+            validationMessage={showErrors && errors.name ? "Campo Requerido" : null || (details.sold ? "Se han vendido unidades de este adicional" : null)}
             label="Nombre de Adicional"
             placeholder="Nombre"
             description="Debe ser único en el sistema"
@@ -159,10 +159,11 @@ export const AdditionalDetails = () => {
           <TextInputField
             width={'65vh'}
             required
-            validationMessage={showErrors && errors.price ? "Campo Requerido" : null}
-            label="Precio en pesos"
+            disabled={details.sold}
+            validationMessage={showErrors && errors.price ? "Campo Requerido" : null || (details.sold ? "Se han vendido unidades de este adicional" : null)}
+            label="Precio"
             placeholder="0"
-            //description="Debe ser único en el sistema"
+            description="Precio en pesos"
             value={details.price}
             onChange={e => inputCallback(e, 'price')}
           />
