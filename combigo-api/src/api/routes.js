@@ -164,13 +164,12 @@ router.put('/:id', (req, res) => {
 // Delete route with id 
 router.delete('/:id', (req, res) => {
   const {id} = req.params;
-  console.log("api1");
   const index = routes.findIndex(route => route.id === id);
 
   if (index === -1) {
     return res.status(404).send(`La ruta no existe`);
   }
-  console.log("ap21");
+  
   //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS
   routes[index].travels.forEach(travel => {
     const travelIndex = travels.findIndex(item => item.id === travel.id);
