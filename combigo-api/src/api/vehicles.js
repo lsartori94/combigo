@@ -8,7 +8,8 @@ const vehicles = require('./store').vehicles;
 
 // Get all vehicles
 router.get('/', (req, res) => {
-  res.json(vehicles);
+  const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
+  res.json(activeVehicles);
 });
 
 // Search for vehicle with id
@@ -25,6 +26,7 @@ router.get('/:id', (req, res) => {
 
 // Create vehicle
 router.post('/', (req, res) => {
+  const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
   const {name, brand, plate, capacity} = req.body;
 
   if (!req.body) {
@@ -35,7 +37,7 @@ router.post('/', (req, res) => {
     return res.status(409).send(`Capacidad inválida`)
   }
 
-  const exists = vehicles.find(veh => veh.plate === plate);
+  const exists = activeVehicles.find(veh => veh.plate === plate);
 
   if (exists) {
     return res.status(409).send(`Vehiculo con patente ingresada ya existe`);
@@ -47,6 +49,7 @@ router.post('/', (req, res) => {
     brand,
     plate,
     capacity,
+    active: true,
   });
 
   res.send(vehicles);
@@ -54,6 +57,7 @@ router.post('/', (req, res) => {
 
 // Modify vehicle with id
 router.put('/:id', (req, res) => {
+  const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
   const {id} = req.params;
   const {name, brand, plate, capacity} = req.body;
 
@@ -67,7 +71,11 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`Vehiculo no existe`);
   }
 
-  const plateExists = vehicles.find(veh => (veh.plate === plate) && (veh.id != id));
+  if (vehicles[exists].active == false) {
+    return res.status(405).send(`Vehiculo inactivo`);
+  }
+
+  const plateExists = activeVehicles.find(veh => (veh.plate === plate) && (veh.id != id));
 
   if (plateExists) {
     return res.status(409).send(`Vehiculo con patente ingresada ya existe`);
@@ -79,6 +87,7 @@ router.put('/:id', (req, res) => {
     brand,
     plate,
     capacity,
+    active: true,
   };
 
   res.send(vehicles);
@@ -86,6 +95,8 @@ router.put('/:id', (req, res) => {
 
 // Delete vehicle with id
 router.delete('/:id', (req, res) => {
+  return res.status(404).send(`Vehiculo no encontrado`);
+
   const {id} = req.params;
   const index = vehicles.findIndex(veh => veh.id === id);
 
@@ -93,7 +104,8 @@ router.delete('/:id', (req, res) => {
     return res.status(404).send(`Vehiculo no encontrado`);
   }
 
-  vehicles.splice(index, 1);
+  //vehicles.splice(index, 1);
+  vehicles[index].active = false;
 
   res.json(vehicles);
 });

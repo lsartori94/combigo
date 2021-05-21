@@ -119,12 +119,16 @@ export const Additionals = () => {
             <Table.TextHeaderCell>
               Nombre
             </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
+              Precio en pesos
+            </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={240}>
             {additionals.map(additional => (
               <Table.Row key={additional.id}>
                 <Table.TextCell>{additional.id}</Table.TextCell>
                 <Table.TextCell>{additional.name}</Table.TextCell>
+                <Table.TextCell>{additional.price}</Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
                     content={renderRowMenu(additional.id)}

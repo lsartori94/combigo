@@ -8,7 +8,8 @@ let users = [
     name: 'Admin',
     password: 'admin',
     bdate: '', 
-    role: ROLES.ADMIN
+    role: ROLES.ADMIN,
+    active: true
   },
   {
     id: 'CGOU1',
@@ -19,7 +20,8 @@ let users = [
     bdate: '1960-12-12',
     dni: '34506758',
     completedTravels: [],
-    role: ROLES.DRIVER
+    role: ROLES.DRIVER,
+    active: true
   },
   {
     id: 'CGOU2',
@@ -30,7 +32,8 @@ let users = [
     bdate: '1990-11-12',
     dni: '37502385',
     travelHistory: [],
-    role: ROLES.CLIENT
+    role: ROLES.CLIENT,
+    active: true
   },
   {
     id: 'CGOU3',
@@ -46,7 +49,8 @@ let users = [
         boughtAdditionals: []
       }
     ],
-    role: ROLES.CLIENT
+    role: ROLES.CLIENT,
+    active: true
   }
 ];
 
@@ -56,14 +60,16 @@ let vehicles = [
     name: 'Volvo 1',
     brand: 'Volvo',
     plate: 'ASDF1234',
-    capacity: 12
+    capacity: 12,
+    active: true,
   },
   {
     id: 'CGOV2',
     name: 'Volvo 2',
     brand: 'Volvo',
     plate: 'FGHI1234',
-    capacity: 10
+    capacity: 10,
+    active: false,
   }
 ];
 
@@ -79,6 +85,7 @@ let routes = [
         id: 'CGOT1'
       }
     ],
+    active: true
   },
   {
     id: 'CGOR2',
@@ -87,6 +94,7 @@ let routes = [
     distanceKm: 600,
     durationMin: 400,
     travels: [],
+    active: true
   },
   {
     id: 'CGOR3',
@@ -99,6 +107,7 @@ let routes = [
         id: 'CGOT2'
       }
     ],
+    active: true
   },
   { 
     id: 'CGOR4',
@@ -107,6 +116,7 @@ let routes = [
     distanceKm: 300,
     durationMin: 200,
     travels: [],
+    active: true
   }
 ];
 
@@ -128,7 +138,8 @@ let travels = [
       "CGOA1",
       "CGOA3"
     ],
-    boughtAdditionals: []
+    boughtAdditionals: [],
+    active: true
   },
   {
     id: 'CGOT2',
@@ -148,7 +159,8 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
-    boughtAdditionals: []
+    boughtAdditionals: [],
+    active: true
   },
   {
     id: 'CGOT3',
@@ -169,6 +181,7 @@ let travels = [
       "CGOA5"
     ],
     boughtAdditionals: [],
+    active: true
   }
 ];
 
@@ -176,22 +189,44 @@ let additionals = [
   {
     id: 'CGOA1',
     name: 'Caja de 8 chicles de frutilla Beldent',
+    price: 50,
+    sold: false,
+    active: true
   },
   {
     id: 'CGOA2',
     name: 'Caja de 6 alfajores Jorjito',
+    price: 500,
+    sold: false,
+    active: true
   },
   { 
     id: 'CGOA3',
     name: 'Caja de 6 conitos Havana',
+    price: 200,
+    sold: true,
+    active: true
   },
   { 
     id: 'CGOA4',
     name: 'Botella 200ml de Pepsi',
+    price: 120,
+    sold: true,
+    active: true
   },
   { 
     id: 'CGOA5',
     name: 'Botella 200ml de Coca Cola',
+    price: 125,
+    sold: true,
+    active: true
+  },
+  { 
+    id: 'CGOA5',
+    name: 'Botella 200ml de Manaos',
+    price: 125,
+    sold: true,
+    active: false
   }
 ];
 

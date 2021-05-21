@@ -82,8 +82,11 @@ export const AdditionalDetails = () => {
       case 'name':
         setDetails({...details, name: value});
       break;
-      case 'bdate':
-        setDetails({...details, bdate: value});
+      //case 'bdate':
+      //  setDetails({...details, bdate: value});
+      //break;
+      case 'price':
+        setDetails({...details, price: value});
       break;
       default:
       break;
@@ -152,6 +155,16 @@ export const AdditionalDetails = () => {
             description="Debe ser único en el sistema"
             value={details.name}
             onChange={e => inputCallback(e, 'name')}
+          />
+          <TextInputField
+            width={'65vh'}
+            required
+            validationMessage={showErrors && errors.price ? "Campo Requerido" : null}
+            label="Precio en pesos"
+            placeholder="0"
+            //description="Debe ser único en el sistema"
+            value={details.price}
+            onChange={e => inputCallback(e, 'price')}
           />
           <Button
             width={'65vh'}

@@ -10,7 +10,8 @@ const {routes, travels} = require('./store');
 
 // Get all routes
 router.get('/', (req, res) => {
-  res.json(routes);
+  const activeRoutes = routes.filter(routes => routes.active === true );
+  res.json(activeRoutes);
 });
 
 // Search for route with id
@@ -26,28 +27,31 @@ router.get('/:id', (req, res) => {
 
 // Search for routes by origin
 router.get('/:origin', (req, res) => {
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const {origin} = req.params;
-  const result = routes.filter(route => route.origin === origin);
+  const result = activeRoutes.filter(route => route.origin === origin);
 
   if (!result) {
-    res.status(404).send(`No hay rutas para el origen especificado`);
+    res.status(404).send(`No hay rutas activas para el origen especificado`);
   }
   res.json(result);
 });
 
 // Search for routes by destination
 router.get('/:destination', (req, res) => {
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const {destination} = req.params;
-  const result = routes.filter(route => route.destination === destination);
+  const result = activeRoutes.filter(route => route.destination === destination);
 
   if (!result) {
-    res.status(404).send(`No hay rutas para el destino especificado`);
+    res.status(404).send(`No hay rutas activas para el destino especificado`);
   }
   res.json(result);
 });
 
 // Create route
 router.post('/', (req, res) => {
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const {origin, destination, distanceKm, durationMin} = req.body;
 
   if (!req.body) {
@@ -58,7 +62,7 @@ router.post('/', (req, res) => {
     return res.status(409).send(`La ruta no puede tener un origen y destino iguales`);
   }
 
-  const exists = routes.find( route =>
+  const exists = activeRoutes.find( route =>
     route.origin === origin &&  route.destination === destination);
 
   if (exists) {
@@ -72,6 +76,7 @@ router.post('/', (req, res) => {
     distanceKm,
     durationMin,
     travels: [],
+    active: true,
   });
 
   res.send(routes);
@@ -79,6 +84,7 @@ router.post('/', (req, res) => {
 
 // Add a Travel with the id of a route
 router.put('/:id/travels', (req, res) => {
+  const activeRoutes = routes.filter(routes => routes.active === true );
   const {id} = req.params;
   const {travel} = req.body;
 
@@ -89,14 +95,19 @@ router.put('/:id/travels', (req, res) => {
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`La ruta no existe`);
+    return res.status(404).send(`La ruta no existe`);
+  }
+
+  //Que no carguen un viaje a una ruta ya eliminada
+  if (activeRoutes[exists].active = false) {
+    return res.status(405).send(`La ruta fue deshabilitada`);
   }
 
   //Que no cargen el mismo viaje dos veces a su ruta
   const repeated = routes.travels.find(trav => trav.id === travel.id);
 
   if (repeated) {
-    return res.status(409).send(`El viaje ya existe en la ruta`);
+    return res.status(409).send(`El viaje ya existe en la misma ruta`);
   }
 
   //Que no cargen dos viajes al mismo tiempo
@@ -122,7 +133,7 @@ router.put('/:id', (req, res) => {
   const exists = routes.findIndex(route => route.id === id);
 
   if (exists === -1) {
-    return res.status(409).send(`La ruta no existe`);
+    return res.status(404).send(`La ruta no existe`);
   }
 
   const originDestExists = routes.find( route => 
@@ -137,7 +148,8 @@ router.put('/:id', (req, res) => {
     origin,
     destination,
     durationMin,
-    distanceKm
+    distanceKm,
+    active: true,
   };
 
   res.send(routes);
@@ -158,9 +170,10 @@ router.delete('/:id', (req, res) => {
     if (travelIndex > -1 && travels[travelIndex].status == TRAVEL_STATES.NOT_STARTED) {
       travels[travelIndex].status = TRAVEL_STATES.CANCELED;
     }
-  })
+  });
 
-  routes.splice(index, 1);
+  //routes.splice(index, 1);
+  routes[index].active = false;
 
   res.json(routes);
 });

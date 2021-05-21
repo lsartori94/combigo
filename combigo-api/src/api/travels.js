@@ -10,7 +10,8 @@ const TRAVEL_STATES = require('./constants').TRAVEL_STATES;
 
 // Get all travels
 router.get('/', (req, res) => {
-  res.json(travels);
+  const activeTravels = travels.filter(travels => travels.active === true );
+  res.json(activeTravels);
 });
 
 // Search for travel with id
@@ -47,6 +48,7 @@ router.post('/', (req, res) => {
     vehicle: "",
     passengers: [],
     boughtAdditionals: [],
+    active: true,
   });
 
   res.send(travels);
@@ -55,7 +57,7 @@ router.post('/', (req, res) => {
 // Modify travel with id. Creo que todo deberia tener un setter porque todo cambia demasiado
 router.put('/:id', (req, res) => {
   const {id} = req.params;
-  const {dateAndTime, route, vehicle, driver, availableAdditionals, passengers, status} = req.body;
+  const {dateAndTime, route, vehicle, driver, availableAdditionals, passengers, status, boughtAdditionals} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -67,15 +69,21 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`El viaje no existe`);
   }
 
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
   travels[exists] = {
     id,
     dateAndTime,
     route,
+    status,
+    availableAdditionals,
     driver,
     vehicle,
-    availableAdditionals,
     passengers,
-    status,
+    boughtAdditionals,
+    active: true,
   };
 
   res.send(travels);
@@ -94,6 +102,10 @@ router.put('/:id', (req, res) => {
 
   if (exists === -1) {
     return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
   }
 
   travels[exists].passengers.push( passenger )
@@ -116,6 +128,10 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`El viaje no existe`);
   }
 
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
   travels[exists].posibleAdditionals.push( additional )
 
   res.send(additional);
@@ -136,6 +152,10 @@ router.put('/:id', (req, res) => {
     return res.status(409).send(`El viaje no existe`);
   }
 
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
   travels[exists].boughtAdditionals.push( additional );
 
   res.send(additional);
@@ -150,7 +170,8 @@ router.delete('/:id', (req, res) => {
     return res.status(404).send(`Viaje no encontrado`);
   }
 
-  travels.splice(index, 1);
+  //travels.splice(index, 1);
+  travels[index].active = false;
 
   res.json(travels);
 });

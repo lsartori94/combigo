@@ -13,10 +13,12 @@ router.get('/', (req, res) => {
     const actualRole = role && CONSTANTS.ROLES[role.toUpperCase()];
     let result;
 
+    const activeUsers = users.filter(user => user.active === true );
+
     if (actualRole) {
-      result = users.filter(user => user.role === actualRole);
+      result = activeUsers.filter(user => user.role === actualRole);
     } else {
-      result = users;
+      result = activeUsers;
     }
   
     res.json(result);
@@ -78,6 +80,7 @@ router.post('/', (req, res) => {
     bdate,
     dni,
     role,
+    active: true,
   }
 
   users.push(newUser);
@@ -100,6 +103,10 @@ router.put('/:uname', (req, res) => {
     return res.status(409).send(`Usuario no encontrado`);
   }
 
+  if (users[exists].active === false ) {
+    return res.status(405).send(`Usuario inactivo`);
+  }
+
   // check if email/dni already exists 
   const emailExists = users.find(user => (user.email === email) && (user.username != uname));
   const dniExists = users.find(user => (user.dni === dni) && (user.username != uname));
@@ -120,6 +127,7 @@ router.put('/:uname', (req, res) => {
     bdate,
     dni,
     role,
+    active: true,
   };
 
   res.send(users);
@@ -134,7 +142,8 @@ router.delete('/:uname', (req, res) => {
     return res.status(404).send(`Usuario no encontrado`);
   }
 
-  users.splice(index, 1);
+  //users.splice(index, 1);
+  users[index].active = false;
 
   res.json(users);
 });
@@ -147,7 +156,10 @@ router.post('/login', (req, res) => {
     return res.status(400).send(`Bad Request`)
   }
 
-  const result = users.find(user => user.email === email);
+  //Solo se pueden loggear usuarios activos
+  const activeUsers = users.filter(user => user.active === true );
+
+  const result = activeUsers.find(user => user.email === email);
 
   if (!result) {
     res.status(404).send(`Usuario no encontrado`);
