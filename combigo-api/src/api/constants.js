@@ -5,10 +5,10 @@ const ROLES = {
 }
 
 const TRAVEL_STATES = {
-  NOT_STARTED: "NOT_STARTED",
-  IN_PROGRESS: "IN_PROGRESS",
-  FINISHED: "FINISHED",
-  CANCELED: "CANCELED"
+  NOT_STARTED: "Pendiente",
+  IN_PROGRESS: "En Progreso",
+  FINISHED: "Terminado",
+  CANCELED: "Cancelado"
 }
 
 const LEGAL_STATUS = {

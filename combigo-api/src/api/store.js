@@ -89,9 +89,7 @@ let routes = [
     distanceKm: 30,
     durationMin: 40,
     travels: [
-      {
-        id: 'CGOT1'
-      }
+      'CGOT1'
     ],
     active: true
   },
@@ -111,9 +109,8 @@ let routes = [
     distanceKm: 30,
     durationMin: 40,
     travels: [
-      {
-        id: 'CGOT2'
-      }
+      'CGOT2',
+      'CGOT3'
     ],
     active: true
   },

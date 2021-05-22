@@ -9,7 +9,10 @@ import {
   SavedIcon,
   Combobox,
   FormField,
+  Alert
 } from 'evergreen-ui';
+
+import { TRAVEL_STATES } from '../../constants.js';
 
 import {
   getTravelDetails,
@@ -26,6 +29,7 @@ export const TravelAssigns = () => {
   const [details, setDetails] = useState({
     driver: "",
     vehicle: "",
+    status: ""
   });
   const [oldDetails, setOldDetails] = useState({});
   const [availableDrivers, setAvailableDrivers] = useState([]);
@@ -35,6 +39,7 @@ export const TravelAssigns = () => {
   const [errors, setErrors] = useState({
     driver: "",
     vehicle: "",
+    status: ""
   });
   const [showErrors, setShowErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
@@ -151,7 +156,16 @@ export const TravelAssigns = () => {
           Volver
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
-        {!saveError && (<div>
+        {!saveError && (
+        <div>
+
+          {(details.status !== TRAVEL_STATES.NOT_STARTED) && 
+          (<Alert
+            title='El viaje ya finalizó, no se puede asignar un chofer o combi.'
+            intent='danger'
+            appearance='card'
+            marginBottom={32}
+          />)}
 
           {assign === "driver" && (  
           <FormField
@@ -162,6 +176,7 @@ export const TravelAssigns = () => {
             validationMessage={showErrors && errors.driver ? "Campo Requerido" : null}
           >
             <Combobox
+              disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
               items={availableDrivers}
               selectedItem={availableDrivers.find(elem => elem.id === details.driver)}
               label="Chofer"
@@ -181,6 +196,7 @@ export const TravelAssigns = () => {
             validationMessage={showErrors && errors.vehicle ? "Campo Requerido" : null}
           >
             <Combobox
+              disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
               items={availableVehicles}
               selectedItem={availableVehicles.find(elem => elem.id === details.vehicle)}
               onChange={value => value ? inputCallback(value.id, 'vehicle', true) : ''}
@@ -189,7 +205,6 @@ export const TravelAssigns = () => {
             />
           </FormField>
           )}
-
           <Button
             width={'65vh'}
             display="flex"

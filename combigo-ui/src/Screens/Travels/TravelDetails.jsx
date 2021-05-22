@@ -10,7 +10,8 @@ import {
   SavedIcon,
   Combobox,
   FormField,
-  Checkbox
+  Checkbox, 
+  Alert
 } from 'evergreen-ui';
 
 import { TRAVEL_STATES } from '../../constants.js';
@@ -212,12 +213,22 @@ export const TravelDetails = () => {
           Volver
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
-        {!saveError && (<div>
+        {!saveError && (
+        <div>
+
+          {(details.passengers.length > 0) &&
+          (<Alert
+            title='Hay pasajes vendidos para el viaje, no puede modificarse Ruta ni Fecha/Hora.'
+            intent='danger'
+            appearance='card'
+            marginBottom={32}
+          />)}
+
           <FormField
             width={'65vh'}
             marginBottom={20}
             required
-            validationMessage={(showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null) || (details.passengers.length ? "Hay pasajes vendidos para el viaje" : null)}
+            validationMessage={showErrors && errors.dateAndTime ? "Campo Requerido o Invalido" : null}
             label="Fecha y Hora"
           >
             <input
@@ -233,7 +244,7 @@ export const TravelDetails = () => {
           <FormField
             width={'65vh'}
             required
-            validationMessage={(showErrors && errors.route ? "Campo Requerido" : null) || (details.passengers.length ? "Hay pasajes vendidos para el viaje" : null)}
+            validationMessage={showErrors && errors.route ? "Campo Requerido" : null}
             marginBottom={20}
             label="Ruta"
             description="La Ruta ya debe existir en el sistema"
@@ -242,7 +253,7 @@ export const TravelDetails = () => {
               items={availableRoutes}
               selectedItem={availableRoutes.find(elem => elem.id === details.route)}
               label="Ruta"
-              disabled={details.passengers.length}
+              disabled={details.passengers.length > 0}
               onChange={value => value ? inputCallback(value.id, 'route', true) : ''}
               placeholder="Ruta"
               itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}

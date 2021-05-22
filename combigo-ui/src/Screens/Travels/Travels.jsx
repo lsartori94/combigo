@@ -13,7 +13,6 @@ import {
   Dialog
 } from 'evergreen-ui';
 
-import { TRAVEL_STATES } from '../../constants';
 import './travels.css';
 import { getTravels, deleteTravel } from './travelsStore';
 
@@ -161,15 +160,15 @@ export const Travels = () => {
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {(travel.driver && 
+                  {(travel.driver !== " " && 
                     <Link to={`/drivers/${travel.driver}?isId=true`}>{travel.driver}</Link>) || "No asignado"}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {(travel.vehicle && 
+                  {(travel.vehicle !== " " && 
                     <Link to={`/vehicles/${travel.vehicle}`}>{travel.vehicle}</Link>) || "No asignado"}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {TRAVEL_STATES[travel.status]}
+                  {travel.status}
                 </Table.TextCell>
                 <Table.TextCell>
                   {travel.availableAdditionals.length}

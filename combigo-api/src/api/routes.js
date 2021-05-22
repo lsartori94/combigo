@@ -26,31 +26,31 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// Search for routes by origin
-router.get('/:origin', (req, res) => {
-  const {origin} = req.params;
+// // Search for routes by origin
+// router.get('/:origin', (req, res) => {
+//   const {origin} = req.params;
 
-  const activeRoutes = routes.filter(routes => routes.active === true );
-  const result = activeRoutes.filter(route => route.origin === origin);
+//   const activeRoutes = routes.filter(routes => routes.active === true );
+//   const result = activeRoutes.filter(route => route.origin === origin);
 
-  if (!result) {
-    res.status(404).send(`No hay rutas activas para el origen especificado`);
-  }
-  res.json(result);
-});
+//   if (!result) {
+//     res.status(404).send(`No hay rutas activas para el origen especificado`);
+//   }
+//   res.json(result);
+// });
 
-// Search for routes by destination
-router.get('/:destination', (req, res) => {
-  const {destination} = req.params;
+// // Search for routes by destination
+// router.get('/:destination', (req, res) => {
+//   const {destination} = req.params;
 
-  const activeRoutes = routes.filter(routes => routes.active === true );
-  const result = activeRoutes.filter(route => route.destination === destination);
+//   const activeRoutes = routes.filter(routes => routes.active === true );
+//   const result = activeRoutes.filter(route => route.destination === destination);
 
-  if (!result) {
-    res.status(404).send(`No hay rutas activas para el destino especificado`);
-  }
-  res.json(result);
-});
+//   if (!result) {
+//     res.status(404).send(`No hay rutas activas para el destino especificado`);
+//   }
+//   res.json(result);
+// });
 
 // Create route
 router.post('/', (req, res) => {

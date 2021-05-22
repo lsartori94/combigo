@@ -7,7 +7,8 @@ import {
   Button,
   BackButton,
   SmallCrossIcon,
-  SavedIcon
+  SavedIcon,
+  Alert
 } from 'evergreen-ui';
 
 import { getAdditionalDetails, saveAdditionalDetails, createAdditional } from './additionalsStore';
@@ -145,11 +146,20 @@ export const AdditionalDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
+
+          {details.sold && 
+          (<Alert
+            title='Se han vendido unidades de este adicional, no puede modificarse.'
+            intent='danger'
+            appearance='card'
+            marginBottom={32}
+          />)}
+
           <TextInputField
             width={'65vh'}
             required
             disabled={details.sold}
-            validationMessage={showErrors && errors.name ? "Campo Requerido" : null || (details.sold ? "Se han vendido unidades de este adicional" : null)}
+            validationMessage={showErrors && errors.name ? "Campo Requerido" : null}
             label="Nombre de Adicional"
             placeholder="Nombre"
             description="Debe ser único en el sistema"
@@ -160,7 +170,7 @@ export const AdditionalDetails = () => {
             width={'65vh'}
             required
             disabled={details.sold}
-            validationMessage={showErrors && errors.price ? "Campo Requerido" : null || (details.sold ? "Se han vendido unidades de este adicional" : null)}
+            validationMessage={showErrors && errors.price ? "Campo Requerido" : null}
             label="Precio"
             placeholder="0"
             description="Precio en pesos"

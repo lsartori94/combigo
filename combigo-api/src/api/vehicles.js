@@ -6,7 +6,7 @@ const ID_BASE = 'CGOV';
 
 const vehicles = require('./store').vehicles;
 
-// Get all vehicles
+// Get active vehicles
 router.get('/', (req, res) => {
   const activeVehicles = vehicles.filter(vehicles => vehicles.active === true );
 

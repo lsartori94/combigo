@@ -7,10 +7,12 @@ import {
   Button,
   BackButton,
   SmallCrossIcon,
-  SavedIcon
+  SavedIcon,
+  Alert
 } from 'evergreen-ui';
 
 import { getRouteDetails, saveRouteDetails, createRoute } from './routesStore';
+import { getTravelDetails } from '../Travels/travelsStore';
 
 export const RouteDetails = () => {
   let { routeId } = useParams();
@@ -139,10 +141,24 @@ export const RouteDetails = () => {
     history.push(history.goBack());
   }
 
+  //secuencial y bloqueante
+  async function hasSoldTravels() {
+    for (const travel of details.travels) {
+        const response = await getTravelDetails(travel);
+        if (response.passengers.length !== 0 )
+          return true;
+    };
+    return false;
+  };
+
   const renderDetails = (details) => {
     if (noRoute) {
       return (<div>No existe Ruta</div>)
     }
+
+    // no se como sacar value para afuera del then()
+    hasSoldTravels().then(value => { console.log(value); });
+
     return (
       <Pane
         marginTop={20}
@@ -161,6 +177,15 @@ export const RouteDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
+           
+          {hasSoldTravels() === true && 
+          (<Alert
+            title='Se han vendido pasajes para viajes de esta ruta. No pueden realizarse modificaciones.'
+            intent='danger'
+            appearance='card'
+            marginBottom={32}
+          />)}
+
           <TextInputField
             width={'65vh'}
             required
@@ -170,6 +195,7 @@ export const RouteDetails = () => {
             description=""
             value={details.origin}
             onChange={e => inputCallback(e, 'origin')}
+            disabled={hasSoldTravels()}
           />
           <TextInputField
             width={'65vh'}
@@ -180,6 +206,7 @@ export const RouteDetails = () => {
             description=""
             value={details.destination}
             onChange={e => inputCallback(e, 'destination')}
+            disabled={hasSoldTravels()}
           />
           <TextInputField
             width={'65vh'}
@@ -190,6 +217,7 @@ export const RouteDetails = () => {
             description="Distancia en Kilometros"
             value={details.distanceKm}
             onChange={e => inputCallback(e, 'distanceKm')}
+            disabled={hasSoldTravels()}
           />
           <TextInputField
             width={'65vh'}
@@ -200,6 +228,7 @@ export const RouteDetails = () => {
             description="Duracion en minutos"
             value={details.durationMin}
             onChange={e => inputCallback(e, 'durationMin')}
+            disabled={hasSoldTravels()}
           />
           <Button
             width={'65vh'}
