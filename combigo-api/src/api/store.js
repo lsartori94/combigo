@@ -31,9 +31,7 @@ let users = [
     password: '123@Pass',
     bdate: '1990-11-12',
     dni: '37502385',
-    travelHistory: [],
-    role: ROLES.CLIENT,
-    active: true,
+    travelHistory: [], 
     creditCard: {
       issuer: 'Visa',
       number: '4983794057102007',
@@ -41,7 +39,9 @@ let users = [
       expDate: '01/25',
       cvv:'123'
     },
-    vipStatus: VIP_STATUS.NOT_ENROLLED
+    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    role: ROLES.CLIENT,
+    active: true,
   },
   {
     id: 'CGOU3',
@@ -53,7 +53,7 @@ let users = [
     dni: '42357195',
     travelHistory: [
       {
-        travelDetails: {},
+        travelId: "",
         boughtAdditionals: []
       }
     ],
@@ -177,7 +177,7 @@ let travels = [
   },
   {
     id: 'CGOT3',
-    dateAndTime: "2021-07-01T08:30",
+    dateAndTime: "2021-08-01T08:30",
     route: "CGOR3",
     passengers: [
       {

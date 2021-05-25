@@ -216,6 +216,14 @@ export const TravelDetails = () => {
         {!saveError && (
         <div>
 
+          {(!details.active && !creating) && 
+          (<Alert
+            title='Viaje eliminado'
+            intent='warning'
+            appearance='card'
+            marginBottom={32}
+          />)}    
+
           {(details.passengers.length > 0) &&
           (<Alert
             title='Hay pasajes vendidos para el viaje, no puede modificarse Ruta ni Fecha/Hora.'

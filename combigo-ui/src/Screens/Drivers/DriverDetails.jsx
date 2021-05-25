@@ -8,7 +8,8 @@ import {
   BackButton,
   SmallCrossIcon,
   SavedIcon,
-  FormField
+  FormField,
+  Alert
 } from 'evergreen-ui';
 
 import { getDriverDetails, saveUserDetails, createDriver, getDriverUsername } from './driversStore';
@@ -209,6 +210,15 @@ export const DriverDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
+
+          {(!details.active && !creating) && 
+          (<Alert
+            title='Chofer eliminado'
+            intent='warning'
+            appearance='card'
+            marginBottom={32}
+          />)}  
+
           <TextInputField
             width={'65vh'}
             disabled={!creating}

@@ -147,6 +147,14 @@ export const AdditionalDetails = () => {
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
 
+          {(!details.active && !creating) && 
+          (<Alert
+            title='Adicional eliminado'
+            intent='warning'
+            appearance='card'
+            marginBottom={32}
+          />)}
+
           {details.sold && 
           (<Alert
             title='Se han vendido unidades de este adicional, no puede modificarse.'

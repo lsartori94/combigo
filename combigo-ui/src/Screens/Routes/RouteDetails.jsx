@@ -170,6 +170,14 @@ export const RouteDetails = () => {
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
            
+          {(!details.active && !creating) && 
+          (<Alert
+            title='Ruta eliminada'
+            intent='warning'
+            appearance='card'
+            marginBottom={32}
+          />)}  
+
           {alreadySold && 
           (<Alert
             title='Se han vendido pasajes para viajes de esta ruta. No pueden realizarse modificaciones.'

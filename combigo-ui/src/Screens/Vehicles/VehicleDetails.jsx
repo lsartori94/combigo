@@ -7,7 +7,8 @@ import {
   Button,
   BackButton,
   SmallCrossIcon,
-  SavedIcon
+  SavedIcon,
+  Alert
 } from 'evergreen-ui';
 
 import { getVehicleDetails, saveVehiculeDetails, createVehicle } from './vehiclesStore';
@@ -153,6 +154,15 @@ export const VehicleDetails = () => {
         </BackButton>
         {saveError && (<div>Error al guardar: {apiError}</div>)}
         {!saveError && (<div>
+
+          {(!details.active && !creating) && 
+          (<Alert
+            title='Vehiculo eliminado'
+            intent='warning'
+            appearance='card'
+            marginBottom={32}
+          />)}  
+
           <TextInputField
             width={'65vh'}
             required

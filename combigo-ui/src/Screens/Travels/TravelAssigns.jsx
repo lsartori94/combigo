@@ -19,8 +19,8 @@ import {
   saveTravelDetails,
   getAvailableDrivers,
   getAvailableVehicles,
+  getTravels,
 } from './travelsStore';
-
 
 export const TravelAssigns = () => {
   let { travelId } = useParams();
@@ -29,7 +29,8 @@ export const TravelAssigns = () => {
   const [details, setDetails] = useState({
     driver: "",
     vehicle: "",
-    status: ""
+    status: "",
+    dateAndTime: ""
   });
   const [oldDetails, setOldDetails] = useState({});
   const [availableDrivers, setAvailableDrivers] = useState([]);
@@ -39,7 +40,8 @@ export const TravelAssigns = () => {
   const [errors, setErrors] = useState({
     driver: "",
     vehicle: "",
-    status: ""
+    status: "",
+    dateAndTime: ""
   });
   const [showErrors, setShowErrors] = useState(false);
   const [saveError, setSaveError] = useState(false);
@@ -50,8 +52,10 @@ export const TravelAssigns = () => {
     async function initializeExtras() {
       const drivers = await getAvailableDrivers();
       const vehicles = await getAvailableVehicles();
-      setAvailableDrivers(drivers);
-      setAvailableVehicles(vehicles);
+      const allTravels = await getTravels();
+      const travelDetails = await getTravelDetails(travelId);
+      setAvailableDrivers(validDrivers(drivers, allTravels, travelDetails));
+      setAvailableVehicles(validVehicles(vehicles, allTravels, travelDetails));
     }
     async function initialize() {
       try {
@@ -132,6 +136,24 @@ export const TravelAssigns = () => {
 
   const backCallback = () => {
     history.push('/travels');
+  }
+
+  //Por ahora solo chequea si la fecha/hora de los viajes son iguales, se puede agregar que tenga en cuenta duracion y solapamiento
+  function validDrivers(drivers, allTravels, travelDetails) {
+    const sameDateTravels = allTravels.filter(travel => travel.dateAndTime === travelDetails.dateAndTime);
+    const validDrivers = drivers.filter(driver => !sameDateTravels.some( travel => travel.driver === driver.id));
+    return validDrivers;
+  };
+
+  function validVehicles(vehicles, allTravels, travelDetails) {
+    const sameDateTravels = allTravels.filter(travel => travel.dateAndTime === travelDetails.dateAndTime);
+    const validVehicles = vehicles.filter(veh => !sameDateTravels.some( travel => travel.vehicle === veh.id));
+    return validVehicles;
+  };
+
+  //#TODO
+  function datesOverlap(date1, date2) {
+    return false;
   }
 
   const renderDetails = (details) => {

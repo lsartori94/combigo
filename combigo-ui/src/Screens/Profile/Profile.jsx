@@ -138,7 +138,7 @@ export const Profile = () => {
             </Pane>
           </>
         ) : (
-          <Link to="/login">Signin</Link>
+          <Link to="/login" className="signin">Inicia sesión o Registrate!</Link>
         )}
     </Pane>
   );
