@@ -133,6 +133,69 @@ router.put('/:uname', (req, res) => {
   res.send(users);
 });
 
+// Get CC
+router.get('/:uname/card', (req, res) => {
+  const {uname} = req.params;
+  const exists = users.findIndex(user => user.username === uname);
+
+  if (exists === -1) {
+    return res.status(409).send(`Usuario no encontrado`);
+  }
+
+  const result = Object.assign(users[exists]);
+
+  return res.send(result.creditCard);
+});
+
+// Create CC
+router.put('/:uname/card', (req, res) => {
+  const {uname} = req.params;
+  const { issuer, number, cardHolder, expDate, cvv } = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`);
+  }
+
+  const exists = users.findIndex(user => user.username === uname);
+
+  if (exists === -1) {
+    return res.status(409).send(`Usuario no encontrado`);
+  }
+
+  if (!number || !cardHolder || !cvv || !expDate) {
+    return res.status(400).send(`Bad Request`);
+  }
+
+  users[exists].creditCard = {
+    issuer,
+    number,
+    cardHolder,
+    expDate,
+    cvv
+  };
+
+  return res.send(users[exists]);
+});
+
+// Delete CC
+router.delete('/:uname/card', (req, res) => {
+  const {uname} = req.params;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`);
+  }
+
+  const exists = users.findIndex(user => user.username === uname);
+
+  if (exists === -1) {
+    return res.status(409).send(`Usuario no encontrado`);
+  }
+
+  users[exists].creditCard = {};
+
+  return res.send({});
+});
+
 // Delete user with username
 router.delete('/:uname', (req, res) => {
   const {uname} = req.params;

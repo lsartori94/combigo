@@ -11,3 +11,8 @@ export const LEGAL_STATUS = {
   APPROVED: "Aprobado",
   REJECTED: "Rechazado"
 }
+
+export const VIP_STATUS = {
+  ENROLLED: "Subscripto",
+  NOT_ENROLLED: "No Subscripto"
+}

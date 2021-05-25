@@ -1,4 +1,4 @@
-const { ROLES, TRAVEL_STATES, LEGAL_STATUS } = require('./constants');
+const { ROLES, TRAVEL_STATES, LEGAL_STATUS, VIP_STATUS } = require('./constants');
 
 let users = [
   {
@@ -33,7 +33,15 @@ let users = [
     dni: '37502385',
     travelHistory: [],
     role: ROLES.CLIENT,
-    active: true
+    active: true,
+    creditCard: {
+      issuer: 'Visa',
+      number: '4983794057102007',
+      cardHolder: 'Juan Perez',
+      expDate: '01/25',
+      cvv:'123'
+    },
+    vipStatus: VIP_STATUS.NOT_ENROLLED
   },
   {
     id: 'CGOU3',

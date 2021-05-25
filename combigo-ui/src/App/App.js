@@ -22,6 +22,7 @@ import { TravelDetails } from '../Screens/Travels/TravelDetails';
 import { TravelAssigns } from '../Screens/Travels/TravelAssigns';
 import { Additionals } from '../Screens/Additionals/Additionals';
 import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
+import { Cards } from '../Screens/Cards/Cards';
 import { ProvideAuth } from '../utils/use-auth';
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
             </Route>
             <Route path="/register">
               <Register />
+            </Route>
+            <Route path="/cards">
+              <Cards />
             </Route>
             <Route path="/vehicles/:vehicleId">
               <VehicleDetails />
