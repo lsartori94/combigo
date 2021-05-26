@@ -21,6 +21,7 @@ import {
   getAvailableVehicles,
   getTravels,
 } from './travelsStore';
+import { getRoutes } from '../Routes/routesStore.js';
 
 export const TravelAssigns = () => {
   let { travelId } = useParams();
@@ -53,9 +54,10 @@ export const TravelAssigns = () => {
       const drivers = await getAvailableDrivers();
       const vehicles = await getAvailableVehicles();
       const allTravels = await getTravels();
+      const allRoutes = await getRoutes();
       const travelDetails = await getTravelDetails(travelId);
-      setAvailableDrivers(validDrivers(drivers, allTravels, travelDetails));
-      setAvailableVehicles(validVehicles(vehicles, allTravels, travelDetails));
+      setAvailableDrivers(validDrivers(drivers, allTravels, allRoutes, travelDetails));
+      setAvailableVehicles(validVehicles(vehicles, allTravels, allRoutes, travelDetails));
     }
     async function initialize() {
       try {
@@ -138,23 +140,33 @@ export const TravelAssigns = () => {
     history.push('/travels');
   }
 
-  //Por ahora solo chequea si la fecha/hora de los viajes son iguales, se puede agregar que tenga en cuenta duracion y solapamiento
-  function validDrivers(drivers, allTravels, travelDetails) {
-    const sameDateTravels = allTravels.filter(travel => travel.dateAndTime === travelDetails.dateAndTime);
-    const validDrivers = drivers.filter(driver => !sameDateTravels.some( travel => travel.driver === driver.id));
+  function validDrivers(drivers, allTravels, allRoutes, travelDetails) {
+    const overlappedTravels = allTravels.filter(travel => datesOverlap(travel, travelDetails, allRoutes));
+    const validDrivers = drivers.filter(driver => !overlappedTravels.some( travel => travel.driver === driver.id));
     return validDrivers;
   };
 
-  function validVehicles(vehicles, allTravels, travelDetails) {
-    const sameDateTravels = allTravels.filter(travel => travel.dateAndTime === travelDetails.dateAndTime);
-    const validVehicles = vehicles.filter(veh => !sameDateTravels.some( travel => travel.vehicle === veh.id));
+  function validVehicles(vehicles, allTravels, allRoutes, travelDetails) {
+    const overlappedTravels = allTravels.filter(travel => datesOverlap(travel, travelDetails, allRoutes));
+    const validVehicles = vehicles.filter(veh => !overlappedTravels.some(travel => travel.vehicle === veh.id));
     return validVehicles;
   };
 
-  //#TODO
-  function datesOverlap(date1, date2) {
+  function datesOverlap(travel1, travel2, allRoutes) {
+    if (travel1.id === travel2.id) 
+      return false;
+    const route1 = allRoutes.find(route => route.id === travel1.route);
+    const route2 = allRoutes.find(route => route.id === travel2.route);
+    const duration1 = route1.durationMin * 60000;
+    const duration2 = route2.durationMin * 60000;
+    const start1 = Date.parse(travel1.dateAndTime);
+    const start2 = Date.parse(travel2.dateAndTime);
+    const end1 = start1 + duration1;
+    const end2 = start2 + duration2;
+    if ((start1 <= end2) && (end1 >= start2)) 
+      return true;
     return false;
-  }
+  };
 
   const renderDetails = (details) => {
     if (noTravel) {

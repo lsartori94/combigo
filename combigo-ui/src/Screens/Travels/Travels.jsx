@@ -147,14 +147,14 @@ export const Travels = () => {
               Cantidad de Pasajeros
             </Table.TextHeaderCell>
           </Table.Head>
-          <Table.Body height={240}>
+          <Table.Body height={400}>
             {travels.map(travel => (
               <Table.Row key={travel.id}>
                 <Table.TextCell>
                   <Link to={`/travels/${travel.id}`}>{travel.id}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.dateAndTime}
+                  {new Date(travel.dateAndTime).toString()}
                 </Table.TextCell>
                 <Table.TextCell>
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>
