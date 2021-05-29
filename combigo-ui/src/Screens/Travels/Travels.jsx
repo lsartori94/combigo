@@ -52,7 +52,7 @@ export const Travels = () => {
   const promptDelete = (travelId) => {
     setSelectedTravel(travelId);
     const pending = travels.find(travel => (travel.id === travelId) && (travel.status === TRAVEL_STATES.NOT_STARTED));
-    if (pending.passengers.length > 0)
+    if (pending && pending.passengers.length > 0)
       setShowDeleteWithPending(true);
     setShowDelete(true);
   }
