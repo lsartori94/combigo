@@ -33,13 +33,14 @@ router.post('/', (req, res) => {
     return res.status(400).send(`Bad Request`)
   }
 
-  const routeExists = routes.find(route => route.id === route);
-  if (routeExists === -1) { 
+  const routeIndex = routes.findIndex(each => each.id === route);
+  if (routeIndex === -1) { 
     return res.status(409).send(`La ruta ingresada no existe`);
   }
+  const newId = `${ID_BASE}${travels.length + 1}`
 
   travels.push({
-    id: `${ID_BASE}${travels.length + 1}`,
+    id: newId,
     dateAndTime,
     route,
     status: TRAVEL_STATES.NOT_STARTED,
@@ -50,6 +51,9 @@ router.post('/', (req, res) => {
     boughtAdditionals: [],
     active: true,
   });
+
+  // Agrega la referencia del nuevo viaje a la ruta
+  routes[routeIndex].travels.push(newId);
 
   res.send(travels);
 });

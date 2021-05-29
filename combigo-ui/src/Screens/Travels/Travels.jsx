@@ -15,12 +15,14 @@ import {
 
 import './travels.css';
 import { getTravels, deleteTravel } from './travelsStore';
+import {TRAVEL_STATES} from '../../constants'
 
 export const Travels = () => {
   const [travels, setTravels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTravel, setSelectedTravel] = useState(null);
   const [showDelete, setShowDelete] = useState(false);
+  const [showDeleteWithPending, setShowDeleteWithPending] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -37,9 +39,9 @@ export const Travels = () => {
     initialize();
   }, []);
 
-  const deleteRouteCb = async (uname) =>{
+  const deleteRouteCb = async (travelId) =>{
     try {
-      await deleteTravel(uname);
+      await deleteTravel(travelId);
       const response = await getTravels();
         setTravels(response);
     } catch (e) {
@@ -47,13 +49,17 @@ export const Travels = () => {
     }
   }
 
-  const promptDelete = (uname) => {
-    setSelectedTravel(uname);
+  const promptDelete = (travelId) => {
+    setSelectedTravel(travelId);
+    const pending = travels.find(travel => (travel.id === travelId) && (travel.status === TRAVEL_STATES.NOT_STARTED));
+    if (pending.passengers.length > 0)
+      setShowDeleteWithPending(true);
     setShowDelete(true);
   }
 
   const deleteCallback = () => {
     deleteRouteCb(selectedTravel);
+    setShowDeleteWithPending(false);
     setShowDelete(false);
   }
 
@@ -118,7 +124,8 @@ export const Travels = () => {
           confirmLabel="Eliminar"
           cancelLabel="Cancelar"
         >
-          Los Viajes Eliminados no pueden recuperarse. Esta seguro de que quiere eliminar?
+          {showDeleteWithPending ? "El viaje tiene reservas hechas, ¿esta seguro de que quiere eliminar el Viaje?" 
+            : "¿Esta seguro de que quiere eliminar el Viaje?"}
         </Dialog>
         <Table width={"95%"}>
           <Table.Head>

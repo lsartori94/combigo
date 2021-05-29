@@ -74,7 +74,7 @@ export const TravelAssigns = () => {
     }
     initialize();
     initializeExtras();
-  }, [travelId])
+  }, [travelId]); // eslint-disable-line
   
   useEffect(() => {
     const prev = JSON.stringify(oldDetails);

@@ -170,10 +170,11 @@ router.delete('/:id', (req, res) => {
     return res.status(404).send(`La ruta no existe`);
   }
   
-  //CAMBIAR POR UNA LLAMADA A CANCELAR VIAJE CUANDO LO IMPLEMENTEMOS
-  routes[index].travels.forEach(travel => {
-    const travelIndex = travels.findIndex(item => item.id === travel.id);
-    if (travelIndex > -1 && travels[travelIndex].status == TRAVEL_STATES.NOT_STARTED) {
+  //Cambia estado de todos los viajes "pendiente" de la ruta a "cancelado"
+  //#TODO devolver dinero de reservas
+  routes[index].travels.forEach(routeTravel => {
+    const travelIndex = travels.findIndex(travel => travel.id === routeTravel);
+    if (travelIndex !== -1 && travels[travelIndex].status === TRAVEL_STATES.NOT_STARTED) {
       travels[travelIndex].status = TRAVEL_STATES.CANCELED;
     }
   });
