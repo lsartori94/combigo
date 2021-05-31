@@ -336,7 +336,7 @@ export const BookingDetails = () => {
             <TextInputField
               width={'65vh'}
               label="Ruta"
-              value={details.route}
+              value={availableRoutes.find(elem => elem.id === details.route)} 
               disabled
             />
             <TextInputField
