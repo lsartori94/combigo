@@ -53,7 +53,7 @@ let users = [
     dni: '42357195',
     travelHistory: [
       {
-        travelId: "",
+        travelId: "CGOT1",
         boughtAdditionals: []
       }
     ],

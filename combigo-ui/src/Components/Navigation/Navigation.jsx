@@ -101,6 +101,14 @@ export const Navigation = () => {
                 </li>
               </>
             )}
+            {auth.user && auth.isClient() && ( //Esto es para las reservas
+              <>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/bookings">Reservas</Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </Pane>

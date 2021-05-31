@@ -133,6 +133,20 @@ router.put('/:uname', (req, res) => {
   res.send(users);
 });
 
+// Get Bookings // reservas
+router.get('/:uname/bookings', (req, res) => {
+  const {uname} = req.params;
+  const exists = users.findIndex(user => user.username === uname);
+
+  if (exists === -1) {
+    return res.status(409).send(`Usuario no encontrado`);
+  }
+
+  const result = Object.assign(users[exists].travelHistory);
+
+  return res.send(result);
+});
+
 // Get CC
 router.get('/:uname/card', (req, res) => {
   const {uname} = req.params;
