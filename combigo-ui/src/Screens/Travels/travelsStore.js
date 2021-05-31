@@ -15,7 +15,7 @@ export async function getTravels() {
 
 //Get bookings
 export async function getBookings(user) {
-  const response = await fetch(`${API_BASE}/users/${user.username}/bookings`);
+  const response = await fetch(`${API_BASE}/users/${user.user.username}/bookings`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
