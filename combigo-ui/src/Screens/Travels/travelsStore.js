@@ -4,8 +4,6 @@ import { getAdditionals } from '../Additionals/additionalsStore';
 import { getVehicles } from '../Vehicles/vehiclesStore';
 import { getRoutes } from '../Routes/routesStore';
 
-import { useAuth } from "../../utils/use-auth"; //For bookings
-
 export async function getTravels() {
   const response = await fetch(`${API_BASE}/travels`);
   if (!response.ok) {
@@ -16,9 +14,8 @@ export async function getTravels() {
 }
 
 //Get bookings
-export async function getBookings() {
-  //const auth = useAuth();
-  const response = await fetch(`${API_BASE}/users/diego.sosa/bookings`);
+export async function getBookings(user) {
+  const response = await fetch(`${API_BASE}/users/${user.username}/bookings`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

@@ -16,8 +16,10 @@ import {
 import './travels.css';
 import { getBookings, getTravelDetails } from './travelsStore'; //Sacar el delete travels
 import {TRAVEL_STATES} from '../../constants';
+import { useAuth } from "../../utils/use-auth"; //For bookings
 
 export const Bookings = () => {
+  const author = useAuth();
   const [travels, setTravels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTravel, setSelectedTravel] = useState(null);
@@ -28,7 +30,7 @@ export const Bookings = () => {
   useEffect(() => {
     async function initialize() {
       try {
-        const response = await getBookings();
+        const response = await getBookings(author);
         setTravels(response);
       } catch (e) {
         console.error(e);
