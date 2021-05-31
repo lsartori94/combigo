@@ -25,6 +25,7 @@ import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
 import { Cards } from '../Screens/Cards/Cards';
 import { ProvideAuth } from '../utils/use-auth';
 import { Bookings } from '../Screens/Travels/Bookings'; //Reservas
+import { BookingDetails } from '../Screens/Travels/BookingDetails'; //Reservas
 
 function App() {
   useEffect(() => {
@@ -92,6 +93,9 @@ function App() {
             </Route>
             <Route path="/bookings">
               <Bookings />
+            </Route> 
+            <Route path="/bookingDetails/:travelId/:uname"> 
+              <BookingDetails />
             </Route>
             <Route path="/additionals/:addId">
               <AdditionalDetails />
@@ -110,7 +114,7 @@ function App() {
         </div>
       </Router>
     </ProvideAuth>
-  );
+  ); //Los usernames son unicos no?
 }
 
 export default App;

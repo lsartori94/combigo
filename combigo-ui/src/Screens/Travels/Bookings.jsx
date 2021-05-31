@@ -50,7 +50,7 @@ export const Bookings = () => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/travels/${travelId}`}><Menu.Item>Detalles</Menu.Item></Link>
+          <Link to={`/bookingDetails/${travelId}/${author.user.username}`}><Menu.Item>Detalles</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
