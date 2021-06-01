@@ -18,15 +18,13 @@ import { TRAVEL_STATES } from '../../constants.js';
 
 import {
   getTravelDetails,
-  saveTravelDetails,
-  createTravel,
   getAvailableAditionals,
   getAvailableRoutes
 } from './travelsStore';
 
 export const BookingDetails = () => {
   let { travelId } = useParams();
-  let { author } = useParams();
+  let { authorUsername } = useParams();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
     dateAndTime: "",
@@ -107,29 +105,29 @@ export const BookingDetails = () => {
     }
   }, [details, oldDetails]);
 
-  const inputCallback = (e, name, skipValidation) => {
-    if (skipValidation) {
-      setDetails({...details, [name]: e});
-    } else {
-      const {value} = e.target;
-      switch (name) {
-        case 'dateAndTime':
-          setDetails({...details, dateAndTime: value});
-        break;
-        case 'route':
-          setDetails({...details, route: value});
-        break;
-        case 'availableAdditionals':
-          setDetails({...details, availableAdditionals: value});
-        break;
-        case 'passengers':
-          setDetails({...details, passengers: value});
-        break;
-        default:
-        break;
-      }
-    }
-  }
+  // const inputCallback = (e, name, skipValidation) => {
+  //   if (skipValidation) {
+  //     setDetails({...details, [name]: e});
+  //   } else {
+  //     const {value} = e.target;
+  //     switch (name) {
+  //       case 'dateAndTime':
+  //         setDetails({...details, dateAndTime: value});
+  //       break;
+  //       case 'route':
+  //         setDetails({...details, route: value});
+  //       break;
+  //       case 'availableAdditionals':
+  //         setDetails({...details, availableAdditionals: value});
+  //       break;
+  //       case 'passengers':
+  //         setDetails({...details, passengers: value});
+  //       break;
+  //       default:
+  //       break;
+  //     }
+  //   }
+  // }
 
   const handleCheckbox = (e) => {
     const {checked, id} = e.target;
@@ -143,35 +141,35 @@ export const BookingDetails = () => {
     setDetails({...details, availableAdditionals: newAdditionals});
   }
 
-  const restoreForm = () => {
-    setDetails(oldDetails);
-  }
+  // const restoreForm = () => {
+  //   setDetails(oldDetails);
+  // }
 
-  const saveCallback = async () => {
-    if (Object.values(errors).find(val => val)) {
-      setShowErrors(true);
-      return;
-    } else {
-      setShowErrors(false);
-    }
-    try {
-      setLoading(true);
-      if (creating) {
-        await createTravel(details);
-      } else {
-        await saveTravelDetails(details);
-      }
-      setLoading(false);
-      history.push('/travels');
-    } catch (e) {
-      setApiError(e.message)
-      setSaveError(true);
-      setLoading(false);
-    }
-  }
+  // const saveCallback = async () => {
+  //   if (Object.values(errors).find(val => val)) {
+  //     setShowErrors(true);
+  //     return;
+  //   } else {
+  //     setShowErrors(false);
+  //   }
+  //   try {
+  //     setLoading(true);
+  //     if (creating) {
+  //       await createTravel(details);
+  //     } else {
+  //       await saveTravelDetails(details);
+  //     }
+  //     setLoading(false);
+  //     history.push('/travels');
+  //   } catch (e) {
+  //     setApiError(e.message)
+  //     setSaveError(true);
+  //     setLoading(false);
+  //   }
+  // }
 
   const backCallback = () => {
-    history.push('/travels');
+    history.push('/Bookings');
   }
 
   const renderAdditionals = () => {
@@ -357,6 +355,21 @@ export const BookingDetails = () => {
               value={details.status}
               disabled
             />
+
+          <FormField
+             width={'65vh'}
+             marginBottom={20}
+             label="Adicionales"
+            description="Adicionales comprados" //Cambiar a los adicionales comprados
+            required
+          >
+            <Pane display="flex" flexWrap="wrap">
+              <ul>
+                {renderAdditionals()}
+              </ul>
+            </Pane>
+          </FormField>
+
           </>
         }
     </Pane>
