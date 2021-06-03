@@ -6,6 +6,7 @@ const ID_BASE = 'CGOU';
 
 const CONSTANTS = require('./constants');
 const users = require('./store').users;
+const travels = require('./store').travels;
 
 // Get all users by role
 router.get('/', (req, res) => {
@@ -142,7 +143,9 @@ router.get('/:uname/bookings', (req, res) => {
     return res.status(409).send(`Usuario no encontrado`);
   }
 
-  const result = Object.assign(users[exists].travelHistory);
+  const resultsID = Object.assign(users[exists].travelHistory);
+
+  const result = travels.filter(travel => resultsID.includes( travel.id ));
 
   return res.send(result);
 });

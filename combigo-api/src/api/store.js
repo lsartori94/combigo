@@ -1,4 +1,4 @@
-const { ROLES, TRAVEL_STATES, LEGAL_STATUS, VIP_STATUS } = require('./constants');
+const { ROLES, TRAVEL_STATES, BOOKING_STATES, LEGAL_STATUS, VIP_STATUS } = require('./constants');
 
 let users = [
   {
@@ -54,7 +54,8 @@ let users = [
     travelHistory: [
       {
         travelId: "CGOT1",
-        boughtAdditionals: []
+        boughtAdditionals: [],
+        status: BOOKING_STATES.ACTIVE,
       }
     ],
     role: ROLES.CLIENT,

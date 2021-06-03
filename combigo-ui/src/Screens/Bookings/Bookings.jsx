@@ -63,46 +63,32 @@ export const Bookings = () => {
         <Table width={"95%"}>
           <Table.Head>
             <Table.TextHeaderCell>
-              ID
+              Fecha y Hora
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Fecha
+              Origen
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Ruta
+              Destino
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Chofer
-            </Table.TextHeaderCell>
-            <Table.TextHeaderCell>
-              Vehiculo
-            </Table.TextHeaderCell>
-            <Table.TextHeaderCell>
-              Estado
+              Estado de reserva
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
             {travels.map(travel => (
-              <Table.Row key={travel.travelId}>
+              <Table.Row key={travel.id}>
                 <Table.TextCell>
-                  <Link to={`/travels/${travel.travelId}`}>{travel.travelId}</Link>
+                  {new Date(travel.dateAndTime).toString()}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {new Date((getTravelDetails(travel.travelId)).dateAndTime).toString()}
+                  <Link to={`/routes/${travel.travelId}`}>{travel.route}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.travelId}`}>{getTravelDetails(travel.travelId).route}</Link>
+                  <Link to={`/routes/${travel.travelId}`}>{travel.route}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {(travel.driver !== " " && 
-                    <Link to={`/drivers`}>{getTravelDetails(travel.travelId).driver}</Link>) || "No asignado"}
-                </Table.TextCell>
-                <Table.TextCell>
-                  {(travel.vehicle !== " " && 
-                    <Link to={`/vehicles}`}>{getTravelDetails(travel.travelId).vehicle}</Link>) || "No asignado"}
-                </Table.TextCell>
-                <Table.TextCell>
-                  {getTravelDetails(travel.travelId).status}
+                  {travel.id}
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
