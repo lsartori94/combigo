@@ -11,12 +11,13 @@ import {
   Pane
 } from 'evergreen-ui';
 
-import { getBookings, getTravelDetails } from './BookingsStore'; //Sacar el delete travels
+import { getAvailableRoutes, getBookings, getTravelDetails } from './BookingsStore'; //Sacar el delete travels
 import { useAuth } from "../../utils/use-auth"; //For bookings
 
 export const Bookings = () => {
   const auth = useAuth();
   const [travels, setTravels] = useState([]);
+  const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +25,8 @@ export const Bookings = () => {
       try {
         const response = await getBookings(auth.user);
         setTravels(response);
+        const response1 = await getAvailableRoutes();
+        setRoutes(response1);
       } catch (e) {
         console.error(e);
       } finally {
@@ -34,7 +37,7 @@ export const Bookings = () => {
   }, []);
 
   const renderPlaceholder = () => (
-    <div style={{padding: "30px"}}>No hay Reservas
+    <div style={{padding: "30px"}}>No hay Reservas ff
     </div>
   );
   
@@ -48,7 +51,7 @@ export const Bookings = () => {
       )
   }
 
-  const renderTravels = (travels) => {
+  const renderTravels = (travels, routes) => {
     if (travels.length < 1) {
       return renderPlaceholder();
     }
@@ -82,17 +85,17 @@ export const Bookings = () => {
                   {new Date(travel.dateAndTime).toString()}
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.travelId}`}>{travel.route}</Link>
+                  <Link to={`/routes/${travel.id}`}>{routes.find(rou => rou.id === travel.route).origin}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.travelId}`}>{travel.route}</Link>
+                  <Link to={`/routes/${travel.id}`}>{routes.find(rou => rou.id === travel.route).destination}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.id}
+                  {auth.user.travelHistory.find(th => th.travelId === travel.id).status}
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(travel.travelId)}
+                    content={renderRowMenu(travel.id)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />
@@ -108,7 +111,7 @@ export const Bookings = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderTravels(travels) }
+      { !loading &&  renderTravels(travels, routes) }
     </div>
   );
 };
