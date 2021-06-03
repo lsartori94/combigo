@@ -8,29 +8,21 @@ import {
   IconButton,
   Spinner,
   MoreIcon,
-  PlusIcon,
-  Pane,
-  Dialog
+  Pane
 } from 'evergreen-ui';
 
-import './travels.css';
-import { getBookings, getTravelDetails } from './travelsStore'; //Sacar el delete travels
-import {TRAVEL_STATES} from '../../constants';
+import { getBookings, getTravelDetails } from './BookingsStore'; //Sacar el delete travels
 import { useAuth } from "../../utils/use-auth"; //For bookings
 
 export const Bookings = () => {
-  const author = useAuth();
+  const auth = useAuth();
   const [travels, setTravels] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTravel, setSelectedTravel] = useState(null);
-  const [showDelete, setShowDelete] = useState(false);
-  const [showDeleteWithPending, setShowDeleteWithPending] = useState(false);
-  const history = useHistory();
 
   useEffect(() => {
     async function initialize() {
       try {
-        const response = await getBookings(author);
+        const response = await getBookings(auth.user);
         setTravels(response);
       } catch (e) {
         console.error(e);
@@ -50,7 +42,7 @@ export const Bookings = () => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/bookingDetails/${travelId}/${author.user.username}`}><Menu.Item>Detalles</Menu.Item></Link>
+          <Link to={`/bookingDetails/${travelId}/${auth.user.username}`}><Menu.Item>Detalles</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
@@ -68,18 +60,6 @@ export const Bookings = () => {
         flexDirection="column"
         className="Booking-container"
       >
-        <Dialog
-          isShown={false}
-          title="Confirmar Eliminacion"
-          intent="danger"
-          //onConfirm={() => deleteCallback()}
-          onCloseComplete={() => setShowDelete(false)}
-          confirmLabel="Eliminar"
-          cancelLabel="Cancelar"
-        >
-          {showDeleteWithPending ? "El viaje tiene reservas hechas, ¿esta seguro de que quiere eliminar el Viaje?" 
-            : "¿Esta seguro de que quiere eliminar el Viaje?"}
-        </Dialog>
         <Table width={"95%"}>
           <Table.Head>
             <Table.TextHeaderCell>

@@ -10,7 +10,7 @@ const TRAVEL_STATES = require('./constants').TRAVEL_STATES;
 
 // Get all travels
 router.get('/', (req, res) => {
-  const activeTravels = travels.filter(travels => travels.active === true );
+  const activeTravels = travels.filter(travels => travels.active === true);
   res.json(activeTravels);
 });
 

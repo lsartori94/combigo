@@ -24,8 +24,8 @@ import { Additionals } from '../Screens/Additionals/Additionals';
 import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
 import { Cards } from '../Screens/Cards/Cards';
 import { ProvideAuth } from '../utils/use-auth';
-import { Bookings } from '../Screens/Travels/Bookings'; //Reservas
-import { BookingDetails } from '../Screens/Travels/BookingDetails'; //Reservas
+import { Bookings } from '../Screens/Bookings/Bookings'; //Reservas
+import { BookingDetails } from '../Screens/Bookings/BookingDetails'; //Reservas
 
 function App() {
   useEffect(() => {
