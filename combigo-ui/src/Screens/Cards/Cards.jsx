@@ -22,6 +22,7 @@ export const Cards = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [newCard, setNewCard] = useState(false);
   const [error, setError] = useState(null);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     async function initialize() {
@@ -49,6 +50,8 @@ export const Cards = () => {
       const res = await saveUserCreditCardInfo(auth.user.username, userCardInfo);
       setUserCardInfo(res);
       setPreviousCardInfo(res);
+      setSaved(true);
+      setEditando(false);
     } catch (e) {
       console.error(e);
       setError(e)
@@ -85,12 +88,12 @@ export const Cards = () => {
   }
 
   const handleInput = (name, value) => {
-    const newValues = Object.assign(userCardInfo);
+    const newValues = JSON.parse(JSON.stringify(userCardInfo));
     switch (name) {
       case 'number':
         if (isNaN(value)) return;
-        if (newValues.number.length > 15) return;
-        switch (newValues.number[0]) {
+        if (value.length > 16) return;
+        switch (value[0]) {
           case '4':
             newValues.issuer = 'Visa';
             break;
@@ -101,18 +104,22 @@ export const Cards = () => {
             newValues.issuer = 'American Express'
             break;
           default:
+            newValues.issuer = ''
             break;
         }
+        newValues.number = value;
         break;
       case 'cardHolder':
-        if (/^[a-z ,.'-]+$/i.test(value)) return
+        if (/[^a-zA-Z0-9 ]/g.test(value)) return
+        newValues.cardHolder = value;
         break;
       case 'expDate':
-        if (newValues.number.length > 5) return;
+        newValues.expDate = value;
         break;
       case 'cvv':
         if (isNaN(value)) return;
-        if (newValues.number.length > 2) return;
+        if (value.length > 3) return;
+        newValues.cvv = value;
         break;
       default:
         break;
@@ -155,6 +162,11 @@ export const Cards = () => {
           {error}
         </Alert>
       )}
+      {saved && (
+        <Alert intent="success" 
+          title="Guardado"
+        />
+      )}
       {(newCard || userCardInfo.issuer) && (
         <Pane width={'65vh'} marginBottom={20}>
           <Pane display={'flex'} alignItems="center">
@@ -190,14 +202,21 @@ export const Cards = () => {
             onChange={e => handleInput('cardHolder', e.target.value)}
             required
           />
-          <TextInputField
+          <FormField
             width={'65vh'}
-            label="Fecha de Vencimiento"
-            value={userCardInfo.expDate}
-            disabled={!editando}
-            onChange={e => handleInput('expDate', e.target.value)}
+            marginBottom={20}
             required
-          />
+            label="Fecha de Vencimiento"
+          >
+            <input
+              type="date"
+              value={userCardInfo.expDate}
+              disabled={!editando}
+              onChange={e => handleInput('expDate', e.target.value)}
+              min="2021-01-01"
+              max="2030-31-12"
+            />
+          </FormField>
           <TextInputField
             width={'65vh'}
             label="CVV"

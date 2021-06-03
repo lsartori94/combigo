@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { Pane, Button, TextInputField, FormField } from 'evergreen-ui';
 
-import { VIP_STATUS } from "../../constants";
+import { VIP_STATUS, VIP_STATUS_MSG } from "../../constants";
 import { useAuth } from "../../utils/use-auth";
 import { getUserInfo, saveUserInfo, changeVipStatus } from './profileStore';
 
@@ -36,6 +36,7 @@ export const Profile = () => {
     } else {
       value = VIP_STATUS.ENROLLED;
     }
+    debugger;
     try {
       const res = await changeVipStatus(userInfo.username, value);
       setUserInfo(res);
@@ -107,17 +108,23 @@ export const Profile = () => {
               width={'65vh'}
               description="10% de descuento en total de las reservas por $100 mensuales. Es necesario tener tarjeta de credito asociada"
             >
+              {!vipAvailable && 
+                <FormField
+                  label="Asocie una tarjeta para acceder a la membresía"
+                  marginBottom="5"
+                />
+              }
               <Pane display={'flex'} alignItems={'center'}>
                 <TextInputField
                   label="Estado"
-                  value={VIP_STATUS[userInfo.vipStatus]}
+                  value={VIP_STATUS_MSG[userInfo.vipStatus]}
                   disabled
                   marginRight={30}
                 />
                 <Button disabled={!vipAvailable} onClick={() => handleVipChange()} isLoading={changingVip}>
                   {
                     (userInfo.vipStatus && userInfo.vipStatus === VIP_STATUS.ENROLLED)
-                      ? `Cancelar`
+                      ? `Cancelar Membresía`
                       : `Subscribirse a Membresía`
                   }
                 </Button>

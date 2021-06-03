@@ -39,7 +39,7 @@ export async function changeVipStatus(username, vipStatus) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(vipStatus)
+      body: JSON.stringify({vipStatus})
     }
   );
   if (!response.ok) {

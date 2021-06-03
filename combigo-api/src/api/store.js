@@ -36,7 +36,7 @@ let users = [
       issuer: 'Visa',
       number: '4983794057102007',
       cardHolder: 'Juan Perez',
-      expDate: '01/25',
+      expDate: '2021-11-12',
       cvv:'123'
     },
     vipStatus: VIP_STATUS.NOT_ENROLLED,

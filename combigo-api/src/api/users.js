@@ -188,7 +188,7 @@ router.put('/:uname/card', (req, res) => {
     cvv
   };
 
-  return res.send(users[exists]);
+  return res.send(users[exists].creditCard);
 });
 
 // Delete CC
@@ -208,6 +208,30 @@ router.delete('/:uname/card', (req, res) => {
   users[exists].creditCard = {};
 
   return res.send({});
+});
+
+// VIP
+router.put('/:uname/vip', (req, res) => {
+  const {uname} = req.params;
+  const {vipStatus} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`);
+  }
+
+  const exists = users.findIndex(user => user.username === uname);
+
+  if (exists === -1) {
+    return res.status(409).send(`Usuario no encontrado`);
+  }
+
+  if (!vipStatus) {
+    return res.status(400).send(`Bad Request`);
+  }
+
+  users[exists].vipStatus = CONSTANTS.VIP_STATUS[vipStatus];
+
+  return res.send(users[exists]);
 });
 
 // Delete user with username

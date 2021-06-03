@@ -13,6 +13,11 @@ export const LEGAL_STATUS = {
 }
 
 export const VIP_STATUS = {
+  ENROLLED: "ENROLLED",
+  NOT_ENROLLED: "NOT_ENROLLED"
+}
+
+export const VIP_STATUS_MSG = {
   ENROLLED: "Subscripto",
   NOT_ENROLLED: "No Subscripto"
 }
