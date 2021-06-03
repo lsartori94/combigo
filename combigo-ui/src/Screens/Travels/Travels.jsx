@@ -107,6 +107,7 @@ export const Travels = () => {
     if (travels.length < 1) {
       return renderPlaceholder();
     }
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     return (
       <Pane
         marginTop={20}
@@ -161,7 +162,8 @@ export const Travels = () => {
                   <Link to={`/travels/${travel.id}`}>{travel.id}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {new Date(travel.dateAndTime).toString()}
+                  {new Date(travel.dateAndTime).toLocaleDateString(undefined, options)}
+                  
                 </Table.TextCell>
                 <Table.TextCell>
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>
