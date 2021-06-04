@@ -139,6 +139,7 @@ let travels = [
     id: 'CGOT1',
     dateAndTime: "2021-06-01T08:30",
     route: "CGOR1",
+    stock: 3,
     passengers: [
       {
         id: "CGOU3",
@@ -159,6 +160,7 @@ let travels = [
     id: 'CGOT2',
     dateAndTime: "2021-07-01T08:30",
     route: "CGOR3",
+    stock: 1,
     passengers: [
       {
         id: "CGOU3",
@@ -180,6 +182,7 @@ let travels = [
     id: 'CGOT3',
     dateAndTime: "2021-08-01T08:30",
     route: "CGOR3",
+    stock: 5,
     passengers: [
       {
         id: "CGOU3",

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import {
   TextInputField,
   Button,
@@ -15,6 +15,12 @@ export const Login = () => {
   const [loginError, setLoginError] = useState(false);
   const auth = useAuth();
   const history = useHistory();
+
+  function useQuery() {
+    return new URLSearchParams(useLocation().search); 
+  } 
+
+  let callbackUrl = useQuery().get("callbackUrl");
 
   const inputCallback = (e, name) => {
     const {value} = e.target;
@@ -33,7 +39,11 @@ export const Login = () => {
   const loginCallback = async () => {
     try {
       await auth.signin(email, password);
-      history.push('/');
+      if (callbackUrl) {
+        history.push(callbackUrl);
+      } else {
+        history.push('/');
+      }
     } catch (e) {
       setLoginError(true);
     }

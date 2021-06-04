@@ -26,6 +26,8 @@ import { Cards } from '../Screens/Cards/Cards';
 import { ProvideAuth } from '../utils/use-auth';
 import { Bookings } from '../Screens/Bookings/Bookings'; //Reservas
 import { BookingDetails } from '../Screens/Bookings/BookingDetails'; //Reservas
+import TravelListing from "../Screens/TravelListing/TravelListing";
+import Checkout from "../Screens/Checkout/Checkout";
 
 function App() {
   useEffect(() => {
@@ -79,6 +81,9 @@ function App() {
             <Route path="/routes">
               <Routes />
             </Route>
+            <Route path="/travels/list/:routeId">
+              <TravelListing />
+            </Route>
             <Route path="/travels/:travelId/:assign">
               <TravelAssigns />
             </Route>
@@ -105,6 +110,9 @@ function App() {
             </Route>
             <Route path="/additionals">
               <Additionals />
+            </Route>
+            <Route path="/checkout/:travelId">
+              <Checkout />
             </Route>
             <Route path="/">
               <Home />

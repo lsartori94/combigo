@@ -26,6 +26,17 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
+// get travels for route
+router.get('/:routeId/travels', (req, res) => {
+  const {routeId} = req.params;
+
+  const routeValid = routes.find(r => r.id === routeId);
+  if (!routeValid) return res.status(409).send(`La ruta ingresada no existe`);
+
+  const result = travels.filter(t => t.route === routeId && t.active);
+  return res.json(result);
+});
+
 // // Search for routes by origin
 // router.get('/:origin', (req, res) => {
 //   const {origin} = req.params;
