@@ -14,8 +14,8 @@ const TRAVEL_STATES = {
 const BOOKING_STATES = {
   ACTIVE: "Activa",
   COMPLETED: "Finalizada",
-  FULL_REFUND: "reembolsada 100%",
-  HALF_REFUND: "reembolsada 50%",
+  FULL_REFUND: "Reembolsada 100%",
+  HALF_REFUND: "Reembolsada 50%",
   CANCELED: "Cancelada"
 }
 

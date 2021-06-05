@@ -46,7 +46,7 @@ let users = [
   {
     id: 'CGOU3',
     username: 'diego.sosa',
-    email: 'diegod@gmail.com',
+    email: 'diegos@gmail.com',
     name: 'Diego',
     password: '123@Pass',
     bdate: '1995-10-12',

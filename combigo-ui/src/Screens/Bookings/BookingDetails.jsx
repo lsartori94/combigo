@@ -113,7 +113,7 @@ export const BookingDetails = () => {
         </BackButton>
         <TextInputField
           width={'65vh'}
-          label="Tiempo de salida"
+          label="Fecha y hora de salida"
           value={details.dateAndTime}
           disabled
         />
@@ -123,7 +123,7 @@ export const BookingDetails = () => {
           value={mapRoute()} 
           disabled
         />
-        <TextInputField
+        {/* <TextInputField
           width={'65vh'}
           label="Chofer"
           value={details.driver}
@@ -134,7 +134,7 @@ export const BookingDetails = () => {
           label="Vehiculo"
           value={details.vehicle}
           disabled
-        />
+        /> */}
         <TextInputField
           width={'65vh'}
           label="Estado del viaje"
@@ -146,7 +146,6 @@ export const BookingDetails = () => {
             marginBottom={20}
             label="Adicionales"
           description="Adicionales comprados" //Cambiar a los adicionales comprados
-          required
         >
           <Pane display="flex" flexWrap="wrap">
             <ul>

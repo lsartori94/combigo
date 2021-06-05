@@ -37,7 +37,7 @@ export const Bookings = () => {
   }, []);
 
   const renderPlaceholder = () => (
-    <div style={{padding: "30px"}}>No hay Reservas ff
+    <div style={{padding: "30px"}}> Usted no ha realizado reservas.
     </div>
   );
   
@@ -55,6 +55,7 @@ export const Bookings = () => {
     if (travels.length < 1) {
       return renderPlaceholder();
     }
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     return (
       <Pane
         marginTop={20}
@@ -82,13 +83,13 @@ export const Bookings = () => {
             {travels.map(travel => (
               <Table.Row key={travel.id}>
                 <Table.TextCell>
-                  {new Date(travel.dateAndTime).toString()}
+                  {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.id}`}>{routes.find(rou => rou.id === travel.route).origin}</Link>
+                  <Link to={`/routes/${travel.route}`}>{routes.find(rou => rou.id === travel.route).origin}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.id}`}>{routes.find(rou => rou.id === travel.route).destination}</Link>
+                  <Link to={`/routes/${travel.route}`}>{routes.find(rou => rou.id === travel.route).destination}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
                   {auth.user.travelHistory.find(th => th.travelId === travel.id).status}

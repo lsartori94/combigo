@@ -134,7 +134,7 @@ router.put('/:uname', (req, res) => {
   res.send(users);
 });
 
-// Get Bookings // reservas
+// Get user bookings
 router.get('/:uname/bookings', (req, res) => {
   const {uname} = req.params;
   const exists = users.findIndex(user => user.username === uname);
@@ -145,7 +145,7 @@ router.get('/:uname/bookings', (req, res) => {
 
   const resultsID = Object.assign(users[exists].travelHistory.map(th => th.travelId));
 
-  const result = travels.filter(travel => resultsID.includes( travel.id ));
+  const result = travels.filter(travel => resultsID.includes(travel.id));
 
   return res.send(result);
 });
