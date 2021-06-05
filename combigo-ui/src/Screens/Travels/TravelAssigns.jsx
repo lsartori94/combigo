@@ -180,6 +180,10 @@ export const TravelAssigns = () => {
     return false;
   };
 
+  const disableTravel = (status) =>
+    !(status === TRAVEL_STATES.NOT_STARTED
+    || status === TRAVEL_STATES.NO_VEHICLE);
+
   const renderDetails = (details) => {
     if (noTravel) {
       return (<div>No existe Ruta</div>)
@@ -205,7 +209,7 @@ export const TravelAssigns = () => {
         {!saveError && (
         <div>
 
-          {(details.status !== TRAVEL_STATES.NOT_STARTED) && 
+          {disableTravel(details.status) && 
           (<Alert
             title='El viaje ya finalizó, no se puede asignar un chofer o combi.'
             intent='danger'
@@ -222,7 +226,7 @@ export const TravelAssigns = () => {
             validationMessage={showErrors && errors.driver ? "Campo Requerido" : null}
           >
             <Combobox
-              disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
+              disabled={disableTravel(details.status)}
               items={availableDrivers}
               selectedItem={availableDrivers.find(elem => elem.id === details.driver)}
               label="Chofer"
@@ -242,7 +246,7 @@ export const TravelAssigns = () => {
             validationMessage={showErrors && errors.vehicle ? "Campo Requerido" : null}
           >
             <Combobox
-              disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
+              disabled={disableTravel(details.status)}
               items={availableVehicles}
               selectedItem={availableVehicles.find(elem => elem.id === details.vehicle)}
               onChange={value => value ? inputCallback(value.id, 'vehicle', true) : ''}

@@ -4,7 +4,8 @@ export const TRAVEL_STATES = {
   NOT_STARTED: "Pendiente",
   IN_PROGRESS: "En Progreso",
   FINISHED: "Terminado",
-  CANCELED: "Cancelado"
+  CANCELED: "Cancelado",
+  NO_VEHICLE: "Sin Vehiculo"
 }
 export const LEGAL_STATUS = {
   PENDING: "Pendiente",

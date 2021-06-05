@@ -143,7 +143,8 @@ let travels = [
     passengers: [
       {
         id: "CGOU3",
-        legalStatus: LEGAL_STATUS.PENDING
+        legalStatus: LEGAL_STATUS.PENDING,
+        boughtAdditionals: [],
       }
     ],
     driver: 'CGOU1',
@@ -153,7 +154,6 @@ let travels = [
       "CGOA1",
       "CGOA3"
     ],
-    boughtAdditionals: [],
     active: true
   },
   {
@@ -164,7 +164,8 @@ let travels = [
     passengers: [
       {
         id: "CGOU3",
-        legalStatus: LEGAL_STATUS.APPROVED
+        legalStatus: LEGAL_STATUS.APPROVED,
+        boughtAdditionals: [],
       }
     ],
     driver: 'CGOU1',
@@ -175,7 +176,6 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
-    boughtAdditionals: [],
     active: true
   },
   {
@@ -186,7 +186,8 @@ let travels = [
     passengers: [
       {
         id: "CGOU3",
-        legalStatus: LEGAL_STATUS.APPROVED
+        legalStatus: LEGAL_STATUS.APPROVED,
+        boughtAdditionals: [],
       }
     ],
     driver: 'CGOU1',
@@ -197,7 +198,6 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
-    boughtAdditionals: [],
     active: true
   }
 ];

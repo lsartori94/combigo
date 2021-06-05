@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
     id: newId,
     dateAndTime,
     route,
-    status: TRAVEL_STATES.NOT_STARTED,
+    status: TRAVEL_STATES.NO_VEHICLE,
     availableAdditionals: [],
     driver: null,
     vehicle: null,
@@ -79,8 +79,14 @@ router.put('/:id/vehicle', (req, res) => {
     return res.status(405).send(`El viaje no esta activo`);
   }
 
-  travels[exists].vehicle = vehicle;
-  travels[exists].stock = vehicle.capacity;
+  travels[exists] = Object.assign(
+    travels[exists],
+    {
+      vehicle,
+      stock: vehicle.capacity,
+      status: TRAVEL_STATES.NOT_STARTED
+    }
+  );
 
   res.send(travels[exists]);
 });
