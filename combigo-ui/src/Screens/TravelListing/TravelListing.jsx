@@ -41,6 +41,15 @@ export default function TravelListing() {
     }
   }
 
+  const alreadyReserved = (travelInfo) => {
+    const {passengers} = travelInfo;
+    if (!auth.user) {
+      return false;
+    } else {
+      return passengers.find(p => p.id === auth.user.id);
+    }
+  };
+
   const backCallback = () => history.push('/');
 
   const travelItem = (info) => (
@@ -75,7 +84,14 @@ export default function TravelListing() {
             Hora Salida: {info.dateAndTime.split('T')[1]}
           </Pane>
         </Pane>
-        <Button appearance="primary" intent="none" onClick={() =>handleBtnClick(info)}>Ver viaje ˃</Button>
+        <Button
+          disabled={alreadyReserved(info)}
+          appearance="primary"
+          intent="none"
+          onClick={() =>handleBtnClick(info)}
+        >
+          {alreadyReserved(info) ? 'Reservado' : 'Reservar'}
+        </Button>
       </Pane>
       {info.stock < 3 && <Pane fontSize={12} fontStyle="italic" color="#FFB020">Ultimos Asientos!</Pane>}
     </Pane>
