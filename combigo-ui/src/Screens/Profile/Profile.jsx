@@ -26,7 +26,7 @@ export const Profile = () => {
       }
     }
     initialize();
-  }, []);
+  },[auth.user.username]);
 
   const handleVipChange = async () => {
     steChangingVip(true);
@@ -36,7 +36,6 @@ export const Profile = () => {
     } else {
       value = VIP_STATUS.ENROLLED;
     }
-    debugger;
     try {
       const res = await changeVipStatus(userInfo.username, value);
       setUserInfo(res);

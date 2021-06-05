@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Table,
   Popover,
@@ -11,7 +11,7 @@ import {
   Pane
 } from 'evergreen-ui';
 
-import { getAvailableRoutes, getBookings, getTravelDetails } from './BookingsStore'; //Sacar el delete travels
+import { getAvailableRoutes, getBookings } from './BookingsStore'; //Sacar el delete travels
 import { useAuth } from "../../utils/use-auth"; //For bookings
 
 export const Bookings = () => {
@@ -34,10 +34,10 @@ export const Bookings = () => {
       }
     }
     initialize();
-  }, []);
+  }, [auth.user]);
 
   const renderPlaceholder = () => (
-    <div style={{padding: "30px"}}>No hay Reservas ff
+    <div style={{padding: "30px"}}>No hay Reservas
     </div>
   );
   

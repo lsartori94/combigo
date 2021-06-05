@@ -16,7 +16,8 @@ import { TRAVEL_STATES } from '../../constants.js';
 
 import {
   getTravelDetails,
-  saveTravelDetails,
+  saveTravelVehicle,
+  saveTravelDriver,
   getAvailableDrivers,
   getAvailableVehicles,
   getTravels,
@@ -133,7 +134,11 @@ export const TravelAssigns = () => {
     }
     try {
       setLoading(true);
-      await saveTravelDetails(details);
+      if (assign === 'vehicle') {
+        await saveTravelVehicle(details);
+      } else {
+        await saveTravelDriver(details);
+      }
       setLoading(false);
       history.push('/travels');
     } catch (e) {
