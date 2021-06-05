@@ -37,11 +37,7 @@ export const Bookings = () => {
   }, [auth.user]);
 
   const renderPlaceholder = () => (
-<<<<<<< HEAD
     <div style={{padding: "30px"}}> Usted no ha realizado reservas.
-=======
-    <div style={{padding: "30px"}}>No hay Reservas
->>>>>>> 8b74addc72fce3f777ef2cf2741b2e7099e68a55
     </div>
   );
   
