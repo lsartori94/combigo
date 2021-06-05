@@ -142,7 +142,7 @@ let travels = [
     stock: 3,
     passengers: [
       {
-        id: "CGOU3",
+        id: "CGOU2",
         legalStatus: LEGAL_STATUS.PENDING,
         boughtAdditionals: [],
       }
