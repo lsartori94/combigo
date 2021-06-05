@@ -33,11 +33,13 @@ router.get('/:routeId/travels', (req, res) => {
   const routeValid = routes.find(r => r.id === routeId);
   if (!routeValid) return res.status(409).send(`La ruta ingresada no existe`);
 
-  const result = travels.filter(t => t.route === routeId && t.active);
+  const result = travels.filter(
+    t => t.route === routeId && t.status === TRAVEL_STATES.NOT_STARTED
+  );
   return res.json(result);
 });
 
-// // Search for routes by origin
+// Search for routes by origin
 // router.get('/:origin', (req, res) => {
 //   const {origin} = req.params;
 
@@ -50,7 +52,7 @@ router.get('/:routeId/travels', (req, res) => {
 //   res.json(result);
 // });
 
-// // Search for routes by destination
+// Search for routes by destination
 // router.get('/:destination', (req, res) => {
 //   const {destination} = req.params;
 
@@ -61,7 +63,7 @@ router.get('/:routeId/travels', (req, res) => {
 //     res.status(404).send(`No hay rutas activas para el destino especificado`);
 //   }
 //   res.json(result);
-// });
+// })
 
 // Create route
 router.post('/', (req, res) => {

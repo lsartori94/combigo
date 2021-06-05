@@ -37,7 +37,7 @@ export const Cards = () => {
       }
     }
     initialize();
-  }, []);
+  }, [auth.user, history]);
 
   const handleEdit = () => {
     setPreviousCardInfo(userCardInfo);

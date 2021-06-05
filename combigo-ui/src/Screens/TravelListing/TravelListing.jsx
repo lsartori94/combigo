@@ -108,7 +108,7 @@ export default function TravelListing() {
               {`${error}`}
             </Alert>
           )}
-          {travels.length && routeDetails.origin && renderTravels(travels) || null}
+          {travels.length > 0 && routeDetails.origin && renderTravels(travels)}
           {!travels.length && (
             <>
               <Alert
