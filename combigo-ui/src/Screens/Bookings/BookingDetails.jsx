@@ -10,6 +10,7 @@ import {
 } from 'evergreen-ui';
 
 import { TRAVEL_STATES } from '../../constants.js';
+import { useAuth } from "../../utils/use-auth"; //For bookings
 
 import {
   getTravelDetails,
@@ -19,6 +20,7 @@ import {
 
 export const BookingDetails = () => {
   let { travelId } = useParams();
+  const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
     dateAndTime: "",
@@ -69,7 +71,7 @@ export const BookingDetails = () => {
 
   const renderAdditionals = () => {
     return availableAdditionals.map(elem => {
-      const checked = details.availableAdditionals.find(
+      const checked = (auth.user.travelHistory.boughtAdditionals).find(
         el => el === elem.id
       );
       return (
@@ -137,8 +139,8 @@ export const BookingDetails = () => {
         />
         <TextInputField
           width={'65vh'}
-          label="Estado del viaje"
-          value={details.status}
+          label="Estado de la reserva"
+          value={auth.user.travelHistory.find(th => th.travelId === details.id).status}
           disabled
         />
         <FormField
