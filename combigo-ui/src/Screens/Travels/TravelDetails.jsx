@@ -92,7 +92,10 @@ export const TravelDetails = () => {
       for (const [key, value] of Object.entries(details)) {
         switch (key) {
           default:
-            if (!value) {
+            if (
+              !(key === 'driver' || key === 'vehicle')
+              && !value
+            ) {
               auxErrors[key] = true;
             } else {
               auxErrors[key] = false;

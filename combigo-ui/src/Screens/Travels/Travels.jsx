@@ -162,7 +162,7 @@ export const Travels = () => {
                   <Link to={`/travels/${travel.id}`}>{travel.id}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {new Date(travel.dateAndTime).toLocaleDateString(undefined, options)}
+                  {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
                   
                 </Table.TextCell>
                 <Table.TextCell>

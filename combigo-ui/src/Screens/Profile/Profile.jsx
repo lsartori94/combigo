@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Link
 } from "react-router-dom";
-import { Pane, Button, TextInputField, FormField } from 'evergreen-ui';
+import { Pane, Button, TextInputField, FormField, InlineAlert } from 'evergreen-ui';
 
 import { VIP_STATUS, VIP_STATUS_MSG } from "../../constants";
 import { useAuth } from "../../utils/use-auth";
@@ -26,7 +26,7 @@ export const Profile = () => {
       }
     }
     initialize();
-  }, []);
+  },[auth.user]); //cambié esto porque pedia algo null en vez de mostrar placeholder si no habia user logueado (auth.user.username cambiado a => auth.user)
 
   const handleVipChange = async () => {
     steChangingVip(true);
@@ -36,7 +36,6 @@ export const Profile = () => {
     } else {
       value = VIP_STATUS.ENROLLED;
     }
-    debugger;
     try {
       const res = await changeVipStatus(userInfo.username, value);
       setUserInfo(res);
@@ -106,14 +105,12 @@ export const Profile = () => {
             <FormField
               label="Membresia VIP"
               width={'65vh'}
-              description="10% de descuento en total de las reservas por $100 mensuales. Es necesario tener tarjeta de credito asociada"
+              description="¡10% de descuento en total de las reservas por $100 mensuales! Es necesario tener tarjeta de credito asociada."
             >
               {!vipAvailable && 
-                <FormField
-                  label="Asocie una tarjeta para acceder a la membresía"
-                  marginBottom="5"
-                />
-              }
+              <InlineAlert intent="none" marginBottom={5}>
+                Asocie una tarjeta para acceder a la membresía.
+              </InlineAlert>}
               <Pane display={'flex'} alignItems={'center'}>
                 <TextInputField
                   label="Estado"

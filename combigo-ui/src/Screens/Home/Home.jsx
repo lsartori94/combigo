@@ -4,10 +4,12 @@ import { Pane, Combobox, FormField, Button, Spinner } from 'evergreen-ui';
 import { getRoutes } from './homeStore';
 
 import { useAuth } from "../../utils/use-auth";
+import { useHistory } from 'react-router';
 
 
 export const Home = () => {
   const auth = useAuth();
+  const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [routes, setRoutes] = useState([]);
   const [origins, setOrigins] = useState([]);
@@ -67,6 +69,8 @@ export const Home = () => {
     setDestinations(destinationBuffer);
   }
 
+  const triggerSearch = () => history.push(`/travels/list/${selectedDestination.id}`);
+
   const renderSearch = () => (
     <Pane>Elegi Tu Destino
       <Pane marginTop={20}>
@@ -103,8 +107,11 @@ export const Home = () => {
         />
       </FormField>
       <Button
-        disabled={!selectedDestination || (selectedOrigin === selectedDestination)} //Cambie esto
-      >Buscar</Button>
+        onClick={triggerSearch}
+        disabled={!selectedDestination}
+      >
+        Buscar
+      </Button>
       </Pane>
     </Pane>
   );

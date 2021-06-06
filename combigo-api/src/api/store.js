@@ -46,7 +46,7 @@ let users = [
   {
     id: 'CGOU3',
     username: 'diego.sosa',
-    email: 'diegod@gmail.com',
+    email: 'diegos@gmail.com',
     name: 'Diego',
     password: '123@Pass',
     bdate: '1995-10-12',
@@ -139,10 +139,12 @@ let travels = [
     id: 'CGOT1',
     dateAndTime: "2021-06-01T08:30",
     route: "CGOR1",
+    stock: 3,
     passengers: [
       {
         id: "CGOU3",
-        legalStatus: LEGAL_STATUS.PENDING
+        legalStatus: LEGAL_STATUS.PENDING,
+        boughtAdditionals: [],
       }
     ],
     driver: 'CGOU1',
@@ -152,17 +154,18 @@ let travels = [
       "CGOA1",
       "CGOA3"
     ],
-    boughtAdditionals: [],
     active: true
   },
   {
     id: 'CGOT2',
     dateAndTime: "2021-07-01T08:30",
     route: "CGOR3",
+    stock: 1,
     passengers: [
       {
         id: "CGOU3",
-        legalStatus: LEGAL_STATUS.APPROVED
+        legalStatus: LEGAL_STATUS.APPROVED,
+        boughtAdditionals: [],
       }
     ],
     driver: 'CGOU1',
@@ -173,17 +176,18 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
-    boughtAdditionals: [],
     active: true
   },
   {
     id: 'CGOT3',
     dateAndTime: "2021-08-01T08:30",
     route: "CGOR3",
+    stock: 5,
     passengers: [
       {
         id: "CGOU3",
-        legalStatus: LEGAL_STATUS.APPROVED
+        legalStatus: LEGAL_STATUS.APPROVED,
+        boughtAdditionals: [],
       }
     ],
     driver: 'CGOU1',
@@ -194,7 +198,6 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
-    boughtAdditionals: [],
     active: true
   }
 ];

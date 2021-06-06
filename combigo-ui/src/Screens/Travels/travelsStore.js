@@ -47,7 +47,7 @@ export async function deleteTravel(travelId) {
 }
 
 export async function createTravel(travel) {
-  const response = await fetch(
+  const travRes = await fetch(
     `${API_BASE}/travels`,
     {
       method: 'POST',
@@ -58,16 +58,32 @@ export async function createTravel(travel) {
       body: JSON.stringify(travel)
     }
   );
-  if (!response.ok) {
-    const error = await response.text();
+  if (!travRes.ok) {
+    const error = await travRes.text();
     throw new Error(error);
   }
-  const result = await response.json();
+  const travJson = await travRes.json();
+  const completeResponse = await fetch(
+    `${API_BASE}/travels/${travJson.id}/additionals`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({availableAdditionals: travel.availableAdditionals})
+    }
+  );
+  if (!completeResponse.ok) {
+    const error = await completeResponse.text();
+    throw new Error(error);
+  }
+  const result = await completeResponse.json();
   return result;
 }
 
 export async function saveTravelDetails(travel) {
-  const response = await fetch(
+  const travRes = await fetch(
     `${API_BASE}/travels/${travel.id}`,
     {
       method: 'PUT',
@@ -76,6 +92,62 @@ export async function saveTravelDetails(travel) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(travel)
+    }
+  );
+  if (!travRes.ok) {
+    const error = await travRes.text();
+    throw new Error(error);
+  }
+  const travJson = await travRes.json();
+  const completeResponse = await fetch(
+    `${API_BASE}/travels/${travJson.id}/additionals`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({availableAdditionals: travel.availableAdditionals})
+    }
+  );
+  if (!completeResponse.ok) {
+    const error = await completeResponse.text();
+    throw new Error(error);
+  }
+  const result = await completeResponse.json();
+  return result;
+}
+
+export async function saveTravelVehicle(travel) {
+  const response = await fetch(
+    `${API_BASE}/travels/${travel.id}/vehicle`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({vehicle: travel.vehicle})
+    }
+  );
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error);
+  }
+  const result = await response.json();
+  return result;
+}
+
+export async function saveTravelDriver(travel) {
+  const response = await fetch(
+    `${API_BASE}/travels/${travel.id}/driver`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({driver: travel.driver})
     }
   );
   if (!response.ok) {

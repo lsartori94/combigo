@@ -96,6 +96,16 @@ export const BookingDetails = () => {
     if (noTravel) {
       return (<div>No existe la reserva</div>)
     }
+
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+
     return (
       <Pane
         display="flex"
@@ -115,8 +125,8 @@ export const BookingDetails = () => {
         </BackButton>
         <TextInputField
           width={'65vh'}
-          label="Tiempo de salida"
-          value={details.dateAndTime}
+          label="Fecha y hora de salida"
+          value={new Date(details.dateAndTime).toLocaleDateString("es-AR", options)}
           disabled
         />
         <TextInputField
@@ -127,28 +137,15 @@ export const BookingDetails = () => {
         />
         <TextInputField
           width={'65vh'}
-          label="Chofer"
-          value={details.driver}
-          disabled
-        />
-        <TextInputField
-          width={'65vh'}
-          label="Vehiculo"
-          value={details.vehicle}
-          disabled
-        />
-        <TextInputField
-          width={'65vh'}
-          label="Estado de la reserva"
-          value={auth.user.travelHistory.find(th => th.travelId === details.id).status}
+          label="Estado del viaje"
+          value={details.status}
           disabled
         />
         <FormField
             width={'65vh'}
             marginBottom={20}
             label="Adicionales"
-          description="Adicionales comprados" //Cambiar a los adicionales comprados
-          required
+            description="Adicionales comprados" //Cambiar a los adicionales comprados
         >
           <Pane display="flex" flexWrap="wrap">
             <ul>

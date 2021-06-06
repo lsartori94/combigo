@@ -8,14 +8,15 @@ const TRAVEL_STATES = {
   NOT_STARTED: "Pendiente",
   IN_PROGRESS: "En Progreso",
   FINISHED: "Terminado",
-  CANCELED: "Cancelado"
+  CANCELED: "Cancelado",
+  NO_VEHICLE: "Sin Vehiculo"
 }
 
 const BOOKING_STATES = {
   ACTIVE: "Activa",
   COMPLETED: "Finalizada",
-  FULL_REFUND: "reembolsada 100%",
-  HALF_REFUND: "reembolsada 50%",
+  FULL_REFUND: "Reembolsada 100%",
+  HALF_REFUND: "Reembolsada 50%",
   CANCELED: "Cancelada"
 }
 

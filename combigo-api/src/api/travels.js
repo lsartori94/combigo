@@ -27,7 +27,7 @@ router.get('/:id', (req, res) => {
 
 // Create travel with ID
 router.post('/', (req, res) => {
-  const {dateAndTime, route, availableAdditionals} = req.body;
+  const {dateAndTime, route} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -39,29 +39,31 @@ router.post('/', (req, res) => {
   }
   const newId = `${ID_BASE}${travels.length + 1}`
 
-  travels.push({
+  const newTravel = {
     id: newId,
     dateAndTime,
     route,
-    status: TRAVEL_STATES.NOT_STARTED,
-    availableAdditionals,
-    driver: " ",
-    vehicle: " ",
+    status: TRAVEL_STATES.NO_VEHICLE,
+    availableAdditionals: [],
+    driver: null,
+    vehicle: null,
     passengers: [],
     boughtAdditionals: [],
     active: true,
-  });
+  };
+
+  travels.push(newTravel);
 
   // Agrega la referencia del nuevo viaje a la ruta
   routes[routeIndex].travels.push(newId);
 
-  res.send(travels);
+  res.send(newTravel);
 });
 
-// Modify travel with id. Creo que todo deberia tener un setter porque todo cambia demasiado
-router.put('/:id', (req, res) => {
+// Modify Vehicle
+router.put('/:id/vehicle', (req, res) => {
   const {id} = req.params;
-  const {dateAndTime, route, vehicle, driver, availableAdditionals, passengers, status, boughtAdditionals} = req.body;
+  const {vehicle} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -77,92 +79,91 @@ router.put('/:id', (req, res) => {
     return res.status(405).send(`El viaje no esta activo`);
   }
 
-  travels[exists] = {
-    id,
+  travels[exists] = Object.assign(
+    travels[exists],
+    {
+      vehicle,
+      stock: vehicle.capacity,
+      status: TRAVEL_STATES.NOT_STARTED
+    }
+  );
+
+  res.send(travels[exists]);
+});
+
+// Modify Additionals
+router.put('/:id/additionals', (req, res) => {
+  const {id} = req.params;
+  const {availableAdditionals} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  travels[exists].availableAdditionals = availableAdditionals;
+  res.send(travels[exists]);
+});
+
+// Modify Driver
+router.put('/:id/driver', (req, res) => {
+  const {id} = req.params;
+  const {driver} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  travels[exists].driver = driver;
+
+  res.send(travels[exists]);
+});
+
+// Modify Basic info
+router.put('/:id', (req, res) => {
+  const {id} = req.params;
+  const {dateAndTime, route, status} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  travels[exists] = Object.assign(travels[exists],{
     dateAndTime,
     route,
-    status,
-    availableAdditionals,
-    driver,
-    vehicle,
-    passengers,
-    boughtAdditionals,
-    active: true,
-  };
+    status
+  });
 
-  res.send(travels);
-});
-
-// Add passenger
-router.put('/:id', (req, res) => {
-  const {id} = req.params;
-  const {passenger} = req.body;
-
-  if (!req.body) {
-    return res.status(400).send(`Bad Request`)
-  }
-
-  const exists = travels.findIndex(travel => travel.id === id);
-
-  if (exists === -1) {
-    return res.status(409).send(`El viaje no existe`);
-  }
-
-  if (travels[exists].active == false) {
-    return res.status(405).send(`El viaje no esta activo`);
-  }
-
-  travels[exists].passengers.push( passenger )
-
-  res.send(passenger);
-});
-
-// Add possibleAdditional
-router.put('/:id', (req, res) => {
-  const {id} = req.params;
-  const {additional} = req.body;
-
-  if (!req.body) {
-    return res.status(400).send(`Bad Request`)
-  }
-
-  const exists = travels.findIndex(travel => travel.id === id);
-
-  if (exists === -1) {
-    return res.status(409).send(`El viaje no existe`);
-  }
-
-  if (travels[exists].active == false) {
-    return res.status(405).send(`El viaje no esta activo`);
-  }
-
-  travels[exists].posibleAdditionals.push( additional )
-
-  res.send(additional);
-});
-
-// Add boughtAdditional // Esto se podria hacer muy distinto para que lleve cuenta de la cantidad de cada adicional...
-router.put('/:id', (req, res) => {
-  const {id} = req.params;
-  const {additional} = req.body;
-
-  if (!req.body) {
-    return res.status(400).send(`Bad Request`)
-  }
-
-  const exists = travels.findIndex(travel => travel.id === id);
-
-  if (exists === -1) {
-    return res.status(409).send(`El viaje no existe`);
-  }
-
-  if (travels[exists].active == false) {
-    return res.status(405).send(`El viaje no esta activo`);
-  }
-
-  travels[exists].boughtAdditionals.push( additional );
-
-  res.send(additional);
+  res.send(travels[exists]);
 });
 
 // Delete travel with id
