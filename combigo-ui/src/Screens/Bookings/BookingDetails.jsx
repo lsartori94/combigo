@@ -94,6 +94,16 @@ export const BookingDetails = () => {
     if (noTravel) {
       return (<div>No existe la reserva</div>)
     }
+
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+
     return (
       <Pane
         display="flex"
@@ -114,7 +124,7 @@ export const BookingDetails = () => {
         <TextInputField
           width={'65vh'}
           label="Fecha y hora de salida"
-          value={details.dateAndTime}
+          value={new Date(details.dateAndTime).toLocaleDateString("es-AR", options)}
           disabled
         />
         <TextInputField
@@ -123,18 +133,6 @@ export const BookingDetails = () => {
           value={mapRoute()} 
           disabled
         />
-        {/* <TextInputField
-          width={'65vh'}
-          label="Chofer"
-          value={details.driver}
-          disabled
-        />
-        <TextInputField
-          width={'65vh'}
-          label="Vehiculo"
-          value={details.vehicle}
-          disabled
-        /> */}
         <TextInputField
           width={'65vh'}
           label="Estado del viaje"
@@ -145,7 +143,7 @@ export const BookingDetails = () => {
             width={'65vh'}
             marginBottom={20}
             label="Adicionales"
-          description="Adicionales comprados" //Cambiar a los adicionales comprados
+            description="Adicionales comprados" //Cambiar a los adicionales comprados
         >
           <Pane display="flex" flexWrap="wrap">
             <ul>

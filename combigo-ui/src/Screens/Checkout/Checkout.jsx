@@ -1,59 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router';
+import React, { useEffect, useState } from "react";
+import { useParams, useHistory } from "react-router";
+import { useAuth } from "../../utils/use-auth";
 import {
   Pane,
   TextInputField,
   Spinner,
   Button,
   BackButton,
-  SmallCrossIcon,
   SavedIcon,
-  Combobox,
   FormField,
-  Checkbox, 
+  Checkbox,
   Alert,
-  Text, 
-  Strong
-} from 'evergreen-ui';
+  Text,
+  Strong,
+  InlineAlert,
+  EditIcon,
+  Dialog
+} from "evergreen-ui";
 
-import { TRAVEL_STATES } from '../../constants.js';
-
-import {
-  getAvailableAditionals,
-  getAvailableRoutes
-} from '../Travels/travelsStore';
-
-import {
-  getRouteDetails,
-  getTravelDetails,
-} from './checkoutStore';
+import { getAdditionals } from "../Additionals/additionalsStore";
+import { getRouteDetails, getTravelDetails } from "./checkoutStore";
 
 export default function Checkout() {
+  let subtotal = 0;
   let { travelId } = useParams();
+  const history = useHistory();
+  const auth = useAuth();
   const [loading, setLoading] = useState(true);
+  const [isShownCC, setIsShownCC] = useState(false)
+  const [checkedCC, setCheckedCC] = useState(false)
   const [details, setDetails] = useState({
     dateAndTime: "",
     route: "",
-    availableAdditionals: []
+    availableAdditionals: [],
   });
-  const [availableAdditionals, setAvailableAdditionals] = useState([]);
-  const [availableRoutes, setAvailableRoutes] = useState([]);
-  const [routeDetails, setRouteDetails] = useState([]);
-  const history = useHistory();
+  const [allAdditionals, setAllAdditionals] = useState([]);
+  const [routeDetails, setRouteDetails] = useState({
+    origin: "",
+    destination: "",
+    durationMin: "",
+  });
+  const [newPassengerDetails, setNewPassengerDetails] = useState({
+    id: "",
+    boughtAdditionals: [],
+    total: 0,
+  });
 
   useEffect(() => {
     async function initializeExtras() {
-      const additionals = await getAvailableAditionals();
-      const routes = await getAvailableRoutes();
-      //const rdet = await getRouteDetails(details.route);
-      setAvailableAdditionals(additionals);
-      setAvailableRoutes(routes);
+      const additionals = await getAdditionals();
+      setAllAdditionals(additionals);
     }
     async function initialize() {
       try {
         setLoading(true);
-        const response = await getTravelDetails(travelId);
-        setDetails(response);
+        const travelResponse = await getTravelDetails(travelId);
+        const routeResponse = await getRouteDetails(travelResponse.route);
+        setDetails(travelResponse);
+        setRouteDetails(routeResponse);
       } catch (e) {
         console.error(e);
       } finally {
@@ -65,48 +69,91 @@ export default function Checkout() {
   }, [travelId]);
 
   const handleCheckbox = (e) => {
-    const {checked, id} = e.target;
+    const { checked, id } = e.target;
     let newAdditionals;
 
     if (!checked) {
-      newAdditionals = [...details.availableAdditionals.filter(el => el !== id)];
+      newAdditionals = [
+        ...newPassengerDetails.boughtAdditionals.filter((el) => el !== id),
+      ];
     } else {
-      newAdditionals = [...details.availableAdditionals, id];
+      newAdditionals = [...newPassengerDetails.boughtAdditionals, id];
     }
-    setDetails({...details, availableAdditionals: newAdditionals});
-  }
-
-  const backCallback = () => {
-    history.push(history.goBack());
-  }
+    setNewPassengerDetails({
+      ...newPassengerDetails,
+      boughtAdditionals: newAdditionals,
+    });
+  };
 
   const renderAdditionals = () => {
-    return availableAdditionals.map(elem => {
-      const checked = details.availableAdditionals.find(
-        el => el === elem.id
+    const available = allAdditionals.filter((elem) =>
+      details.availableAdditionals.includes(elem.id)
+    );
+    return available.map((elem) => {
+      const checked = newPassengerDetails.boughtAdditionals.find(
+        (el) => el === elem.id
       );
       return (
         <li key={elem.id}>
           <Checkbox
-            label={elem.name}
+            label={`${elem.name} - $${elem.price}`}
             marginLeft={10}
             id={elem.id}
             checked={checked ? true : false}
-            onChange={e => handleCheckbox(e)}
+            onChange={(e) => handleCheckbox(e)}
           />
-        </li>)
-      });
-  }
-
-  const mapRoute = () => {
-    const route = availableRoutes.find(elem => elem.id === details.route) || {};
-    return `${route.origin} / ${route.destination}`;
+        </li>
+      );
+    });
   };
 
-  const bookCallback = async () => {
+  const renderSavedCCCheckbox = () => {
+    return (
+      <Checkbox
+        label={`${auth.user.creditCard.issuer} - Terminada en ${auth.user.creditCard.number.slice(-5)}`}
+        marginLeft={10}
+        checked={checkedCC}     
+        onChange={e => setCheckedCC(e.target.checked)}
+      />)
   }
 
+  const renderHr = () => {
+    return (
+      <hr
+        style={{
+          color: "#000000",
+          backgroundColor: "#000000",
+          borderColor: "#000000",
+        }}
+      />
+    );
+  };
+
+  const backCallback = () => {
+    history.push(history.goBack());
+  };
+
+  //Simular pago
+  const paymentCallback = async () => {
+    setIsShownCC(true);
+  };
+
+  //#TODO handle inputs CC, subtotal dinámico, disable button reservar si no se eligio/llenó tarjeta
   const renderDetails = (details) => {
+    if (!auth.user) {
+      const url = `/checkout/${details.id}`;
+      history.push(`/login?callbackUrl=${url}`);
+    }
+
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    
     return (
       <Pane
         marginTop={20}
@@ -125,37 +172,124 @@ export default function Checkout() {
           Volver
         </BackButton>
         <div>
-        <div>
           <div>
-            <Strong size={400}>Fecha y hora de salida: </Strong>
-            <Text>{details.dateAndTime}</Text>
-          </div>
           <div>
-            <Strong size={400}>Ruta: </Strong>
-            <Text>{mapRoute()}</Text>
+              <InlineAlert intent="none">
+                Detalles:
+              </InlineAlert>
+            </div>
+            <div>
+              <Strong size={400}>Fecha y hora de salida: </Strong>
+              <Text>
+                {new Date(details.dateAndTime).toLocaleDateString("es-AR", options)}
+              </Text>
+            </div>
+            <div>
+              <Strong size={400}>Ruta: </Strong>
+              <Text>{`${routeDetails.origin} / ${routeDetails.destination}`}</Text>
+            </div>
+            <div>
+              <Strong size={400}>Duración estimada: </Strong>
+              <Text>{`${routeDetails.durationMin} minutos`}</Text>
+            </div>
+            {renderHr()}
+            <div>
+              <InlineAlert intent="warning" marginBottom={10} marginTop={10}>
+                Prepare su reserva:
+              </InlineAlert>
+            </div>
+            <div>
+              <Strong size={400}>Adicionales disponibles: </Strong>
+              <Pane display="flex" flexWrap="wrap">
+                <ul style={{ margin: "0" }}>{renderAdditionals()}</ul>
+              </Pane>
+            </div>
+            <div>
+              <EditIcon color="selected" marginRight={8} />
+              <Strong size={400}>Información de pago: </Strong>
+            </div>
+
+            {auth.user.creditCard ? renderSavedCCCheckbox() :
+              <Alert
+              intent="none"
+              hasIcon={false}
+              appearance="card"
+              title="Podés asociar una tarjeta navegando a tu perfil"
+              marginBottom={8}
+              marginTop={8}
+            />}
+
+              {!checkedCC && (
+              <Pane width={'40vh'} marginBottom={20} marginTop={15}>
+                <TextInputField
+                  width={'40vh'}
+                  label="Emisor"
+                  required
+                />
+                <TextInputField
+                  width={'40vh'}
+                  label="Numero"
+                  // onChange={e => handleInput('number', e.target.value)}
+                  required
+                />
+                <TextInputField
+                  width={'40vh'}
+                  label="Titular"
+                  // onChange={e => handleInput('cardHolder', e.target.value)}
+                  required
+                />
+                <FormField
+                  width={'40vh'}
+                  marginBottom={20}
+                  required
+                  label="Fecha de Vencimiento"
+                >
+                  <input
+                    type="date"
+                    // onChange={e => handleInput('expDate', e.target.value)}
+                    min="2021-01-01"
+                    max="2030-31-12"
+                  />
+                </FormField>
+                <TextInputField
+                  width={'10vh'}
+                  label="CVV"
+                  // onChange={e => handleInput('cvv', e.target.value)}
+                  required
+                />
+              </Pane>
+              )}
+
+            {renderHr()}
+            <div>
+              <InlineAlert intent="none" marginBottom={10} marginTop={10}>
+                Subtotal: {`$${subtotal}`}
+              </InlineAlert>
+            </div>
           </div>
-          <div>
-            <Strong size={400}>Duracion estimada: </Strong>
-            <Text>{}</Text>
-          </div>
-          <div>
-            <Strong size={400}>Adicionales disponibles: </Strong>
-            <Pane display="flex" flexWrap="wrap">
-              <ul>{renderAdditionals()}</ul>
-            </Pane>
-          </div>
-        </div>
+
           <Button
-            width={'65vh'}
+            width={"65vh"}
             display="flex"
             justifyContent="center"
             appearance="primary"
             intent="success"
             iconBefore={SavedIcon}
-            onClick={() => bookCallback()}
+            marginTop="20"
+            onClick={() => paymentCallback()}
           >
-            Reservar
+            Pagar y Reservar
           </Button>
+
+          <Dialog
+            isShown={isShownCC}
+            title="Reserva exitosa"
+            onCloseComplete={() => setIsShownCC(false)}
+            confirmLabel="Ver ticket"
+            hasCancel={false}
+          > Viaje reservado 
+          </Dialog>
+
         </div>
       </Pane>
     );
@@ -163,9 +297,8 @@ export default function Checkout() {
 
   return (
     <div>
-      { loading && <Spinner /> }
-      { !loading &&  renderDetails(details) }
+      {loading && <Spinner />}
+      {!loading && renderDetails(details)}
     </div>
   );
-};
-
+}

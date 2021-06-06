@@ -26,7 +26,7 @@ export const Profile = () => {
       }
     }
     initialize();
-  },[auth.user.username]);
+  },[auth.user]); //cambié esto porque pedia algo null en vez de mostrar placeholder si no habia user logueado (auth.user.username cambiado a => auth.user)
 
   const handleVipChange = async () => {
     steChangingVip(true);
