@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import {
   Table,
   Popover,
@@ -16,17 +17,23 @@ import { useAuth } from "../../utils/use-auth"; //For bookings
 
 export const Bookings = () => {
   const auth = useAuth();
+  const history = useHistory();
   const [travels, setTravels] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [bookingsLoaded, setBookingsLoaded] = useState(false);
 
   useEffect(() => {
     async function initialize() {
       try {
-        const response = await getBookings(auth.user);
-        setTravels(response);
-        const response1 = await getAvailableRoutes();
-        setRoutes(response1);
+        const routesResponse = await getAvailableRoutes();
+        const booksResponse = await getBookings(auth.user);
+        setRoutes(routesResponse);
+        if (booksResponse.length) {
+          setTravels(booksResponse);
+          setBookingsLoaded(true);
+        }
+        
       } catch (e) {
         console.error(e);
       } finally {
@@ -34,7 +41,7 @@ export const Bookings = () => {
       }
     }
     initialize();
-  }, [auth.user]);
+  }, [auth.user, history]);
 
   const renderPlaceholder = () => (
     <div style={{padding: "30px"}}> Usted no ha realizado reservas.
@@ -86,10 +93,10 @@ export const Bookings = () => {
                   {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.route}`}>{routes.find(rou => rou.id === travel.route).origin}</Link>
+                  {bookingsLoaded && routes.find(rou => rou.id === travel.route).origin}
                 </Table.TextCell>
                 <Table.TextCell>
-                  <Link to={`/routes/${travel.route}`}>{routes.find(rou => rou.id === travel.route).destination}</Link>
+                  {bookingsLoaded && routes.find(rou => rou.id === travel.route).destination}
                 </Table.TextCell>
                 <Table.TextCell>
                   {auth.user.travelHistory.find(th => th.travelId === travel.id).status}

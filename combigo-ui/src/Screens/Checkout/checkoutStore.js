@@ -19,6 +19,6 @@ export async function getTravelDetails(travelId) {
   return result;
 }
 
-export async function getUserCC(uname) {
-  return getCreditCardInfo(uname.username);
+export async function getUserCC(user) {
+  return getCreditCardInfo(user.username);
 }
