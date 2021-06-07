@@ -37,6 +37,7 @@ export default function Checkout() {
     dateAndTime: '',
     route: '',
     availableAdditionals: [],
+    passengers: []
   });
   const [routeDetails, setRouteDetails] = useState({
     origin: '',
@@ -234,9 +235,18 @@ export default function Checkout() {
     history.push(history.goBack());
   };
 
+  const alreadyReserved = (travelInfo) => {
+    const {passengers} = travelInfo;
+    if (!auth.user) {
+      return false;
+    } else {
+      return (passengers.find(p => p.id === auth.user.id))
+    }
+  };
+
   //debug
   const ss = () => {
-    console.log(details);
+    alreadyReserved(details);
   };
 
   //reemplazar 0 por travel price
@@ -272,6 +282,19 @@ export default function Checkout() {
     if (!auth.user) {
       const url = `/checkout/${details.id}`;
       history.push(`/login?callbackUrl=${url}`);
+    }
+
+    if (alreadyReserved(details)) {
+      return (
+      <div>
+        <Alert
+          intent="danger"
+          hasIcon={true}
+          appearance="card"
+          title="Usted ya ha realizado una reserva en este viaje."
+          marginTop={20}
+        />
+      </div>)
     }
 
     const options = {
@@ -412,7 +435,7 @@ export default function Checkout() {
             display="flex"
             justifyContent="center"
             marginBottom={8}
-            onClick={() => ss()}
+            onClick={() => refreshSubtotal()}
             > refresh subtotal 
             </Button>
 
