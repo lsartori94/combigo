@@ -1,4 +1,5 @@
 import { API_BASE } from '../../constants';
+import { getCreditCardInfo } from '../Cards/CardsStore';
 
 export async function getRouteDetails(routeId) {
     const response = await fetch(`${API_BASE}/routes/${routeId}`);
@@ -16,4 +17,8 @@ export async function getTravelDetails(travelId) {
   }
   const result = await response.json();
   return result;
+}
+
+export async function getUserCC(uname) {
+  return getCreditCardInfo(uname.username);
 }

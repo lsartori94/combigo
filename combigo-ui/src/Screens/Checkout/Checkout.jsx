@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router";
+import { useParams, useHistory } from "react-router-dom";
 import { useAuth } from "../../utils/use-auth";
 import {
   Pane,
@@ -19,7 +19,7 @@ import {
 } from "evergreen-ui";
 
 import { getAdditionals } from "../Additionals/additionalsStore";
-import { getRouteDetails, getTravelDetails } from "./checkoutStore";
+import { getRouteDetails, getTravelDetails, getUserCC } from "./checkoutStore";
 
 export default function Checkout() {
   let { travelId } = useParams();
@@ -67,24 +67,26 @@ export default function Checkout() {
     cvv: ''
   });
   const [showCcErrors, setShowCcErrors] = useState(false);
+  const [userCardInfo, setUserCardInfo] = useState({});
   const [selectedCard, setSelectedCard] = useState({});
 
   useEffect(() => {
     async function initializeExtras() {
       const additionals = await getAdditionals();
       setAllAdditionals(additionals);
-      //user puede tener creditCard = {} si está hardcodeado, o puede no tener un campo creditCard si lo creamos desde la api
-      if (auth.user && auth.user.creditCard && auth.user.creditCard.number) {
-        setUserHasSavedCC(true);
-      }
     }
     async function initialize() {
       try {
         setLoading(true);
         const travelResponse = await getTravelDetails(travelId);
         const routeResponse = await getRouteDetails(travelResponse.route);
+        const userCCInfo = await getUserCC(auth.user);
         setDetails(travelResponse);
         setRouteDetails(routeResponse);
+        if (userCCInfo.number) {
+          setUserCardInfo(userCCInfo);
+          setUserHasSavedCC(true);
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -154,7 +156,7 @@ export default function Checkout() {
   const renderSavedCCCheckbox = () => {
     return (
       <Checkbox
-        label={`${auth.user.creditCard.issuer} - Terminada en ${auth.user.creditCard.number.slice(-4)}`}
+        label={`${userCardInfo.issuer} - Terminada en ${userCardInfo.number.slice(-4)}`}
         marginLeft={10}
         checked={checkedSavedCC}     
         onChange={e => setCheckedSavedCC(e.target.checked)}
@@ -234,7 +236,7 @@ export default function Checkout() {
 
   //debug
   const ss = () => {
-    console.log(ccErrors);
+    console.log(userCardInfo);
   };
 
   //reemplazar 0 por travel price
@@ -258,7 +260,7 @@ export default function Checkout() {
       setShowCcErrors(false);
     }
     if (checkedSavedCC) 
-      setSelectedCard(auth.user.creditCard)
+      setSelectedCard(userCardInfo)
     else 
       setSelectedCard(newCardInfo);
     setIsShownSuccess(true);
