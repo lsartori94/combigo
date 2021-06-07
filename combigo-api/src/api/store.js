@@ -199,6 +199,22 @@ let travels = [
       "CGOA5"
     ],
     active: true
+  },
+  {
+    id: 'CGOT4',
+    dateAndTime: "2021-09-01T08:30",
+    route: "CGOR4",
+    stock: 5,
+    passengers: [],
+    driver: 'CGOU1',
+    vehicle: 'CGOV1',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      "CGOA2",
+      "CGOA4",
+      "CGOA5"
+    ],
+    active: true
   }
 ];
 

@@ -110,11 +110,14 @@ export const Cards = () => {
         newValues.number = value;
         break;
       case 'cardHolder':
-        if (/[^a-zA-Z0-9 ]/g.test(value)) return
+        if (/[^a-zA-Z]/g.test(value)) return
         newValues.cardHolder = value;
         break;
       case 'expDate':
-        newValues.expDate = value;
+        if (new Date(value) > new Date())
+          newValues.expDate = value;
+        else
+          newValues.expDate = '';
         break;
       case 'cvv':
         if (isNaN(value)) return;
@@ -185,6 +188,7 @@ export const Cards = () => {
             label="Emisor"
             value={userCardInfo.issuer}
             disabled
+            placeholder="Autocompletado"
           />
           <TextInputField
             width={'65vh'}
