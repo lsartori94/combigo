@@ -76,8 +76,8 @@ export default function Checkout() {
       setAllAdditionals(additionals);
     }
     async function initialize() {
+      setLoading(true);
       try {
-        setLoading(true);
         const travelResponse = await getTravelDetails(travelId);
         const routeResponse = await getRouteDetails(travelResponse.route);
         const userCCInfo = await getUserCC(auth.user);
@@ -236,7 +236,7 @@ export default function Checkout() {
 
   //debug
   const ss = () => {
-    console.log(userCardInfo);
+    console.log(details);
   };
 
   //reemplazar 0 por travel price
@@ -412,7 +412,7 @@ export default function Checkout() {
             display="flex"
             justifyContent="center"
             marginBottom={8}
-            onClick={() => refreshSubtotal()}
+            onClick={() => ss()}
             > refresh subtotal 
             </Button>
 

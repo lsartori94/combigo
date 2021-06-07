@@ -67,8 +67,8 @@ export const TravelDetails = () => {
       return;
     };
     async function initialize() {
+      setLoading(true);
       try {
-        setLoading(true);
         const response = await getTravelDetails(travelId);
         setNoTravel(false);
         setDetails(response);

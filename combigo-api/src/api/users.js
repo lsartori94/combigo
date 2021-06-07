@@ -160,8 +160,11 @@ router.get('/:uname/card', (req, res) => {
   }
 
   const result = Object.assign(users[exists]);
-
-  return res.send(result.creditCard);
+  
+  if (result.creditCard)
+    return res.send(result.creditCard);
+  else
+    return res.send({});
 });
 
 // Create CC
