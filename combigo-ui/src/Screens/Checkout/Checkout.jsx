@@ -263,6 +263,7 @@ export default function Checkout() {
       setSelectedCard(userCardInfo)
     else 
       setSelectedCard(newCardInfo);
+    refreshSubtotal();
     setIsShownSuccess(true);
   };
 
