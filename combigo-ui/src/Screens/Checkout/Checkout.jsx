@@ -22,34 +22,61 @@ import { getAdditionals } from "../Additionals/additionalsStore";
 import { getRouteDetails, getTravelDetails } from "./checkoutStore";
 
 export default function Checkout() {
-  let subtotal = 0;
   let { travelId } = useParams();
   const history = useHistory();
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
-  const [isShownCC, setIsShownCC] = useState(false)
-  const [checkedCC, setCheckedCC] = useState(false)
+  const [isShownSuccess, setIsShownSuccess] = useState(false);
+  const [checkedSavedCC, setCheckedSavedCC] = useState(false);
+  const [userHasSavedCC, setUserHasSavedCC] = useState(false);
+  const [subtotal, setSubtotal] = useState(0);
+
+  //Detalles del viaje
+  const [allAdditionals, setAllAdditionals] = useState([]);
   const [details, setDetails] = useState({
-    dateAndTime: "",
-    route: "",
+    dateAndTime: '',
+    route: '',
     availableAdditionals: [],
   });
-  const [allAdditionals, setAllAdditionals] = useState([]);
   const [routeDetails, setRouteDetails] = useState({
-    origin: "",
-    destination: "",
-    durationMin: "",
+    origin: '',
+    destination: '',
+    durationMin: '',
   });
+
+  //Detalles del pasajero
   const [newPassengerDetails, setNewPassengerDetails] = useState({
-    id: "",
+    id: '',
     boughtAdditionals: [],
     total: 0,
   });
+
+  //CC
+  const [newCardInfo, setNewCardInfo] = useState({
+    issuer: '',
+    number: '',
+    cardHolder: '',
+    expDate: '',
+    cvv: ''
+  });
+  const [ccErrors, setCcErrors] = useState({
+    issuer: '',
+    number: '',
+    cardHolder: '',
+    expDate: '',
+    cvv: ''
+  });
+  const [showCcErrors, setShowCcErrors] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
 
   useEffect(() => {
     async function initializeExtras() {
       const additionals = await getAdditionals();
       setAllAdditionals(additionals);
+      //user puede tener creditCard = {} si está hardcodeado, o puede no tener un campo creditCard si lo creamos desde la api
+      if (auth.user && auth.user.creditCard && auth.user.creditCard.number) {
+        setUserHasSavedCC(true);
+      }
     }
     async function initialize() {
       try {
@@ -66,12 +93,28 @@ export default function Checkout() {
     }
     initialize();
     initializeExtras();
-  }, [travelId]);
+  }, [travelId, auth.user, history]);
 
+  useEffect(() => {
+    const auxErrors = {};
+    for (const [key, value] of Object.entries(newCardInfo)) {
+      switch (key) {
+        default:
+          if (!value) {
+            auxErrors[key] = true;
+          } else {
+            auxErrors[key] = false;
+          }
+          break;
+      }
+    }
+    setCcErrors({...auxErrors});
+  }, [newCardInfo]);
+
+  //Adicionales
   const handleCheckbox = (e) => {
     const { checked, id } = e.target;
     let newAdditionals;
-
     if (!checked) {
       newAdditionals = [
         ...newPassengerDetails.boughtAdditionals.filter((el) => el !== id),
@@ -107,16 +150,63 @@ export default function Checkout() {
     });
   };
 
+  //CC
   const renderSavedCCCheckbox = () => {
     return (
       <Checkbox
-        label={`${auth.user.creditCard.issuer} - Terminada en ${auth.user.creditCard.number.slice(-5)}`}
+        label={`${auth.user.creditCard.issuer} - Terminada en ${auth.user.creditCard.number.slice(-4)}`}
         marginLeft={10}
-        checked={checkedCC}     
-        onChange={e => setCheckedCC(e.target.checked)}
+        checked={checkedSavedCC}     
+        onChange={e => setCheckedSavedCC(e.target.checked)}
       />)
   }
 
+  const handleInput = (name, value) => {
+    const newValues = JSON.parse(JSON.stringify(newCardInfo));
+    switch (name) {
+      case 'number':
+        if (isNaN(value)) return;
+        if (value.length > 16) {
+          return;
+        };
+        switch (value[0]) {
+          case '4':
+            newValues.issuer = 'Visa';
+            break;
+          case '5':
+            newValues.issuer = 'Master'
+            break;
+          case '3':
+            newValues.issuer = 'American Express'
+            break;
+          default:
+            newValues.issuer = ''
+            break;
+        }
+        newValues.number = value;
+        break;
+      case 'cardHolder':
+        if (/[^a-zA-Z]/g.test(value)) return
+        newValues.cardHolder = value;
+        break;
+      case 'expDate':
+        if (new Date(value) > new Date())
+          newValues.expDate = value;
+        else
+          newValues.expDate = '';
+        break;
+      case 'cvv':
+        if (isNaN(value)) return;
+        if (value.length > 3) return;
+        newValues.cvv = value;
+        break;
+      default:
+        break;
+    }
+    setNewCardInfo(newValues);
+  }
+
+  //Util
   const renderHr = () => {
     return (
       <hr
@@ -129,16 +219,52 @@ export default function Checkout() {
     );
   };
 
+  function timeConvert(n) {
+    var num = n;
+    var hours = (num / 60);
+    var rhours = Math.floor(hours);
+    var minutes = (hours - rhours) * 60;
+    var rminutes = Math.round(minutes);
+    return rhours + " hora(s) y " + rminutes + " minuto(s).";
+  }
+
   const backCallback = () => {
     history.push(history.goBack());
   };
 
-  //Simular pago
-  const paymentCallback = async () => {
-    setIsShownCC(true);
+  //debug
+  const ss = () => {
+    console.log(ccErrors);
   };
 
-  //#TODO handle inputs CC, subtotal dinámico, disable button reservar si no se eligio/llenó tarjeta
+  //reemplazar 0 por travel price
+  const refreshSubtotal = () => {
+    const selected = newPassengerDetails.boughtAdditionals;
+    if (selected.length) {
+      const prices = allAdditionals.filter(elem => selected.includes(elem.id)).map(elem => elem.price);
+      const n = prices.reduce((a, b) => a + b, 0);
+      setSubtotal(n);
+    } else {
+      setSubtotal(0);
+    }
+  };
+
+  //Simular pago, #TODO spinner en dialog
+  const paymentCallback = async () => {
+    if (Object.values(ccErrors).find(val => val) && !checkedSavedCC) {
+      setShowCcErrors(true);
+      return;
+    } else {
+      setShowCcErrors(false);
+    }
+    if (checkedSavedCC) 
+      setSelectedCard(auth.user.creditCard)
+    else 
+      setSelectedCard(newCardInfo);
+    setIsShownSuccess(true);
+  };
+
+  //#TODO subtotal dinámico, sección descuento VIP
   const renderDetails = (details) => {
     if (!auth.user) {
       const url = `/checkout/${details.id}`;
@@ -190,7 +316,8 @@ export default function Checkout() {
             </div>
             <div>
               <Strong size={400}>Duración estimada: </Strong>
-              <Text>{`${routeDetails.durationMin} minutos`}</Text>
+              <Text>{`${timeConvert(routeDetails.durationMin)}`}</Text>
+
             </div>
             {renderHr()}
             <div>
@@ -209,7 +336,7 @@ export default function Checkout() {
               <Strong size={400}>Información de pago: </Strong>
             </div>
 
-            {auth.user.creditCard ? renderSavedCCCheckbox() :
+            {userHasSavedCC ? renderSavedCCCheckbox() :
               <Alert
               intent="none"
               hasIcon={false}
@@ -219,43 +346,53 @@ export default function Checkout() {
               marginTop={8}
             />}
 
-              {!checkedCC && (
+              {!checkedSavedCC && (
               <Pane width={'40vh'} marginBottom={20} marginTop={15}>
                 <TextInputField
                   width={'40vh'}
                   label="Emisor"
-                  required
+                  value={newCardInfo.issuer}
+                  placeholder="Autocompletado"
+                  disabled
                 />
                 <TextInputField
                   width={'40vh'}
                   label="Numero"
-                  // onChange={e => handleInput('number', e.target.value)}
+                  value={newCardInfo.number}
+                  onChange={e => handleInput('number', e.target.value)}
                   required
+                  validationMessage={showCcErrors && ccErrors.number ? "Campo Requerido o inválido" : null}
                 />
                 <TextInputField
                   width={'40vh'}
                   label="Titular"
-                  // onChange={e => handleInput('cardHolder', e.target.value)}
+                  value={newCardInfo.cardHolder}
+                  onChange={e => handleInput('cardHolder', e.target.value)}
                   required
+                  validationMessage={showCcErrors && ccErrors.cardHolder ? "Campo Requerido o inválido" : null}
                 />
                 <FormField
                   width={'40vh'}
                   marginBottom={20}
                   required
                   label="Fecha de Vencimiento"
+                  value={newCardInfo.expDate}
+                  validationMessage={showCcErrors && ccErrors.expDate ? "Campo Requerido o inválido" : null}
                 >
                   <input
                     type="date"
-                    // onChange={e => handleInput('expDate', e.target.value)}
-                    min="2021-01-01"
+                    onChange={e => handleInput('expDate', e.target.value)}
+                    min={(new Date()).day}
                     max="2030-31-12"
                   />
                 </FormField>
                 <TextInputField
-                  width={'10vh'}
+                  width={'20vh'}
                   label="CVV"
-                  // onChange={e => handleInput('cvv', e.target.value)}
+                  value={newCardInfo.cvv}
+                  onChange={e => handleInput('cvv', e.target.value)}
                   required
+                  validationMessage={showCcErrors && ccErrors.cvv ? "Campo Requerido o inválido" : null}
                 />
               </Pane>
               )}
@@ -266,6 +403,16 @@ export default function Checkout() {
                 Subtotal: {`$${subtotal}`}
               </InlineAlert>
             </div>
+
+             {/* No se desde donde llamar a refresh para que funcione bien */}
+             <Button
+            display="flex"
+            justifyContent="center"
+            marginBottom={8}
+            onClick={() => refreshSubtotal()}
+            > refresh subtotal 
+            </Button>
+
           </div>
 
           <Button
@@ -276,18 +423,19 @@ export default function Checkout() {
             intent="success"
             iconBefore={SavedIcon}
             marginTop="20"
+            disabled={!checkedSavedCC && !ccErrors}
             onClick={() => paymentCallback()}
           >
             Pagar y Reservar
           </Button>
 
           <Dialog
-            isShown={isShownCC}
+            isShown={isShownSuccess}
             title="Reserva exitosa"
-            onCloseComplete={() => setIsShownCC(false)}
+            onCloseComplete={() => setIsShownSuccess(false)}
             confirmLabel="Ver ticket"
             hasCancel={false}
-          > Viaje reservado 
+          > {selectedCard.number ? (`Pago de $${subtotal} realizado. Con tarjeta ${selectedCard.issuer} - Terminada en ${selectedCard.number.slice(-4)}`) : null}
           </Dialog>
 
         </div>
