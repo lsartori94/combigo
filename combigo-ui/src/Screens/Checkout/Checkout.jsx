@@ -371,8 +371,8 @@ export default function Checkout() {
                 Prepare su reserva:
               </InlineAlert>
             </div>
-            <div>
-              <Strong size={400}>Adicionales disponibles: </Strong>
+            <div style={{marginBottom: 10}}>
+              <Strong size={400}> {details.availableAdditionals.length ? 'Adicionales disponibles:' : 'No hay adicionales disponibles para este viaje.'} </Strong>
               <Pane display="flex" flexWrap="wrap">
                 <ul style={{ margin: "0" }}>{renderAdditionals()}</ul>
               </Pane>
