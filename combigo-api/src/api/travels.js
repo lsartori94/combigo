@@ -174,11 +174,36 @@ router.delete('/:id', (req, res) => {
   if (index === -1) {
     return res.status(404).send(`Viaje no encontrado`);
   }
-
-  //travels.splice(index, 1);
+  
   travels[index].active = false;
 
   res.json(travels);
+});
+
+// Add new booking
+router.put('/:id/newBooking', (req, res) => {
+  const {id} = req.params;
+  const booking = req.body;
+
+  console.log(booking);
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  travels[exists].passengers.push(booking);
+
+  res.send(booking);
 });
 
 module.exports = router;
