@@ -70,8 +70,9 @@ export const BookingDetails = () => {
   }
 
   const renderAdditionals = () => {
+    //if (!auth.user.travelHistory) { return false };
     return availableAdditionals.map(elem => {
-      const checked = (auth.user.travelHistory.boughtAdditionals).find(
+      const checked = (auth.user.travelHistory.find(th => th.travelId === details.id).boughtAdditionals).find(
         el => el === elem.id
       );
       return (
@@ -134,6 +135,23 @@ export const BookingDetails = () => {
           label="Ruta"
           value={mapRoute()} 
           disabled
+        />
+        <TextInputField
+          width={'65vh'}
+          label="Chofer"
+          value={details.driver}
+          disabled
+        />
+        <TextInputField
+          width={'65vh'}
+          label="Vehiculo"
+          value={details.vehicle}
+          disabled
+        />
+        <TextInputField
+          width={'65vh'}
+          label="Estado de la reserva"
+          value={auth.user.travelHistory.find(th => th.travelId === details.id).status}
         />
         <TextInputField
           width={'65vh'}

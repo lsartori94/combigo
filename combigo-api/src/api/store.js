@@ -54,7 +54,10 @@ let users = [
     travelHistory: [
       {
         travelId: "CGOT1",
-        boughtAdditionals: [],
+        boughtAdditionals: [
+          'CGOA1',
+          'CGOA2',
+        ],
         status: BOOKING_STATES.ACTIVE,
       }
     ],
