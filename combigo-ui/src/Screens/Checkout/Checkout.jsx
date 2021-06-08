@@ -18,8 +18,8 @@ import {
   Dialog
 } from "evergreen-ui";
 
-import { getAdditionals } from "../Additionals/additionalsStore";
-import { getRouteDetails, getTravelDetails, getUserCC } from "./checkoutStore";
+import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking } from "./checkoutStore";
+import { VIP_STATUS } from "../../constants";
 
 export default function Checkout() {
   let { travelId } = useParams();
@@ -29,6 +29,7 @@ export default function Checkout() {
   const [isShownSuccess, setIsShownSuccess] = useState(false);
   const [checkedSavedCC, setCheckedSavedCC] = useState(false);
   const [userHasSavedCC, setUserHasSavedCC] = useState(false);
+  const [userIsVIP, setUserIsVip] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
 
   //Detalles del viaje
@@ -45,11 +46,12 @@ export default function Checkout() {
     durationMin: '',
   });
 
-  //Detalles del pasajero
+  //Detalles del nuevo pasajero/reserva
   const [newPassengerDetails, setNewPassengerDetails] = useState({
     id: '',
     boughtAdditionals: [],
-    total: 0,
+    creditCard: '',
+    payment: 0
   });
 
   //CC
@@ -73,7 +75,7 @@ export default function Checkout() {
 
   useEffect(() => {
     async function initializeExtras() {
-      const additionals = await getAdditionals();
+      const additionals = await getAvailableAdditionals();
       setAllAdditionals(additionals);
     }
     async function initialize() {
@@ -81,13 +83,21 @@ export default function Checkout() {
       try {
         const travelResponse = await getTravelDetails(travelId);
         const routeResponse = await getRouteDetails(travelResponse.route);
-        const userCCInfo = await getUserCC(auth.user);
+        const userInfo = await getUserDetails(auth.user);
         setDetails(travelResponse);
         setRouteDetails(routeResponse);
-        if (userCCInfo.number) {
-          setUserCardInfo(userCCInfo);
+        if (userInfo.creditCard.number) {
+          setUserCardInfo(userInfo.creditCard);
           setUserHasSavedCC(true);
         }
+        if (userInfo.vipStatus && userInfo.vipStatus === VIP_STATUS.ENROLLED)
+          setUserIsVip(true);
+
+        //#TODO fix, esto deberia estar junto con el otro set
+        setNewPassengerDetails({
+          ...newPassengerDetails,
+          id: auth.user.id});
+
       } catch (e) {
         console.error(e);
       } finally {
@@ -96,7 +106,7 @@ export default function Checkout() {
     }
     initialize();
     initializeExtras();
-  }, [travelId, auth.user, history]);
+  }, [travelId, auth.user]);
 
   useEffect(() => {
     const auxErrors = {};
@@ -210,18 +220,6 @@ export default function Checkout() {
   }
 
   //Util
-  const renderHr = () => {
-    return (
-      <hr
-        style={{
-          color: "#000000",
-          backgroundColor: "#000000",
-          borderColor: "#000000",
-        }}
-      />
-    );
-  };
-
   function timeConvert(n) {
     var num = n;
     var hours = (num / 60);
@@ -261,8 +259,8 @@ export default function Checkout() {
     }
   };
 
-  //Simular pago, #TODO spinner en dialog
-  const paymentCallback = async () => {
+  //#TODO spinner
+  const paymentCallback = () => {
     if (Object.values(ccErrors).find(val => val) && !checkedSavedCC) {
       setShowCcErrors(true);
       return;
@@ -274,10 +272,30 @@ export default function Checkout() {
     else 
       setSelectedCard(newCardInfo);
     refreshSubtotal();
-    setIsShownSuccess(true);
+    saveBookingCallback();
   };
 
-  //#TODO subtotal dinámico, sección descuento VIP
+  const saveBookingCallback = async () => {
+
+    //#TODO fix, de que manera agarrar estos dos estados y que no estén vacios?
+    setNewPassengerDetails({
+      ...newPassengerDetails,
+      creditCard: selectedCard,
+      payment: subtotal
+    });
+
+    try {
+      setLoading(true);
+      await createBooking(newPassengerDetails, travelId);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsShownSuccess(true);
+    }
+  }
+
+  //#TODO subtotal dinámico
   const renderDetails = (details) => {
     if (!auth.user) {
       const url = `/checkout/${details.id}`;
@@ -345,7 +363,9 @@ export default function Checkout() {
               <Text>{`${timeConvert(routeDetails.durationMin)}`}</Text>
 
             </div>
-            {renderHr()}
+
+            <hr/>
+
             <div>
               <InlineAlert intent="warning" marginBottom={10} marginTop={10}>
                 Prepare su reserva:
@@ -423,21 +443,25 @@ export default function Checkout() {
               </Pane>
               )}
 
-            {renderHr()}
+            <hr/>
+
             <div>
               <InlineAlert intent="none" marginBottom={10} marginTop={10}>
                 Subtotal: {`$${subtotal}`}
               </InlineAlert>
             </div>
+            {userIsVIP && (
+             <div>
+              <InlineAlert intent="success" marginBottom={10} marginTop={10}>
+                Descuento VIP del 10% aplicado: -${subtotal * 0.10}
+              </InlineAlert>
+            </div>)}
 
-             {/* No se desde donde llamar a refresh para que funcione bien */}
-             <Button
-            display="flex"
-            justifyContent="center"
-            marginBottom={8}
-            onClick={() => refreshSubtotal()}
-            > refresh subtotal 
-            </Button>
+            <hr/>
+
+            <div>
+              <Strong size={600}>Total a pagar: ${userIsVIP ? subtotal * 0.90 : subtotal}</Strong>
+            </div>
 
           </div>
 
@@ -446,22 +470,33 @@ export default function Checkout() {
             display="flex"
             justifyContent="center"
             appearance="primary"
-            intent="success"
+            intent="none"
             iconBefore={SavedIcon}
-            marginTop="20"
+            marginTop="15"
             disabled={!checkedSavedCC && !ccErrors}
             onClick={() => paymentCallback()}
           >
             Pagar y Reservar
           </Button>
 
+            {/* DEBUG No se desde donde llamar a refresh para que funcione bien */}
+            <Button
+              onClick={() => refreshSubtotal()}
+            > test refresh subtotal 
+            </Button>
+
           <Dialog
             isShown={isShownSuccess}
             title="Reserva exitosa"
-            onCloseComplete={() => setIsShownSuccess(false)}
+            onCloseComplete={() => setIsShownSuccess(false)} //#TODO mostrar ticket
+            onCancel={() => history.push(history.goBack())}
             confirmLabel="Ver ticket"
-            hasCancel={false}
-          > {selectedCard.number ? (`Pago de $${subtotal} realizado. Con tarjeta ${selectedCard.issuer} - Terminada en ${selectedCard.number.slice(-4)}`) : null}
+            cancelLabel="Atrás"
+            hasCancel={true}
+            intent="success"
+          > {selectedCard.number ? 
+              (`Pago de $${userIsVIP ? subtotal * 0.90 : subtotal} realizado. Con tarjeta ${selectedCard.issuer} - Terminada en ${selectedCard.number.slice(-4)}`)
+              : null}
           </Dialog>
 
         </div>
