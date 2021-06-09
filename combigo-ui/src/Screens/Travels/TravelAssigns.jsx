@@ -58,7 +58,7 @@ export const TravelAssigns = () => {
       const allRoutes = await getRoutes();
       const travelDetails = await getTravelDetails(travelId);
       // si se intenta asignar chofer/combi a un viaje con ruta eliminada, este if evita que validDrivers() intente hacer cosas con rutas no activas (que la api no te devuelve)
-      if (travelDetails.status === TRAVEL_STATES.NOT_STARTED) {
+      if (travelDetails.status === TRAVEL_STATES.NOT_STARTED || travelDetails.status === TRAVEL_STATES.NO_VEHICLE) {
         setAvailableDrivers(validDrivers(drivers, allTravels, allRoutes, travelDetails));
         setAvailableVehicles(validVehicles(vehicles, allTravels, allRoutes, travelDetails));
       }
