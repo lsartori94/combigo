@@ -132,7 +132,9 @@ let routes = [
     destination: 'Rosario',
     distanceKm: 300,
     durationMin: 200,
-    travels: [],
+    travels: [
+      'CGOT4'
+    ],
     active: true
   }
 ];

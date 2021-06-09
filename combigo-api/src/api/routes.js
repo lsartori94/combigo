@@ -183,11 +183,11 @@ router.delete('/:id', (req, res) => {
     return res.status(404).send(`La ruta no existe`);
   }
   
-  //Cambia estado de todos los viajes "pendiente" de la ruta a "cancelado"
+  //Cambia estado de todos los viajes "pendiente" o "no vehiculo" de la ruta a "cancelado" o lo da de baja
   //#TODO devolver dinero de reservas
   routes[index].travels.forEach(routeTravel => {
     const travelIndex = travels.findIndex(travel => travel.id === routeTravel);
-    if (travelIndex !== -1 && travels[travelIndex].status === TRAVEL_STATES.NOT_STARTED) {
+    if (travelIndex !== -1 && (travels[travelIndex].status === TRAVEL_STATES.NOT_STARTED || travels[travelIndex].status === TRAVEL_STATES.NO_VEHICLE)) {
       travels[travelIndex].status = TRAVEL_STATES.CANCELED;
     }
   });

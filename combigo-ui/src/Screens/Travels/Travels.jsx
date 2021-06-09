@@ -121,7 +121,7 @@ export const Travels = () => {
           title="Confirmar Eliminacion"
           intent="danger"
           onConfirm={() => deleteCallback()}
-          onCloseComplete={() => setShowDelete(false)}
+          onCloseComplete={() => {setShowDelete(false); setShowDeleteWithPending(false)}}
           confirmLabel="Eliminar"
           cancelLabel="Cancelar"
         >

@@ -194,6 +194,10 @@ export const TravelDetails = () => {
       });
   }
 
+  const statusDisabled = (status) =>
+  !(status === TRAVEL_STATES.NOT_STARTED
+  || status === TRAVEL_STATES.NO_VEHICLE);
+
   const renderDetails = (details) => {
     if (noTravel) {
       return (<div>No existe Ruta</div>)
@@ -227,9 +231,17 @@ export const TravelDetails = () => {
             marginBottom={32}
           />)}    
 
-          {(details.passengers.length > 0) &&
+          {(details.passengers.length > 0 && !statusDisabled(details.status)) &&
           (<Alert
             title='Hay pasajes vendidos para el viaje, no puede modificarse Ruta ni Fecha/Hora.'
+            intent='danger'
+            appearance='card'
+            marginBottom={32}
+          />)}
+
+          {statusDisabled(details.status) && 
+          (<Alert
+            title='El viaje ya finalizó, no se puede editar.'
             intent='danger'
             appearance='card'
             marginBottom={32}
@@ -243,7 +255,7 @@ export const TravelDetails = () => {
             label="Fecha y Hora"
           >
             <input
-              disabled={details.passengers.length}
+              disabled={details.passengers.length || statusDisabled(details.status)}
               type="datetime-local"
               value={details.dateAndTime}
               onChange={e => inputCallback(e, 'dateAndTime')}
@@ -264,7 +276,7 @@ export const TravelDetails = () => {
               items={availableRoutes}
               selectedItem={availableRoutes.find(elem => elem.id === details.route)}
               label="Ruta"
-              disabled={details.passengers.length > 0}
+              disabled={details.passengers.length > 0 || statusDisabled(details.status)}
               onChange={value => value ? inputCallback(value.id, 'route', true) : ''}
               placeholder="Ruta"
               itemToString={item => item ? `${item.origin}/${item.destination}(${item.id})` : ''}
