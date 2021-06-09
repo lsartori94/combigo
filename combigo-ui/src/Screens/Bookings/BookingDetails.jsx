@@ -71,10 +71,18 @@ export const BookingDetails = () => {
   }
 
   const promptCancel = () => {
-    // if (true) //if( details.dateAndTime - Date.new() > )
+    //Primero mostrar el dialog de cuidado porque se cancelara
+    //Despues si lo aceptan que dependiendo de cuanto falta para el viaje se full refound o half refound
+
+    // if (true) //if( ( details.dateAndTime - Date.new() ) > 1.728e+8 )
     //   setfullRefound(true);
     // setshowCancel(true);
-    //history.push('/Bookings');
+  }
+
+  const fullRefound = () => {
+    //Llama al travel que cancele la reserva con todo,
+    //Despues llama al usuario que ponga "FULLREFOUND" en el estado nuevo
+    //Devolver el dinero? no se como hacerlo todavia
   }
 
   const renderAdditionals = () => {
@@ -121,7 +129,7 @@ export const BookingDetails = () => {
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
-        paddingTop={100}
+        paddingTop={20}
       >
         <BackButton
           appearance="minimal"
