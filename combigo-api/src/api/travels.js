@@ -206,4 +206,35 @@ router.put('/:id/newBooking', (req, res) => {
   res.send(booking);
 });
 
+// cancel booking
+router.put('/:id/cancelBooking', (req, res) => {
+  const {id} = req.params;
+  const booking = req.body;
+
+  console.log(booking);
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
+    return res.status(405).send(`Solo se puede cancelar un viaje pendiente`);
+  }
+
+  const existsBooking = travels[exists].passengers.findIndex(abook => abook.id === booking.id);
+  travels[exists].passengers.splice( index, existsBooking )
+
+  res.send(booking);
+});
+
 module.exports = router;

@@ -6,7 +6,8 @@ import {
   Spinner,
   FormField,
   Checkbox,
-  BackButton
+  BackButton,
+  Button
 } from 'evergreen-ui';
 
 import { TRAVEL_STATES } from '../../constants.js';
@@ -67,6 +68,13 @@ export const BookingDetails = () => {
 
   const backCallback = () => {
     history.push('/Bookings');
+  }
+
+  const promptCancel = () => {
+    // if (true) //if( details.dateAndTime - Date.new() > )
+    //   setfullRefound(true);
+    // setshowCancel(true);
+    //history.push('/Bookings');
   }
 
   const renderAdditionals = () => {
@@ -171,6 +179,13 @@ export const BookingDetails = () => {
             </ul>
           </Pane>
           </FormField>
+        <Button 
+          marginRight={16} 
+          intent="danger"
+          onClick={promptCancel()}
+        >
+        Cancel
+      </Button>
       </Pane>
     );
   };
