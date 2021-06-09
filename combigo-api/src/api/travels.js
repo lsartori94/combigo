@@ -3,9 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 const ID_BASE = 'CGOT';
+const TICKET_BASE = 'CGOTKT';
 
 const travels = require('./store').travels;
 const routes = require('./store').routes;
+const users = require('./store').users;
 const TRAVEL_STATES = require('./constants').TRAVEL_STATES;
 
 // Get all travels
@@ -176,6 +178,7 @@ router.delete('/:id', (req, res) => {
   }
   
   travels[index].active = false;
+  travels[index].passengers.forEach(p => p.bookingStatus = BOOKING_STATES.FULL_REFUND);
 
   res.json(travels);
 });
@@ -192,6 +195,7 @@ router.put('/:id/newBooking', (req, res) => {
   }
 
   const exists = travels.findIndex(travel => travel.id === id);
+  const userExists = users.findIndex(user => booking.id === user.id);
 
   if (exists === -1) {
     return res.status(409).send(`El viaje no existe`);
@@ -201,7 +205,22 @@ router.put('/:id/newBooking', (req, res) => {
     return res.status(405).send(`El viaje no esta activo`);
   }
 
-  travels[exists].passengers.push(booking);
+  if (travels[exists].stock < 1) {
+    return res.status(405).send(`El viaje ya no tiene asientos disponibles.`);
+  }
+
+  if (booking.creditCard.number === '3456789123456789') {
+    return res.status(405).send(`La tarjeta no tiene fondos para realizar la compra.`);
+  }
+
+  if (booking.creditCard.number === '3333333333333333') {
+    return res.status(405).send(`La tarjeta es inválida.`);
+  }
+
+  travels[exists].stock = travels[exists].stock - 1;
+  const finalBooking = Object.assign(booking, {ticketId: `${TICKET_BASE}${travels[exists].passengers.length + 1}`})
+  travels[exists].passengers.push(finalBooking);
+  users[userExists].travelHistory.push(finalBooking);
 
   res.send(booking);
 });

@@ -29,6 +29,7 @@ export default function Checkout() {
   const [isShownSuccess, setIsShownSuccess] = useState(false);
   const [checkedSavedCC, setCheckedSavedCC] = useState(false);
   const [userHasSavedCC, setUserHasSavedCC] = useState(false);
+  const [error, setError] = useState(false);
   const [userIsVIP, setUserIsVip] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
 
@@ -38,7 +39,9 @@ export default function Checkout() {
     dateAndTime: '',
     route: '',
     availableAdditionals: [],
-    passengers: []
+    passengers: [],
+    stock: null,
+    price: 0
   });
   const [routeDetails, setRouteDetails] = useState({
     origin: '',
@@ -86,14 +89,13 @@ export default function Checkout() {
         const userInfo = await getUserDetails(auth.user);
         setDetails(travelResponse);
         setRouteDetails(routeResponse);
+        setSubtotal(travelResponse.price)
         if (userInfo.creditCard.number) {
           setUserCardInfo(userInfo.creditCard);
           setUserHasSavedCC(true);
         }
         if (userInfo.vipStatus && userInfo.vipStatus === VIP_STATUS.ENROLLED)
           setUserIsVip(true);
-
-        //#TODO fix, esto deberia estar junto con el otro set
         setNewPassengerDetails({
           ...newPassengerDetails,
           id: auth.user.id});
@@ -123,6 +125,14 @@ export default function Checkout() {
     }
     setCcErrors({...auxErrors});
   }, [newCardInfo]);
+
+  useEffect(() => {
+    refreshSubtotal();
+  }, [newPassengerDetails]);
+
+  useEffect(() => {
+    refreshPayment();
+  }, [checkedSavedCC]);
 
   //Adicionales
   const handleCheckbox = (e) => {
@@ -253,49 +263,40 @@ export default function Checkout() {
     if (selected.length) {
       const prices = allAdditionals.filter(elem => selected.includes(elem.id)).map(elem => elem.price);
       const n = prices.reduce((a, b) => a + b, 0);
-      setSubtotal(n);
+      setSubtotal(n + details.price);
     } else {
-      setSubtotal(0);
+      setSubtotal(details.price);
     }
+    debugger;
   };
 
-  //#TODO spinner
-  const paymentCallback = () => {
+  const refreshPayment = () => {
     if (Object.values(ccErrors).find(val => val) && !checkedSavedCC) {
       setShowCcErrors(true);
       return;
     } else {
       setShowCcErrors(false);
     }
-    if (checkedSavedCC) 
+    if (checkedSavedCC)
       setSelectedCard(userCardInfo)
     else 
       setSelectedCard(newCardInfo);
-    refreshSubtotal();
-    saveBookingCallback();
   };
 
-  const saveBookingCallback = async () => {
-
-    //#TODO fix, de que manera agarrar estos dos estados y que no estén vacios?
-    setNewPassengerDetails({
-      ...newPassengerDetails,
-      creditCard: selectedCard,
-      payment: subtotal
-    });
-
+  const paymentCallback = async () => {
+    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard, payment: (userIsVIP ? subtotal * 0.90 : subtotal)});
+    debugger;
     try {
       setLoading(true);
-      await createBooking(newPassengerDetails, travelId);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-    } finally {
+      await createBooking(booking, travelId);
       setIsShownSuccess(true);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
     }
   }
 
-  //#TODO subtotal dinámico
   const renderDetails = (details) => {
     if (!auth.user) {
       const url = `/checkout/${details.id}`;
@@ -314,6 +315,20 @@ export default function Checkout() {
         />
       </div>)
     }
+  
+    if (details.stock < 1) {
+      return (
+      <div>
+        <Alert
+          intent="danger"
+          hasIcon={true}
+          appearance="card"
+          title="Viaje sin asientos disponibles."
+          marginTop={20}
+        />
+      </div>)
+    };
+
 
     const options = {
       weekday: "long",
@@ -341,6 +356,14 @@ export default function Checkout() {
         >
           Volver
         </BackButton>
+
+        {error && (
+        <Alert intent="danger" 
+          title="Tuvimos un Error"
+        > {error.toString()}
+        </Alert>
+        )}
+        {!error && (
         <div>
           <div>
           <div>
@@ -479,12 +502,6 @@ export default function Checkout() {
             Pagar y Reservar
           </Button>
 
-            {/* DEBUG No se desde donde llamar a refresh para que funcione bien */}
-            <Button
-              onClick={() => refreshSubtotal()}
-            > test refresh subtotal 
-            </Button>
-
           <Dialog
             isShown={isShownSuccess}
             title="Reserva exitosa"
@@ -499,7 +516,7 @@ export default function Checkout() {
               : null}
           </Dialog>
 
-        </div>
+        </div>)}
       </Pane>
     );
   };
