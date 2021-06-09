@@ -147,6 +147,9 @@ let travels = [
       {
         id: "CGOU3",
         legalStatus: LEGAL_STATUS.PENDING,
+        bookingStatus: BOOKING_STATES.ACTIVE,
+        creditCard: 4444444444444444,
+        payment: 100,
         boughtAdditionals: [],
       }
     ],
@@ -157,6 +160,7 @@ let travels = [
       "CGOA1",
       "CGOA3"
     ],
+    price: 100,
     active: true
   },
   {
@@ -168,6 +172,9 @@ let travels = [
       {
         id: "CGOU3",
         legalStatus: LEGAL_STATUS.APPROVED,
+        bookingStatus: BOOKING_STATES.COMPLETED,
+        creditCard: 4444444444444444,
+        payment: 160,
         boughtAdditionals: [],
       }
     ],
@@ -179,6 +186,7 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
+    price: 160,
     active: true
   },
   {
@@ -190,6 +198,9 @@ let travels = [
       {
         id: "CGOU3",
         legalStatus: LEGAL_STATUS.APPROVED,
+        bookingStatus: BOOKING_STATES.COMPLETED,
+        creditCard: 4444444444444444,
+        payment: 200,
         boughtAdditionals: [],
       }
     ],
@@ -201,6 +212,7 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
+    price: 200,
     active: true
   },
   {
@@ -217,6 +229,7 @@ let travels = [
       "CGOA4",
       "CGOA5"
     ],
+    price: 120,
     active: true
   }
 ];

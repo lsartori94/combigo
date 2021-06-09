@@ -104,7 +104,7 @@ export const Cards = () => {
             newValues.issuer = 'American Express'
             break;
           default:
-            newValues.issuer = ''
+            newValues.issuer = 'n/a'
             break;
         }
         newValues.number = value;
@@ -162,7 +162,6 @@ export const Cards = () => {
         <Alert intent="danger" 
           title="Tuvimos un Error"
         >
-          {error}
         </Alert>
       )}
       {saved && (
@@ -231,11 +230,11 @@ export const Cards = () => {
           />
           {editando && (
             <Pane display="flex" justifyContent="space-around">
-              <Button appearance="primary" intent="danger" onClick={() => handleSaveCard()}>
-                Guardar
-              </Button>
               <Button appearance="primary" onClick={() => handleCancel()}>
                 Cancelar
+              </Button>
+              <Button appearance="primary" intent="success" onClick={() => handleSaveCard()}>
+                Guardar
               </Button>
             </Pane>
           )}
