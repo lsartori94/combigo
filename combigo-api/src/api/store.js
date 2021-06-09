@@ -51,7 +51,7 @@ let users = [
     password: '123@Pass',
     bdate: '1995-10-12',
     dni: '42357195',
-    travelHistory: [
+    travelHistory: [ //travelHistory alcanza con que tenga solo travelId, simplifica despues manener coherente el modelo
       {
         travelId: 'CGOT1',
         boughtAdditionals: [
@@ -61,6 +61,7 @@ let users = [
         status: BOOKING_STATES.ACTIVE,
       }
     ],
+    vipStatus: VIP_STATUS.NOT_ENROLLED,
     role: ROLES.CLIENT,
     active: true
   }
@@ -221,7 +222,7 @@ let travels = [
     id: 'CGOT4',
     dateAndTime: '2021-09-01T08:30',
     route: 'CGOR4',
-    stock: 5,
+    stock: 1,
     passengers: [],
     driver: 'CGOU1',
     vehicle: 'CGOV1',

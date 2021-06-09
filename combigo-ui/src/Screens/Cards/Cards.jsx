@@ -104,7 +104,7 @@ export const Cards = () => {
             newValues.issuer = 'American Express'
             break;
           default:
-            newValues.issuer = 'n/a'
+            newValues.issuer = 'Otra'
             break;
         }
         newValues.number = value;

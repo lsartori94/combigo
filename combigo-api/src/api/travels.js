@@ -201,6 +201,10 @@ router.put('/:id/newBooking', (req, res) => {
     return res.status(409).send(`El viaje no existe`);
   }
 
+  if (userExists === -1) {
+    return res.status(409).send(`El usuario no existe`);
+  }
+
   if (travels[exists].active == false) {
     return res.status(405).send(`El viaje no esta activo`);
   }
@@ -209,11 +213,11 @@ router.put('/:id/newBooking', (req, res) => {
     return res.status(405).send(`El viaje ya no tiene asientos disponibles.`);
   }
 
-  if (booking.creditCard.number === '3456789123456789') {
+  if (booking.creditCard.number === '3456789123456789') { //tarjeta sin fondos
     return res.status(405).send(`La tarjeta no tiene fondos para realizar la compra.`);
   }
 
-  if (booking.creditCard.number === '3333333333333333') {
+  if (booking.creditCard.number === '3333333333333333') { //tarjeta invalida
     return res.status(405).send(`La tarjeta es inválida.`);
   }
 

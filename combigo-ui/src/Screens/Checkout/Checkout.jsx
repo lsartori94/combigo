@@ -96,10 +96,6 @@ export default function Checkout() {
         }
         if (userInfo.vipStatus && userInfo.vipStatus === VIP_STATUS.ENROLLED)
           setUserIsVip(true);
-        setNewPassengerDetails({
-          ...newPassengerDetails,
-          id: auth.user.id});
-
       } catch (e) {
         console.error(e);
       } finally {
@@ -132,7 +128,7 @@ export default function Checkout() {
 
   useEffect(() => {
     refreshPayment();
-  }, [checkedSavedCC]);
+  }, [checkedSavedCC, newCardInfo]);
 
   //Adicionales
   const handleCheckbox = (e) => {
@@ -203,7 +199,7 @@ export default function Checkout() {
             newValues.issuer = 'American Express'
             break;
           default:
-            newValues.issuer = ''
+            newValues.issuer = 'Otra'
             break;
         }
         newValues.number = value;
@@ -252,12 +248,6 @@ export default function Checkout() {
     }
   };
 
-  //debug
-  const ss = () => {
-    alreadyReserved(details);
-  };
-
-  //reemplazar 0 por travel price
   const refreshSubtotal = () => {
     const selected = newPassengerDetails.boughtAdditionals;
     if (selected.length) {
@@ -267,7 +257,6 @@ export default function Checkout() {
     } else {
       setSubtotal(details.price);
     }
-    debugger;
   };
 
   const refreshPayment = () => {
@@ -284,8 +273,7 @@ export default function Checkout() {
   };
 
   const paymentCallback = async () => {
-    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard, payment: (userIsVIP ? subtotal * 0.90 : subtotal)});
-    debugger;
+    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id});
     try {
       setLoading(true);
       await createBooking(booking, travelId);
@@ -496,7 +484,7 @@ export default function Checkout() {
             intent="none"
             iconBefore={SavedIcon}
             marginTop="15"
-            disabled={!checkedSavedCC && !ccErrors}
+            disabled={!checkedSavedCC && (Object.values(ccErrors).find(val => val))}
             onClick={() => paymentCallback()}
           >
             Pagar y Reservar

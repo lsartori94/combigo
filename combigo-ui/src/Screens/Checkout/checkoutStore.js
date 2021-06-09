@@ -21,7 +21,7 @@ export async function getTravelDetails(travelId) {
 }
 
 export async function createBooking(details, travelId) {
-  console.log("store", details);
+  console.log(details);
   const response = await fetch(
     `${API_BASE}/travels/${travelId}/newBooking`,
     {
