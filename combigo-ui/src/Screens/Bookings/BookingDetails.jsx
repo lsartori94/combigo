@@ -7,7 +7,8 @@ import {
   FormField,
   Checkbox,
   BackButton,
-  Button
+  Button,
+  Dialog
 } from 'evergreen-ui';
 
 import { TRAVEL_STATES } from '../../constants.js';
@@ -36,6 +37,8 @@ export const BookingDetails = () => {
   const [availableAdditionals, setAvailableAdditionals] = useState([]);
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
+  const [showRefound, setShowRefound] = useState(false);
+  const [fullRefound, setFullRefound] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -52,7 +55,7 @@ export const BookingDetails = () => {
     };
     async function initialize() {
       try {
-        setLoading(true);
+        //setLoading(true);
         const response = await getTravelDetails(travelId);
         setNoTravel(false);
         setDetails(response);
@@ -71,7 +74,15 @@ export const BookingDetails = () => {
   }
 
   const promptCancel = () => {
+    //Si no se puede cancelar el boton deberia estar desabilitado
+    //Decidir si va a ser full refound o half refound
+
+    //setFullRefound(true); //Agregar condicion!!!
+    //setShowRefound(true);
+
     //Primero mostrar el dialog de cuidado porque se cancelara
+
+
     //Despues si lo aceptan que dependiendo de cuanto falta para el viaje se full refound o half refound
 
     // if (true) //if( ( details.dateAndTime - Date.new() ) > 1.728e+8 )
@@ -79,10 +90,12 @@ export const BookingDetails = () => {
     // setshowCancel(true);
   }
 
-  const fullRefound = () => {
+  const fullRefoundCallback = () => {
     //Llama al travel que cancele la reserva con todo,
     //Despues llama al usuario que ponga "FULLREFOUND" en el estado nuevo
     //Devolver el dinero? no se como hacerlo todavia
+    //setShowRefound(false);
+    //setFullRefound(false);
   }
 
   const renderAdditionals = () => {
@@ -131,6 +144,18 @@ export const BookingDetails = () => {
         alignItems="center"
         paddingTop={20}
       >
+        <Dialog
+          isShown={showRefound}
+          title="Confirmar Eliminacion"
+          intent="danger"
+          onConfirm={() => fullRefoundCallback()}
+          //onCloseComplete={() => setShowRefound(false)}
+          confirmLabel="Aceptar"
+          cancelLabel="Cancelar"
+        > {//fullRefound ? "Si se cancela la reserva con mas de 48 horas de antelacion se devolvera el precio" 
+           // : "Si se cancela la reserva con menos de 48 horas de antelacion solo se devolvera la mitad del precio"
+          "blablablabla"}
+        </Dialog>
         <BackButton
           appearance="minimal"
           alignSelf="flex-start"
@@ -191,6 +216,7 @@ export const BookingDetails = () => {
           marginRight={16} 
           intent="danger"
           onClick={promptCancel()}
+          disabled={details.status === TRAVEL_STATES.NOT_STARTED}
         >
         Cancel
       </Button>

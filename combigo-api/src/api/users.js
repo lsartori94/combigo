@@ -167,6 +167,8 @@ router.get('/:uname/:travelId/fullRefound', (req, res) => {
 
   users[exists].travelHistory[existsTravel].status = CONSTANTS.BOOKING_STATES.FULL_REFUND;
 
+  //Abria que devolverles el dinero aca
+
   return res.send(CONSTANTS.BOOKING_STATES.FULL_REFUND);
 });
 
