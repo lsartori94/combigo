@@ -53,7 +53,7 @@ let users = [
     dni: '42357195',
     travelHistory: [
       {
-        travelId: "CGOT1",
+        travelId: 'CGOT1',
         boughtAdditionals: [
           'CGOA1',
           'CGOA2',
@@ -140,12 +140,12 @@ let routes = [
 let travels = [
   {
     id: 'CGOT1',
-    dateAndTime: "2021-06-01T08:30",
-    route: "CGOR1",
+    dateAndTime: '2021-06-01T08:30',
+    route: 'CGOR1',
     stock: 3,
     passengers: [
       {
-        id: "CGOU3",
+        id: 'CGOU3',
         legalStatus: LEGAL_STATUS.PENDING,
         bookingStatus: BOOKING_STATES.ACTIVE,
         creditCard: 4444444444444444,
@@ -157,20 +157,20 @@ let travels = [
     vehicle: 'CGOV1',
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: [
-      "CGOA1",
-      "CGOA3"
+      'CGOA1',
+      'CGOA3'
     ],
     price: 100,
     active: true
   },
   {
     id: 'CGOT2',
-    dateAndTime: "2021-07-01T08:30",
-    route: "CGOR3",
+    dateAndTime: '2021-07-01T08:30',
+    route: 'CGOR3',
     stock: 1,
     passengers: [
       {
-        id: "CGOU3",
+        id: 'CGOU3',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
         creditCard: 4444444444444444,
@@ -182,21 +182,21 @@ let travels = [
     vehicle: 'CGOV1',
     status: TRAVEL_STATES.FINISHED,
     availableAdditionals: [
-      "CGOA2",
-      "CGOA4",
-      "CGOA5"
+      'CGOA2',
+      'CGOA4',
+      'CGOA5'
     ],
     price: 160,
     active: true
   },
   {
     id: 'CGOT3',
-    dateAndTime: "2021-08-01T08:30",
-    route: "CGOR3",
+    dateAndTime: '2021-08-01T08:30',
+    route: 'CGOR3',
     stock: 5,
     passengers: [
       {
-        id: "CGOU3",
+        id: 'CGOU3',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
         creditCard: 4444444444444444,
@@ -208,26 +208,26 @@ let travels = [
     vehicle: 'CGOV1',
     status: TRAVEL_STATES.FINISHED,
     availableAdditionals: [
-      "CGOA2",
-      "CGOA4",
-      "CGOA5"
+      'CGOA2',
+      'CGOA4',
+      'CGOA5'
     ],
     price: 200,
     active: true
   },
   {
     id: 'CGOT4',
-    dateAndTime: "2021-09-01T08:30",
-    route: "CGOR4",
+    dateAndTime: '2021-09-01T08:30',
+    route: 'CGOR4',
     stock: 5,
     passengers: [],
     driver: 'CGOU1',
     vehicle: 'CGOV1',
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: [
-      "CGOA2",
-      "CGOA4",
-      "CGOA5"
+      'CGOA2',
+      'CGOA4',
+      'CGOA5'
     ],
     price: 120,
     active: true
