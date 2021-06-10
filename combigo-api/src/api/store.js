@@ -54,7 +54,10 @@ let users = [
     travelHistory: [ //travelHistory alcanza con que tenga solo travelId, simplifica despues manener coherente el modelo
       {
         travelId: 'CGOT1',
-        boughtAdditionals: [],
+        boughtAdditionals: [ 
+          'CGOA1',
+          'CGOA3',
+        ],
         status: BOOKING_STATES.PENDING,
       },
       {
@@ -171,9 +174,12 @@ let travels = [
         id: 'CGOU3',
         legalStatus: LEGAL_STATUS.PENDING,
         bookingStatus: BOOKING_STATES.PENDING,
-        creditCard: 4444444444444444,
+        creditCard: '4444444444444444',
         payment: 100,
-        boughtAdditionals: [],
+        boughtAdditionals: [ 
+          'CGOA1',
+          'CGOA3',
+        ],
       }
     ],
     driver: 'CGOU1',
@@ -197,7 +203,7 @@ let travels = [
         // bookingId: '',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
-        creditCard: 4444444444444444,
+        creditCard: '4444444444444444',
         payment: 160,
         boughtAdditionals: [],
       }
@@ -223,7 +229,7 @@ let travels = [
         id: 'CGOU3',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
-        creditCard: 4444444444444444,
+        creditCard: '4444444444444444',
         payment: 200,
         boughtAdditionals: [],
       }
@@ -249,7 +255,7 @@ let travels = [
         id: 'CGOU3',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.ACTIVE,
-        creditCard: 4444444444444444,
+        creditCard: '4444444444444444',
         payment: 200,
         boughtAdditionals: [],
       }

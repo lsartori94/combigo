@@ -143,6 +143,8 @@ router.get('/:uname/bookings', (req, res) => {
     return res.status(409).send(`Usuario no encontrado`);
   }
 
+  //ARREGLAR ESTA COSA
+  
   users[exists].travelHistory;
 
   const resultsID = Object.assign(users[exists].travelHistory.map(th => th.travelId));

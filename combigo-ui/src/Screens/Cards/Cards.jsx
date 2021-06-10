@@ -110,7 +110,7 @@ export const Cards = () => {
         newValues.number = value;
         break;
       case 'cardHolder':
-        if (/[^a-zA-Z]/g.test(value)) return
+        if (/[^a-zA-Z ]/g.test(value)) return
         newValues.cardHolder = value;
         break;
       case 'expDate':

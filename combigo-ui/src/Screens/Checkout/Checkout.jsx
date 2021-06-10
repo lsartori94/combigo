@@ -205,7 +205,7 @@ export default function Checkout() {
         newValues.number = value;
         break;
       case 'cardHolder':
-        if (/[^a-zA-Z]/g.test(value)) return
+        if (/[^a-zA-Z ]/g.test(value)) return
         newValues.cardHolder = value;
         break;
       case 'expDate':
@@ -273,7 +273,7 @@ export default function Checkout() {
   };
 
   const paymentCallback = async () => {
-    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id});
+    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard.number, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id});
     try {
       setLoading(true);
       await createBooking(booking, travelId);
