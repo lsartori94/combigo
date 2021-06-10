@@ -205,7 +205,7 @@ router.put('/:id/newBooking', (req, res) => {
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
   }
-
+ 
   const exists = travels.findIndex(travel => travel.id === id);
   const userExists = users.findIndex(user => booking.id === user.id);
 
@@ -225,11 +225,11 @@ router.put('/:id/newBooking', (req, res) => {
     return res.status(405).send(`El viaje ya no tiene asientos disponibles.`);
   }
 
-  if (booking.creditCard.number === '3456789123456789') { //tarjeta sin fondos
+  if (booking.creditCard === '3456789123456789') { //tarjeta sin fondos
     return res.status(405).send(`La tarjeta no tiene fondos para realizar la compra.`);
   }
 
-  if (booking.creditCard.number === '3333333333333333') { //tarjeta invalida
+  if (booking.creditCard === '3333333333333333') { //tarjeta invalida
     return res.status(405).send(`La tarjeta es inválida.`);
   }
 

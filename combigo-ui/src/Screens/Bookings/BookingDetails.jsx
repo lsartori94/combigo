@@ -132,6 +132,18 @@ export const BookingDetails = () => {
     return `${route.origin}/${route.destination}`;
   };
 
+  const isFullRefund = () => {
+    const time = travel.dateAndTime;
+    const ms = new Date(time).getTime();
+    const now = Date.now();
+    const diff = 48 * 60 * 60 * 1000;
+
+    if (ms - now >= diff)
+      return true
+    else 
+      return false
+  }
+
   const renderDetails = (details) => {
     if (noTravel) {
       return (<div>No existe la reserva</div>)
@@ -162,8 +174,9 @@ export const BookingDetails = () => {
           onCloseComplete={() => setShowRefound(false)}
           confirmLabel="Aceptar"
           cancelLabel="Cancelar"
-        >
-          Esta seguro que quiere cancelar? Si quedan mas de 48hs se devolvera la totalidad del dinero
+        > {isFullRefund() ? 'Faltan mas de 48hs para el viaje, se devolverá la totalidad del dinero ¿Está seguro que quiere cancelar?'
+            : 'Faltan menos de 48hs para el viaje, se devolverá la mitad del dinero ¿Está seguro que quiere cancelar?'}
+          
         </Dialog>
         <BackButton
           appearance="minimal"

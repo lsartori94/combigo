@@ -272,6 +272,7 @@ export default function Checkout() {
       setSelectedCard(newCardInfo);
   };
 
+  //habria que chequear si travel.dateAndTime > Date.now()
   const paymentCallback = async () => {
     const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard.number, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id});
     try {
@@ -281,7 +282,7 @@ export default function Checkout() {
     } catch (e) {
       setError(e);
     } finally {
-      setTimeout(function(){ setLoading(false); }, 1500);
+      setTimeout(function(){ setLoading(false); }, 1500); //timeout simular pago
     }
   }
 

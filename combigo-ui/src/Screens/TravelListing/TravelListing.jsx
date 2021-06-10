@@ -90,7 +90,7 @@ export default function TravelListing() {
           intent="none"
           onClick={() =>handleBtnClick(info)}
         >
-          {alreadyReserved(info) ? 'Reservado' : 'Reservar'}
+          {alreadyReserved(info) ? 'Reservado' : 'Comenzar reserva'}
         </Button>
       </Pane>
       {info.stock < 3 && <Pane fontSize={12} fontStyle="italic" color="#FFB020">Ultimos Asientos!</Pane>}

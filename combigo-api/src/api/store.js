@@ -79,6 +79,26 @@ let users = [
     vipStatus: VIP_STATUS.NOT_ENROLLED,
     role: ROLES.CLIENT,
     active: true
+  },
+  {
+    id: 'CGOU4',
+    username: 'carlos.lopez',
+    email: 'carlosl@gmail.com',
+    name: 'Carlos',
+    password: '123@Pass',
+    bdate: '1990-11-12',
+    dni: '30789453',
+    travelHistory: [], 
+    creditCard: {
+      issuer: 'Visa',
+      number: '567487647384',
+      cardHolder: 'Carlos Lopez',
+      expDate: '2022-11-12',
+      cvv:'153'
+    },
+    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    role: ROLES.CLIENT,
+    active: true,
   }
 ];
 

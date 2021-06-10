@@ -43,7 +43,7 @@ export const Profile = () => {
     } catch (e) {
       console.error(e);
     } finally {
-      steChangingVip(false);
+      setTimeout(function(){ steChangingVip(false); }, 1000); //timeout simular vip change
     }
   }
 
@@ -82,6 +82,7 @@ export const Profile = () => {
               width={'65vh'}
               label="Nombre"
               value={userInfo.name}
+              disabled
               onChange={e => handleInputChange('name', e.target.value)}
             />
             <TextInputField
@@ -100,6 +101,7 @@ export const Profile = () => {
               width={'65vh'}
               label="Email"
               value={userInfo.email}
+              disabled
               onChange={e => handleInputChange('email', e.target.value)}
             />
             <FormField
@@ -133,9 +135,9 @@ export const Profile = () => {
               </Button>
             </Pane>
             <Pane width={'65vh'} display="flex" justifyContent={"space-around"}>
-              <Button appearance="primary" intent="success" onClick={() => saveUserData()}>
+              {/* <Button appearance="primary" intent="success" onClick={() => saveUserData()}>
                 Guardar
-              </Button>
+              </Button> */}
               <Button className="profile-btn" appearance="primary" intent="danger" onClick={() => auth.signout()}>
                 <Link className="profile-a" to="/">Cerrar Sesion</Link>
               </Button>
