@@ -11,7 +11,6 @@ const {routes, travels, users} = require('./store');
 // Get active routes
 router.get('/', (req, res) => {
   const {active} = req.query;
-  console.log(active);
   const activeRoutes = routes.filter(route => route.active === true );
   const result = Boolean(active) ? activeRoutes : routes;
 
@@ -39,11 +38,11 @@ router.get('/:routeId/travels', (req, res) => {
   const result = travels.filter(t => {
     return (
       t.route === routeId &&
-      // t.status === TRAVEL_STATES.NOT_STARTED &&
+      t.status === TRAVEL_STATES.NOT_STARTED &&
       t.stock > 0
     );
   });
-  console.log(result)
+
   return res.json(result);
 });
 

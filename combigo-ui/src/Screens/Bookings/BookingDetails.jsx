@@ -33,7 +33,7 @@ export const BookingDetails = () => {
       destination: ""
     },
     passengers: [],
-    status: TRAVEL_STATES.NOT_STARTED,
+    status: '',
     availableAdditionals: []
   });
   const [availableAdditionals, setAvailableAdditionals] = useState([]);

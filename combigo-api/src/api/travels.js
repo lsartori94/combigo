@@ -260,7 +260,7 @@ router.put('/:id/cancelBooking', (req, res) => {
   }
 
   const exists = travels.findIndex(travel => travel.id === id);
-
+  console.log(travels[exists].status);
   if (exists === -1) {
     return res.status(409).send(`El viaje no existe`);
   }

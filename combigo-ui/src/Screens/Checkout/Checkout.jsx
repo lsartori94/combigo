@@ -281,7 +281,7 @@ export default function Checkout() {
     } catch (e) {
       setError(e);
     } finally {
-      setLoading(false);
+      setTimeout(function(){ setLoading(false); }, 1500);
     }
   }
 
