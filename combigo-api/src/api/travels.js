@@ -5,10 +5,8 @@ const router = express.Router();
 const ID_BASE = 'CGOT';
 const TICKET_BASE = 'CGOTKT';
 
-const travels = require('./store').travels;
-const routes = require('./store').routes;
-const users = require('./store').users;
-const TRAVEL_STATES = require('./constants').TRAVEL_STATES;
+const {travels, routes, users, vehicles} = require('./store');
+const { TRAVEL_STATES, BOOKING_STATES }= require('./constants');
 
 // Get all travels
 router.get('/', (req, res) => {
@@ -52,6 +50,8 @@ router.post('/', (req, res) => {
     passengers: [],
     boughtAdditionals: [],
     active: true,
+    stock: null,
+    price: 100
   };
 
   travels.push(newTravel);
@@ -72,9 +72,14 @@ router.put('/:id/vehicle', (req, res) => {
   }
 
   const exists = travels.findIndex(travel => travel.id === id);
+  const existsV = vehicles.findIndex(v => v.id === vehicle);
 
   if (exists === -1) {
     return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (existsV === -1) {
+    return res.status(409).send(`El vehiculo`);
   }
 
   if (travels[exists].active == false) {
@@ -84,11 +89,13 @@ router.put('/:id/vehicle', (req, res) => {
   travels[exists] = Object.assign(
     travels[exists],
     {
-      vehicle,
-      stock: vehicle.capacity,
+      vehicle: vehicles[existsV].id,
+      stock: vehicles[existsV].capacity,
       status: TRAVEL_STATES.NOT_STARTED
     }
   );
+
+  console.log(travels)
 
   res.send(travels[exists]);
 });
@@ -178,7 +185,14 @@ router.delete('/:id', (req, res) => {
   }
   
   travels[index].active = false;
-  travels[index].passengers.forEach(p => p.bookingStatus = BOOKING_STATES.FULL_REFUND);
+  travels[index].passengers.forEach(p =>{
+    p.bookingStatus = BOOKING_STATES.CANCELED;
+    users.find(
+      e => e.id === p.id
+    ).travelHistory.find(
+      t => t.travelId === travels[index].id
+    ).status = BOOKING_STATES.CANCELED;
+  });
 
   res.json(travels);
 });
@@ -187,8 +201,6 @@ router.delete('/:id', (req, res) => {
 router.put('/:id/newBooking', (req, res) => {
   const {id} = req.params;
   const booking = req.body;
-
-  console.log(booking);
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -222,9 +234,18 @@ router.put('/:id/newBooking', (req, res) => {
   }
 
   travels[exists].stock = travels[exists].stock - 1;
-  const finalBooking = Object.assign(booking, {ticketId: `${TICKET_BASE}${travels[exists].passengers.length + 1}`})
+  const finalBooking = Object.assign(
+    booking,
+    {
+      ticketId: `${TICKET_BASE}${travels[exists].passengers.length + 1}`
+    }
+  );
   travels[exists].passengers.push(finalBooking);
-  users[userExists].travelHistory.push(finalBooking);
+  users[userExists].travelHistory.push({
+    travelId: travels[exists].id,
+    boughtAdditionals: booking.boughtAdditionals,
+    status: BOOKING_STATES.PENDING
+  });
 
   res.send(booking);
 });
@@ -232,9 +253,7 @@ router.put('/:id/newBooking', (req, res) => {
 // cancel booking
 router.put('/:id/cancelBooking', (req, res) => {
   const {id} = req.params;
-  const booking = req.body;
-
-  console.log(booking);
+  const {user} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -254,10 +273,36 @@ router.put('/:id/cancelBooking', (req, res) => {
     return res.status(405).send(`Solo se puede cancelar un viaje pendiente`);
   }
 
-  const existsBooking = travels[exists].passengers.findIndex(abook => abook.id === booking.id);
-  travels[exists].passengers.splice( index, existsBooking )
+  const existsBooking = travels[exists].passengers.find(abook => abook.id === user);
+  
+  if (!existsBooking) {
+    return res.status(405).send(`La reserva no existe`);
+  }
 
-  res.send(booking);
+  const time = travels[exists].dateAndTime;
+  const ms = new Date(time).getTime();
+  const now = Date.now();
+  const diff = 48 * 60 * 60 * 1000;
+  const userI = users.findIndex(u => u.id === user);
+
+  if (ms - now >= diff) {
+    // mas de 48hs
+    users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.FULL_REFUND;
+  } else {
+    // menos de 48hs
+    users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.HALF_REFUND;
+  }
+  
+  const newTravel = Object.assign(
+    travels[exists],
+    {
+      stock: travels[exists].stock + 1,
+      passengers: travels[exists].passengers.filter(p => p.id !== user)
+    }
+  );
+  travels[exists] = newTravel;
+
+  res.send(travels[exists]);
 });
 
 module.exports = router;

@@ -143,11 +143,13 @@ router.get('/:uname/bookings', (req, res) => {
     return res.status(409).send(`Usuario no encontrado`);
   }
 
+  users[exists].travelHistory;
+
   const resultsID = Object.assign(users[exists].travelHistory.map(th => th.travelId));
 
   const result = travels.filter(travel => resultsID.includes(travel.id));
 
-  return res.send(result);
+  return res.send(users[exists].travelHistory);
 });
 
 // Devolucion completa booking

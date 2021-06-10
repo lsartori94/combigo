@@ -2,17 +2,20 @@ const express = require('express');
 
 const router = express.Router();
 
-const { TRAVEL_STATES } = require('./constants');
+const { TRAVEL_STATES, BOOKING_STATES } = require('./constants');
 
 const ID_BASE = 'CGOR';
 
-const {routes, travels} = require('./store');
+const {routes, travels, users} = require('./store');
 
 // Get active routes
 router.get('/', (req, res) => {
+  const {active} = req.query;
+  console.log(active);
   const activeRoutes = routes.filter(route => route.active === true );
+  const result = Boolean(active) ? activeRoutes : routes;
 
-  res.json(activeRoutes);
+  res.json(result);
 });
 
 // Search for route with id
@@ -33,9 +36,14 @@ router.get('/:routeId/travels', (req, res) => {
   const routeValid = routes.find(r => r.id === routeId);
   if (!routeValid) return res.status(409).send(`La ruta ingresada no existe`);
 
-  const result = travels.filter(
-    t => t.route === routeId && t.status === TRAVEL_STATES.NOT_STARTED
-  );
+  const result = travels.filter(t => {
+    return (
+      t.route === routeId &&
+      // t.status === TRAVEL_STATES.NOT_STARTED &&
+      t.stock > 0
+    );
+  });
+  console.log(result)
   return res.json(result);
 });
 
@@ -182,13 +190,31 @@ router.delete('/:id', (req, res) => {
   if (index === -1) {
     return res.status(404).send(`La ruta no existe`);
   }
+
+  function cancelTravelBookings(travel) {
+    travel.passengers.forEach(p => {
+      p.bookingStatus = BOOKING_STATES.CANCELED;
+      users.find(
+        e => e.id === p.id
+      ).travelHistory.find(
+        t => t.travelId === travel.id
+      ).status = BOOKING_STATES.CANCELED;
+    });
+  }
   
   //Cambia estado de todos los viajes "pendiente" o "no vehiculo" de la ruta a "cancelado" o lo da de baja
   //#TODO devolver dinero de reservas
   routes[index].travels.forEach(routeTravel => {
     const travelIndex = travels.findIndex(travel => travel.id === routeTravel);
-    if (travelIndex !== -1 && (travels[travelIndex].status === TRAVEL_STATES.NOT_STARTED || travels[travelIndex].status === TRAVEL_STATES.NO_VEHICLE)) {
+    if (
+      travelIndex !== -1 &&
+      (
+        travels[travelIndex].status === TRAVEL_STATES.NOT_STARTED ||
+        travels[travelIndex].status === TRAVEL_STATES.NO_VEHICLE
+      )
+    ) {
       travels[travelIndex].status = TRAVEL_STATES.CANCELED;
+      cancelTravelBookings(travels[travelIndex]);
     }
   });
 

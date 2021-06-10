@@ -6,18 +6,19 @@ const ROLES = {
 
 const TRAVEL_STATES = {
   NOT_STARTED: "Pendiente",
-  IN_PROGRESS: "En Progreso",
+  IN_PROGRESS: "En Curso",
   FINISHED: "Terminado",
   CANCELED: "Cancelado",
   NO_VEHICLE: "Sin Vehiculo"
 }
 
 const BOOKING_STATES = {
-  ACTIVE: "Activa",
+  PENDING: "Pendiente",
+  ACTIVE: "En Curso",
   COMPLETED: "Finalizada",
   FULL_REFUND: "Reembolsada 100%",
   HALF_REFUND: "Reembolsada 50%",
-  CANCELED: "Cancelada"
+  CANCELED: "Cancelada (100% Reembolso)"
 }
 
 const LEGAL_STATUS = {

@@ -17,7 +17,9 @@ import { useAuth } from "../../utils/use-auth"; //For bookings
 import {
   getTravelDetails,
   getAvailableAditionals,
-  getAvailableRoutes
+  getAvailableRoutes,
+  getBookings,
+  cancelBooking
 } from './BookingsStore';
 
 export const BookingDetails = () => {
@@ -37,16 +39,18 @@ export const BookingDetails = () => {
   const [availableAdditionals, setAvailableAdditionals] = useState([]);
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
+  const [travel, setTravel] = useState([]);
   const [showRefound, setShowRefound] = useState(false);
-  const [fullRefound, setFullRefound] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
     async function initializeExtras() {
       const additionals = await getAvailableAditionals();
       const routes = await getAvailableRoutes();
+      const travelResponse = await getTravelDetails(travelId);
       setAvailableAdditionals(additionals);
       setAvailableRoutes(routes);
+      setTravel(travelResponse)
     }
     if (travelId === 'add') {
       setNoTravel(false);
@@ -56,9 +60,12 @@ export const BookingDetails = () => {
     async function initialize() {
       try {
         //setLoading(true);
-        const response = await getTravelDetails(travelId);
+        const booksResponse = await getBookings(auth.user);
+        // const response = await getTravelDetails(travelId);
+        const book = booksResponse.find(b => b.travelId === travelId)
         setNoTravel(false);
-        setDetails(response);
+        setDetails(book);
+        // setBookings(booksResponse);
       } catch (e) {
         console.error(e);
       } finally {
@@ -88,37 +95,40 @@ export const BookingDetails = () => {
     // if (true) //if( ( details.dateAndTime - Date.new() ) > 1.728e+8 )
     //   setfullRefound(true);
     // setshowCancel(true);
+    setShowRefound(true);
   }
 
-  const fullRefoundCallback = () => {
+  const fullRefoundCallback = async () => {
     //Llama al travel que cancele la reserva con todo,
     //Despues llama al usuario que ponga "FULLREFOUND" en el estado nuevo
     //Devolver el dinero? no se como hacerlo todavia
     //setShowRefound(false);
     //setFullRefound(false);
+    try {
+      setLoading(true);
+      await cancelBooking(travelId, auth.user.id);
+      history.push('/bookings');
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setShowRefound(false);
+      setLoading(false);
+    }
   }
 
   const renderAdditionals = () => {
-    //if (!auth.user.travelHistory) { return false };
-    return availableAdditionals.map(elem => {
-      const checked = (auth.user.travelHistory.find(th => th.travelId === details.id).boughtAdditionals).find(
-        el => el === elem.id
-      );
-      return (
-        <li key={elem.id}>
-          <Checkbox
-            label={elem.name}
-            marginLeft={10}
-            id={elem.id}
-            checked={checked ? true : false}
-            disabled
-          />
-        </li>)
-      });
+    const filtered = availableAdditionals.filter(
+      a => details.boughtAdditionals.find(el => el === a.id)
+    );
+    return filtered.map(elem => (
+      <li key={elem.id}>
+        {elem.name}
+      </li>
+    ));
   }
 
   const mapRoute = () => {
-    const route = availableRoutes.find(elem => elem.id === details.route) || {};
+    const route = availableRoutes.find(elem => elem.id === travel.route) || {};
     return `${route.origin}/${route.destination}`;
   };
 
@@ -149,12 +159,11 @@ export const BookingDetails = () => {
           title="Confirmar Eliminacion"
           intent="danger"
           onConfirm={() => fullRefoundCallback()}
-          //onCloseComplete={() => setShowRefound(false)}
+          onCloseComplete={() => setShowRefound(false)}
           confirmLabel="Aceptar"
           cancelLabel="Cancelar"
-        > {//fullRefound ? "Si se cancela la reserva con mas de 48 horas de antelacion se devolvera el precio" 
-           // : "Si se cancela la reserva con menos de 48 horas de antelacion solo se devolvera la mitad del precio"
-          "blablablabla"}
+        >
+          Esta seguro que quiere cancelar? Si quedan mas de 48hs se devolvera la totalidad del dinero
         </Dialog>
         <BackButton
           appearance="minimal"
@@ -168,7 +177,7 @@ export const BookingDetails = () => {
         <TextInputField
           width={'65vh'}
           label="Fecha y hora de salida"
-          value={new Date(details.dateAndTime).toLocaleDateString("es-AR", options)}
+          value={new Date(travel.dateAndTime).toLocaleDateString("es-AR", options)}
           disabled
         />
         <TextInputField
@@ -179,24 +188,7 @@ export const BookingDetails = () => {
         />
         <TextInputField
           width={'65vh'}
-          label="Chofer"
-          value={details.driver}
-          disabled
-        />
-        <TextInputField
-          width={'65vh'}
-          label="Vehiculo"
-          value={details.vehicle}
-          disabled
-        />
-        <TextInputField
-          width={'65vh'}
           label="Estado de la reserva"
-          value={auth.user.travelHistory.find(th => th.travelId === details.id).status}
-        />
-        <TextInputField
-          width={'65vh'}
-          label="Estado del viaje"
           value={details.status}
           disabled
         />
@@ -206,19 +198,19 @@ export const BookingDetails = () => {
             label="Adicionales"
             description="Adicionales comprados" //Cambiar a los adicionales comprados
         >
-          <Pane display="flex" flexWrap="wrap">
+          {availableAdditionals.length &&(<Pane display="flex" flexWrap="wrap">
             <ul>
               {renderAdditionals()}
             </ul>
-          </Pane>
+          </Pane>)}
           </FormField>
         <Button 
           marginRight={16} 
           intent="danger"
-          onClick={promptCancel()}
-          disabled={details.status === TRAVEL_STATES.NOT_STARTED}
+          onClick={promptCancel}
+          disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
         >
-        Cancel
+        Cancelar Reserva
       </Button>
       </Pane>
     );

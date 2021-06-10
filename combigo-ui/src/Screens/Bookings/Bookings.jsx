@@ -12,14 +12,15 @@ import {
   Pane
 } from 'evergreen-ui';
 
-import { getAvailableRoutes, getBookings } from './BookingsStore'; //Sacar el delete travels
+import { getAvailableRoutes, getBookings, getAllTravels } from './BookingsStore'; //Sacar el delete travels
 import { useAuth } from "../../utils/use-auth"; //For bookings
 
 export const Bookings = () => {
   const auth = useAuth();
   const history = useHistory();
-  const [travels, setTravels] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [routes, setRoutes] = useState([]);
+  const [travels, setTravels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [bookingsLoaded, setBookingsLoaded] = useState(false);
 
@@ -28,9 +29,11 @@ export const Bookings = () => {
       try {
         const routesResponse = await getAvailableRoutes();
         const booksResponse = await getBookings(auth.user);
+        const travelsResponse = await getAllTravels();
         setRoutes(routesResponse);
+        setTravels(travelsResponse);
         if (booksResponse.length) {
-          setTravels(booksResponse);
+          setBookings(booksResponse);
           setBookingsLoaded(true);
         }
         
@@ -58,8 +61,8 @@ export const Bookings = () => {
       )
   }
 
-  const renderTravels = (travels, routes) => {
-    if (travels.length < 1) {
+  const renderBookings = (bookings, routes) => {
+    if (bookings.length < 1) {
       return renderPlaceholder();
     }
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -87,23 +90,23 @@ export const Bookings = () => {
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
-            {travels.map(travel => (
-              <Table.Row key={travel.id}>
+            {bookings.map(booking => (
+              <Table.Row key={booking.travelId}>
                 <Table.TextCell>
-                  {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
+                  {travels.length && new Date(travels.find(trv => trv.id === booking.travelId).dateAndTime).toLocaleDateString('es-AR', options)}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {bookingsLoaded && routes.find(rou => rou.id === travel.route).origin}
+                  {bookingsLoaded && routes.find(rou => rou.travels.includes(booking.travelId)).origin}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {bookingsLoaded && routes.find(rou => rou.id === travel.route).destination}
+                  {bookingsLoaded && routes.find(rou =>rou.travels.includes(booking.travelId)).destination}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {auth.user.travelHistory.find(th => th.travelId === travel.id).status}
+                  {booking.status}
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(travel.id)}
+                    content={renderRowMenu(booking.travelId)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />
@@ -119,7 +122,7 @@ export const Bookings = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderTravels(travels, routes) }
+      { !loading &&  renderBookings(bookings, routes) }
     </div>
   );
 };

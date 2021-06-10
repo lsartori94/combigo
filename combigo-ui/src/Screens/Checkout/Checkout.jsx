@@ -493,11 +493,9 @@ export default function Checkout() {
           <Dialog
             isShown={isShownSuccess}
             title="Reserva exitosa"
-            onCloseComplete={() => setIsShownSuccess(false)} //#TODO mostrar ticket
-            onCancel={() => history.push(history.goBack())}
-            confirmLabel="Ver ticket"
-            cancelLabel="Atrás"
-            hasCancel={true}
+            onCloseComplete={() => history.push('/bookings')}
+            confirmLabel="Ver Reservas"
+            hasCancel={false}
             intent="success"
           > {selectedCard.number ? 
               (`Pago de $${userIsVIP ? subtotal * 0.90 : subtotal} realizado. Con tarjeta ${selectedCard.issuer} - Terminada en ${selectedCard.number.slice(-4)}`)

@@ -1,8 +1,14 @@
 import { API_BASE } from '../../constants';
 
 //Get Routes
-export async function getRoutes() {
-  const response = await fetch(`${API_BASE}/routes`);
+export async function getRoutes(skipActive) {
+  let query;
+  if (skipActive) {
+    query = ``;
+  } else {
+    query = `?active=true`;
+  }
+  const response = await fetch(`${API_BASE}/routes${query}`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
