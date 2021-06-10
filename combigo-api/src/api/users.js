@@ -232,6 +232,10 @@ router.put('/:uname/card', (req, res) => {
     return res.status(400).send(`Bad Request`);
   }
 
+  if (number === '3333333333333333') { //tarjeta invalida
+    return res.status(405).send(`La tarjeta es inválida.`);
+  }
+
   users[exists].creditCard = {
     issuer,
     number,

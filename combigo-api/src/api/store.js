@@ -99,7 +99,31 @@ let users = [
     vipStatus: VIP_STATUS.NOT_ENROLLED,
     role: ROLES.CLIENT,
     active: true,
-  }
+  },
+  {
+    id: 'CGOU5',
+    username: 'manuel.volvo',
+    email: 'manuelv@gmail.com',
+    name: 'Manuel',
+    password: '123@Pass',
+    bdate: '1980-12-12',
+    dni: '34516758',
+    completedTravels: [],
+    role: ROLES.DRIVER,
+    active: true
+  },
+  {
+    id: 'CGOU6',
+    username: 'john.volvo',
+    email: 'johnv@gmail.com',
+    name: 'John',
+    password: '123@Pass',
+    bdate: '1970-12-12',
+    dni: '34616758',
+    completedTravels: [],
+    role: ROLES.DRIVER,
+    active: true
+  },
 ];
 
 let vehicles = [

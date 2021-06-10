@@ -162,6 +162,7 @@ export const Cards = () => {
         <Alert intent="danger" 
           title="Tuvimos un Error"
         >
+          {error.toString()}
         </Alert>
       )}
       {saved && (
