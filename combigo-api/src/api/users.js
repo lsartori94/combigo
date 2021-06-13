@@ -143,57 +143,7 @@ router.get('/:uname/bookings', (req, res) => {
     return res.status(409).send(`Usuario no encontrado`);
   }
 
-  //ARREGLAR ESTA COSA
-  
-  users[exists].travelHistory;
-
-  const resultsID = Object.assign(users[exists].travelHistory.map(th => th.travelId));
-
-  const result = travels.filter(travel => resultsID.includes(travel.id));
-
   return res.send(users[exists].travelHistory);
-});
-
-// Devolucion completa booking
-router.get('/:uname/:travelId/fullRefound', (req, res) => {
-  const {uname, travelId} = req.params;
-  const exists = users.findIndex(user => user.username === uname);
-
-  if (exists === -1) {
-    return res.status(409).send(`Usuario no encontrado`);
-  }
-
-  const existsTravel = users[exists].travelHistory.findIndex(tr => tr.id === travelId);
-
-  if (existsTravel === -1) {
-    return res.status(409).send(`Reserva no encontrado`);
-  }
-
-  users[exists].travelHistory[existsTravel].status = CONSTANTS.BOOKING_STATES.FULL_REFUND;
-
-  //Abria que devolverles el dinero aca
-
-  return res.send(CONSTANTS.BOOKING_STATES.FULL_REFUND);
-});
-
-// Media devolucion booking
-router.get('/:uname/:travelId/halfRefound', (req, res) => {
-  const {uname, travelId} = req.params;
-  const exists = users.findIndex(user => user.username === uname);
-
-  if (exists === -1) {
-    return res.status(409).send(`Usuario no encontrado`);
-  }
-
-  const existsTravel = users[exists].travelHistory.findIndex(tr => tr.id === travelId);
-
-  if (existsTravel === -1) {
-    return res.status(409).send(`Reserva no encontrado`);
-  }
-
-  users[exists].travelHistory[existsTravel].status = CONSTANTS.BOOKING_STATES.HALF_REFOUND;
-
-  return res.send(CONSTANTS.BOOKING_STATES.HALF_REFOUND);
 });
 
 // Get CC
@@ -299,7 +249,6 @@ router.delete('/:uname', (req, res) => {
     return res.status(404).send(`Usuario no encontrado`);
   }
 
-  //users.splice(index, 1);
   users[index].active = false;
 
   res.json(users);

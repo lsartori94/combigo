@@ -1,7 +1,5 @@
 import { API_BASE } from '../../constants';
-import { getDrivers } from '../Drivers/driversStore';
 import { getAdditionals } from '../Additionals/additionalsStore';
-import { getVehicles } from '../Vehicles/vehiclesStore';
 import { getRoutes } from '../Routes/routesStore';
 
 export async function getTravels() {
@@ -158,16 +156,18 @@ export async function saveTravelDriver(travel) {
   return result;
 }
 
+export async function getValidTravelAssigns(travelId) {
+  const response = await fetch(`${API_BASE}/travels/${travelId}/validAssigns`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
+
 export function getAvailableAditionals() {
   return getAdditionals();
-}
-
-export function getAvailableDrivers() {
-  return getDrivers();
-}
-
-export function getAvailableVehicles() {
-  return getVehicles();
 }
 
 export function getAvailableRoutes() {

@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// get travels for route
+// Get travels for route with id
 router.get('/:routeId/travels', (req, res) => {
   const {routeId} = req.params;
 
@@ -45,32 +45,6 @@ router.get('/:routeId/travels', (req, res) => {
 
   return res.json(result);
 });
-
-// Search for routes by origin
-// router.get('/:origin', (req, res) => {
-//   const {origin} = req.params;
-
-//   const activeRoutes = routes.filter(routes => routes.active === true );
-//   const result = activeRoutes.filter(route => route.origin === origin);
-
-//   if (!result) {
-//     res.status(404).send(`No hay rutas activas para el origen especificado`);
-//   }
-//   res.json(result);
-// });
-
-// Search for routes by destination
-// router.get('/:destination', (req, res) => {
-//   const {destination} = req.params;
-
-//   const activeRoutes = routes.filter(routes => routes.active === true );
-//   const result = activeRoutes.filter(route => route.destination === destination);
-
-//   if (!result) {
-//     res.status(404).send(`No hay rutas activas para el destino especificado`);
-//   }
-//   res.json(result);
-// })
 
 // Create route
 router.post('/', (req, res) => {
@@ -190,6 +164,7 @@ router.delete('/:id', (req, res) => {
     return res.status(404).send(`La ruta no existe`);
   }
 
+  // cancelar todos los viajes
   function cancelTravelBookings(travel) {
     travel.passengers.forEach(p => {
       p.bookingStatus = BOOKING_STATES.CANCELED;
@@ -201,8 +176,7 @@ router.delete('/:id', (req, res) => {
     });
   }
   
-  //Cambia estado de todos los viajes "pendiente" o "no vehiculo" de la ruta a "cancelado" o lo da de baja
-  //#TODO devolver dinero de reservas
+  //Cambia estado de todos los viajes "pendiente" o "no vehiculo" de la ruta a "cancelado" y lo da de baja
   routes[index].travels.forEach(routeTravel => {
     const travelIndex = travels.findIndex(travel => travel.id === routeTravel);
     if (

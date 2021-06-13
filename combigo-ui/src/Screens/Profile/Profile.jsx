@@ -7,7 +7,7 @@ import { Pane, Button, TextInputField, FormField, InlineAlert } from 'evergreen-
 
 import { VIP_STATUS, VIP_STATUS_MSG } from "../../constants";
 import { useAuth } from "../../utils/use-auth";
-import { getUserInfo, saveUserInfo, changeVipStatus } from './profileStore';
+import { getUserInfo, changeVipStatus } from './profileStore';
 
 export const Profile = () => {
   const auth = useAuth();
@@ -26,7 +26,7 @@ export const Profile = () => {
       }
     }
     initialize();
-  },[auth.user]); //cambié esto porque pedia algo null en vez de mostrar placeholder si no habia user logueado (auth.user.username cambiado a => auth.user)
+  },[auth.user]);
 
   const handleVipChange = async () => {
     steChangingVip(true);
@@ -47,14 +47,14 @@ export const Profile = () => {
     }
   }
 
-  const saveUserData = async () => {
-    try{
-      const res = await saveUserInfo(userInfo.username, userInfo);
-      setUserInfo(res);
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  // const saveUserData = async () => {
+  //   try{
+  //     const res = await saveUserInfo(userInfo.username, userInfo);
+  //     setUserInfo(res);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // } 
 
   const handleInputChange = (field, value) => {
     const newInfo = Object.assign(userInfo);

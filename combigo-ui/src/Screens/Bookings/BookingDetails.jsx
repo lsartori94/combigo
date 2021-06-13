@@ -5,14 +5,16 @@ import {
   TextInputField,
   Spinner,
   FormField,
-  Checkbox,
   BackButton,
   Button,
-  Dialog
+  Dialog,
+  UnorderedList,
+  ListItem,
+  TickIcon
 } from 'evergreen-ui';
 
 import { TRAVEL_STATES } from '../../constants.js';
-import { useAuth } from "../../utils/use-auth"; //For bookings
+import { useAuth } from "../../utils/use-auth"; 
 
 import {
   getTravelDetails,
@@ -59,13 +61,10 @@ export const BookingDetails = () => {
     };
     async function initialize() {
       try {
-        //setLoading(true);
         const booksResponse = await getBookings(auth.user);
-        // const response = await getTravelDetails(travelId);
         const book = booksResponse.find(b => b.travelId === travelId)
         setNoTravel(false);
         setDetails(book);
-        // setBookings(booksResponse);
       } catch (e) {
         console.error(e);
       } finally {
@@ -74,36 +73,17 @@ export const BookingDetails = () => {
     }
     initialize();
     initializeExtras();
-  }, [travelId]);
+  }, [travelId]); // eslint-disable-line
 
   const backCallback = () => {
     history.push('/Bookings');
   }
 
   const promptCancel = () => {
-    //Si no se puede cancelar el boton deberia estar desabilitado
-    //Decidir si va a ser full refound o half refound
-
-    //setFullRefound(true); //Agregar condicion!!!
-    //setShowRefound(true);
-
-    //Primero mostrar el dialog de cuidado porque se cancelara
-
-
-    //Despues si lo aceptan que dependiendo de cuanto falta para el viaje se full refound o half refound
-
-    // if (true) //if( ( details.dateAndTime - Date.new() ) > 1.728e+8 )
-    //   setfullRefound(true);
-    // setshowCancel(true);
     setShowRefound(true);
   }
 
   const fullRefoundCallback = async () => {
-    //Llama al travel que cancele la reserva con todo,
-    //Despues llama al usuario que ponga "FULLREFOUND" en el estado nuevo
-    //Devolver el dinero? no se como hacerlo todavia
-    //setShowRefound(false);
-    //setFullRefound(false);
     try {
       setLoading(true);
       await cancelBooking(travelId, auth.user.id);
@@ -121,9 +101,7 @@ export const BookingDetails = () => {
       a => details.boughtAdditionals.find(el => el === a.id)
     );
     return filtered.map(elem => (
-      <li key={elem.id}>
-        {elem.name}
-      </li>
+      <ListItem>{elem.name} - ${elem.price}</ListItem>
     ));
   }
 
@@ -205,18 +183,20 @@ export const BookingDetails = () => {
           value={details.status}
           disabled
         />
+
+        {details.boughtAdditionals.length > 0 && (
         <FormField
             width={'65vh'}
             marginBottom={20}
             label="Adicionales"
-            description="Adicionales comprados" //Cambiar a los adicionales comprados
-        >
-          {availableAdditionals.length &&(<Pane display="flex" flexWrap="wrap">
-            <ul>
+            description="Adicionales comprados">
+          <Pane display="flex" flexWrap="wrap">
+            <UnorderedList icon={TickIcon} iconColor="success">
               {renderAdditionals()}
-            </ul>
-          </Pane>)}
-          </FormField>
+            </UnorderedList>
+          </Pane>
+        </FormField>)}
+
         <Button 
           marginRight={16} 
           intent="danger"

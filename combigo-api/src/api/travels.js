@@ -5,8 +5,8 @@ const router = express.Router();
 const ID_BASE = 'CGOT';
 const TICKET_BASE = 'CGOTKT';
 
-const {travels, routes, users, vehicles} = require('./store');
-const { TRAVEL_STATES, BOOKING_STATES }= require('./constants');
+const { travels, routes, users, vehicles } = require('./store');
+const { TRAVEL_STATES, BOOKING_STATES, ROLES }= require('./constants');
 
 // Get all travels
 router.get('/', (req, res) => {
@@ -166,6 +166,34 @@ router.put('/:id', (req, res) => {
     return res.status(405).send(`El viaje no esta activo`);
   }
 
+  const validTravels = travels.filter(trav => 
+    (trav.status !== TRAVEL_STATES.FINISHED && 
+    trav.status !== TRAVEL_STATES.CANCELED) 
+    && (trav.active === true));
+  
+  const tempTravel = {};
+  Object.assign(tempTravel, travels[exists]);
+  tempTravel.dateAndTime = dateAndTime;
+  let driverOverlap, vehicleOverlap = false;
+
+  // nuevo dateAndTime overlaps drivers
+  if (travels[exists].driver) {
+    const sameDriverTravels = validTravels.filter(travel => travel.driver === travels[exists].driver);
+    if (sameDriverTravels.length > 0)
+      driverOverlap = sameDriverTravels.some(travel => datesOverlap(tempTravel, travel));
+  };
+
+  // nuevo dateAndTime overlaps vehicles
+  if (travels[exists].vehicle){
+    const sameVehicleTravels = validTravels.filter(travel => travel.vehicle === travels[exists].vehicle);
+    if (sameVehicleTravels.length > 0)
+      vehicleOverlap = sameVehicleTravels.some(travel => datesOverlap(tempTravel, travel));
+  };
+
+  if (vehicleOverlap || driverOverlap) {
+    return res.status(405).send(`Nueva fecha elegida tiene conflictos de combi/chofer respecto a otros viajes.`);
+  }
+
   travels[exists] = Object.assign(travels[exists],{
     dateAndTime,
     route,
@@ -196,6 +224,7 @@ router.delete('/:id', (req, res) => {
 
   res.json(travels);
 });
+
 
 // Add new booking
 router.put('/:id/newBooking', (req, res) => {
@@ -250,7 +279,7 @@ router.put('/:id/newBooking', (req, res) => {
   res.send(booking);
 });
 
-// cancel booking
+// Cancel booking
 router.put('/:id/cancelBooking', (req, res) => {
   const {id} = req.params;
   const {user} = req.body;
@@ -304,5 +333,56 @@ router.put('/:id/cancelBooking', (req, res) => {
 
   res.send(travels[exists]);
 });
+
+
+// Get valid drivers and vehicles for travel assign
+router.get('/:id/validAssigns', (req, res) => {
+  const {id} = req.params;
+  const travel = travels.find(travel => travel.id === id);
+
+  if (!travel) {
+    res.status(404).send(`Viaje no encontrado`);
+  }
+
+  const drivers = users.filter(user => (user.role === ROLES.DRIVER) && (user.active === true));
+  const validTravels = travels.filter(trav => 
+    (trav.status !== TRAVEL_STATES.FINISHED && 
+    trav.status !== TRAVEL_STATES.CANCELED) 
+    && (trav.active === true));
+
+  const overlappedTravels = validTravels.filter(otherTravel => datesOverlap(travel, otherTravel));
+  const validDrivers = drivers.filter(driver => !overlappedTravels.some(trav => trav.driver === driver.id));
+  const validVehicles = vehicles.filter(veh => !overlappedTravels.some(trav => trav.vehicle === veh.id));
+
+  let validAssigns = {};
+  validAssigns = Object.assign(
+    validAssigns,
+    {
+      validDrivers,
+      validVehicles
+    }
+  );
+
+  res.json(validAssigns);
+});
+
+// Utilities
+function datesOverlap(thisTravel, otherTravel) {
+  if (otherTravel.id === thisTravel.id)
+    return false;
+  const route1 = routes.find(route => route.id === otherTravel.route);
+  const route2 = routes.find(route => route.id === thisTravel.route);
+  if ((!route1 || !route2) || (route1.active === false)) //check rutas eliminadas
+    return false;
+  const duration1 = route1.durationMin * 60000;
+  const duration2 = route2.durationMin * 60000;
+  const start1 = Date.parse(otherTravel.dateAndTime);
+  const start2 = Date.parse(thisTravel.dateAndTime);
+  const end1 = start1 + duration1;
+  const end2 = start2 + duration2;
+  if ((start1 <= end2) && (end1 >= start2)) 
+    return true;
+  return false;
+};
 
 module.exports = router;

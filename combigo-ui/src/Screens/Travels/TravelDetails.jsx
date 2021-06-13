@@ -44,7 +44,7 @@ export const TravelDetails = () => {
     dateAndTime: "",
     route: "",
     passengers: [],
-    status: TRAVEL_STATES.NOT_STARTED,
+    status: "",
     availableAdditionals: []
   });
   const [showErrors, setShowErrors] = useState(false);
@@ -93,7 +93,7 @@ export const TravelDetails = () => {
         switch (key) {
           default:
             if (
-              !(key === 'driver' || key === 'vehicle')
+              !(key === 'driver' || key === 'vehicle' || key === 'stock')
               && !value
             ) {
               auxErrors[key] = true;
@@ -196,7 +196,7 @@ export const TravelDetails = () => {
 
   const statusDisabled = (status) =>
   !(status === TRAVEL_STATES.NOT_STARTED
-  || status === TRAVEL_STATES.NO_VEHICLE);
+  || status === TRAVEL_STATES.NO_VEHICLE) && !creating;
 
   const renderDetails = (details) => {
     if (noTravel) {
@@ -241,7 +241,7 @@ export const TravelDetails = () => {
 
           {statusDisabled(details.status) && 
           (<Alert
-            title='El viaje ya finalizó, no se puede editar.'
+            title='El viaje ya finalizó o esta en curso, no se puede editar.'
             intent='danger'
             appearance='card'
             marginBottom={32}

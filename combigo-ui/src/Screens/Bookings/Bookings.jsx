@@ -12,8 +12,8 @@ import {
   Pane
 } from 'evergreen-ui';
 
-import { getAvailableRoutes, getBookings, getAllTravels } from './BookingsStore'; //Sacar el delete travels
-import { useAuth } from "../../utils/use-auth"; //For bookings
+import { getAvailableRoutes, getBookings, getAllTravels } from './BookingsStore';
+import { useAuth } from "../../utils/use-auth";
 
 export const Bookings = () => {
   const auth = useAuth();

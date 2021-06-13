@@ -124,11 +124,11 @@ export default function Checkout() {
 
   useEffect(() => {
     refreshSubtotal();
-  }, [newPassengerDetails]);
+  }, [newPassengerDetails]); // eslint-disable-line
 
   useEffect(() => {
     refreshPayment();
-  }, [checkedSavedCC, newCardInfo]);
+  }, [checkedSavedCC, newCardInfo]); // eslint-disable-line
 
   //Adicionales
   const handleCheckbox = (e) => {

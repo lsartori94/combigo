@@ -51,7 +51,7 @@ let users = [
     password: '123@Pass',
     bdate: '1995-10-12',
     dni: '42357195',
-    travelHistory: [ //travelHistory alcanza con que tenga solo travelId, simplifica despues manener coherente el modelo
+    travelHistory: [
       {
         travelId: 'CGOT1',
         boughtAdditionals: [ 
@@ -244,7 +244,6 @@ let travels = [
     passengers: [
       {
         id: 'CGOU3',
-        // bookingId: '',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
         creditCard: '4444444444444444',
