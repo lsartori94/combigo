@@ -76,7 +76,7 @@ export const BookingDetails = () => {
   }, [travelId]); // eslint-disable-line
 
   const backCallback = () => {
-    history.push('/Bookings');
+    history.push('/bookings');
   }
 
   const promptCancel = () => {

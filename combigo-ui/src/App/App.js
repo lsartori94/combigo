@@ -9,6 +9,7 @@ import { Footer } from '../Components/Footer/Footer';
 import { Navigation } from '../Components/Navigation/Navigation';
 import { Home } from '../Screens/Home/Home';
 import { Profile } from '../Screens/Profile/Profile';
+import { Subscription } from '../Screens/Profile/Subscription';
 import { Login } from '../Screens/Login/Login';
 import { Register } from '../Screens/Register/Register';
 import { VehicleDetails } from "../Screens/Vehicles/VehicleDetails";
@@ -24,8 +25,8 @@ import { Additionals } from '../Screens/Additionals/Additionals';
 import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
 import { Cards } from '../Screens/Cards/Cards';
 import { ProvideAuth } from '../utils/use-auth';
-import { Bookings } from '../Screens/Bookings/Bookings'; //Reservas
-import { BookingDetails } from '../Screens/Bookings/BookingDetails'; //Reservas
+import { Bookings } from '../Screens/Bookings/Bookings';
+import { BookingDetails } from '../Screens/Bookings/BookingDetails'; 
 import TravelListing from "../Screens/TravelListing/TravelListing";
 import Checkout from "../Screens/Checkout/Checkout";
 
@@ -44,6 +45,9 @@ function App() {
           <Switch>
             <Route path="/profile">
               <Profile />
+            </Route>
+            <Route path="/subscription">
+              <Subscription />
             </Route>
             <Route path="/login">
               <Login />
