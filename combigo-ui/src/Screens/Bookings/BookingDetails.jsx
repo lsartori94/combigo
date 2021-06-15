@@ -1,16 +1,13 @@
+import './Bookings.css';
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router';
 import {
   Pane,
   TextInputField,
   Spinner,
-  FormField,
   BackButton,
   Button,
-  Dialog,
-  UnorderedList,
-  ListItem,
-  TickIcon
+  Dialog
 } from 'evergreen-ui';
 
 import { TRAVEL_STATES } from '../../constants.js';
@@ -18,7 +15,6 @@ import { useAuth } from "../../utils/use-auth";
 
 import {
   getTravelDetails,
-  getAvailableAditionals,
   getAvailableRoutes,
   getBookings,
   cancelBooking
@@ -29,16 +25,11 @@ export const BookingDetails = () => {
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
-    dateAndTime: "",
-    route: {
-      origin: "",
-      destination: ""
-    },
-    passengers: [],
-    status: '',
-    availableAdditionals: []
+    travelId: "",
+    status: "",
+    boughtAdditionals: [],
   });
-  const [availableAdditionals, setAvailableAdditionals] = useState([]);
+ 
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
   const [travel, setTravel] = useState([]);
@@ -47,17 +38,10 @@ export const BookingDetails = () => {
 
   useEffect(() => {
     async function initializeExtras() {
-      const additionals = await getAvailableAditionals();
       const routes = await getAvailableRoutes();
       const travelResponse = await getTravelDetails(travelId);
-      setAvailableAdditionals(additionals);
       setAvailableRoutes(routes);
       setTravel(travelResponse)
-    }
-    if (travelId === 'add') {
-      setNoTravel(false);
-      setLoading(false);
-      return;
     };
     async function initialize() {
       try {
@@ -79,6 +63,10 @@ export const BookingDetails = () => {
     history.push('/bookings');
   }
 
+  const ticketCallback = () => {
+    history.push(`/bookingDetails/${travelId}/ticket`);
+  }
+
   const promptCancel = () => {
     setShowRefound(true);
   }
@@ -94,15 +82,6 @@ export const BookingDetails = () => {
       setShowRefound(false);
       setLoading(false);
     }
-  }
-
-  const renderAdditionals = () => {
-    const filtered = availableAdditionals.filter(
-      a => details.boughtAdditionals.find(el => el === a.id)
-    );
-    return filtered.map(elem => (
-      <ListItem>{elem.name} - ${elem.price}</ListItem>
-    ));
   }
 
   const mapRoute = () => {
@@ -184,27 +163,24 @@ export const BookingDetails = () => {
           disabled
         />
 
-        {details.boughtAdditionals.length > 0 && (
-        <FormField
-            width={'65vh'}
-            marginBottom={20}
-            label="Adicionales"
-            description="Adicionales comprados">
-          <Pane display="flex" flexWrap="wrap">
-            <UnorderedList icon={TickIcon} iconColor="success">
-              {renderAdditionals()}
-            </UnorderedList>
-          </Pane>
-        </FormField>)}
+        <Pane display="flex" justifyContent="space-around">
+          <Button 
+            marginRight={16} 
+            intent="danger"
+            onClick={promptCancel}
+            disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
+          > Cancelar Reserva
+          </Button>
 
-        <Button 
-          marginRight={16} 
-          intent="danger"
-          onClick={promptCancel}
-          disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
-        >
-        Cancelar Reserva
-      </Button>
+          <Button 
+            marginRight={16} 
+            intent="success"
+            onClick={ticketCallback}
+          > Ver ticket
+          </Button>
+      
+        </Pane>
+      
       </Pane>
     );
   };

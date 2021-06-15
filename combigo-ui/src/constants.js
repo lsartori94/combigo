@@ -3,7 +3,7 @@ export const SESSION_KEY = 'CGOSESS';
 
 export const TRAVEL_STATES = {
   NOT_STARTED: "Pendiente",
-  IN_PROGRESS: "En Progreso",
+  IN_PROGRESS: "En Curso",
   FINISHED: "Terminado",
   CANCELED: "Cancelado",
   NO_VEHICLE: "Sin Vehiculo"

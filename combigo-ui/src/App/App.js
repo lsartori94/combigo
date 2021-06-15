@@ -26,7 +26,8 @@ import { AdditionalDetails } from '../Screens/Additionals/AdditionalDetails';
 import { Cards } from '../Screens/Cards/Cards';
 import { ProvideAuth } from '../utils/use-auth';
 import { Bookings } from '../Screens/Bookings/Bookings';
-import { BookingDetails } from '../Screens/Bookings/BookingDetails'; 
+import { BookingDetails } from '../Screens/Bookings/BookingDetails';
+import { Ticket } from '../Screens/Bookings/Ticket';  
 import TravelListing from "../Screens/TravelListing/TravelListing";
 import Checkout from "../Screens/Checkout/Checkout";
 
@@ -102,7 +103,10 @@ function App() {
             </Route>
             <Route path="/bookings">
               <Bookings />
-            </Route> 
+            </Route>
+            <Route path="/bookingDetails/:travelId/ticket"> 
+              <Ticket />
+            </Route>
             <Route path="/bookingDetails/:travelId/:uname"> 
               <BookingDetails />
             </Route>
