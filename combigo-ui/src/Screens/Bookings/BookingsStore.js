@@ -1,7 +1,6 @@
 import { API_BASE } from '../../constants';
 import { getAdditionals } from '../Additionals/additionalsStore';
 import { getRoutes } from '../Routes/routesStore';
-import { getTravels } from '../Travels/travelsStore';
 
 //Get bookings
 export async function getBookings(user) {
@@ -23,7 +22,12 @@ export async function getTravelDetails(travelId) {
 }
 
 export async function getAllTravels() {
-  return getTravels();
+  const response = await fetch(`${API_BASE}/travels/all`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
 }
 
 export async function cancelBooking(travelId, userId) {

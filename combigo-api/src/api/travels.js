@@ -8,10 +8,16 @@ const TICKET_BASE = 'CGOTKT';
 const { travels, routes, users, vehicles } = require('./store');
 const { TRAVEL_STATES, BOOKING_STATES, ROLES }= require('./constants');
 
-// Get all travels
+// Get active travels
 router.get('/', (req, res) => {
   const activeTravels = travels.filter(travels => travels.active === true);
   res.json(activeTravels);
+});
+
+// Get all travels
+// Para que bookings siga funcionando si se elimina un travel
+router.get('/all', (req, res) => {
+  res.json(travels);
 });
 
 // Search for travel with id
@@ -213,6 +219,7 @@ router.delete('/:id', (req, res) => {
   }
   
   travels[index].active = false;
+  travels[index].status = TRAVEL_STATES.CANCELED;
   travels[index].passengers.forEach(p =>{
     p.bookingStatus = BOOKING_STATES.CANCELED;
     users.find(

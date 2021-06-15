@@ -8,7 +8,7 @@ const ID_BASE = 'CGOR';
 
 const {routes, travels, users} = require('./store');
 
-// Get active routes
+// Get routes
 router.get('/', (req, res) => {
   const {active} = req.query;
   const activeRoutes = routes.filter(route => route.active === true );

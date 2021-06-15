@@ -9,11 +9,13 @@ import {
   IconButton,
   Spinner,
   MoreIcon,
-  Pane
+  Pane,
+  Badge
 } from 'evergreen-ui';
 
 import { getAvailableRoutes, getBookings, getAllTravels } from './BookingsStore';
 import { useAuth } from "../../utils/use-auth";
+import { TRAVEL_STATES } from '../../constants';
 
 export const Bookings = () => {
   const auth = useAuth();
@@ -50,6 +52,26 @@ export const Bookings = () => {
     <div style={{padding: "30px"}}> Usted no ha realizado reservas.
     </div>
   );
+
+  const decideStatusColor = (status) => {
+    let color = "";
+    console.log(status);
+    switch(status) {
+      case TRAVEL_STATES.NOT_STARTED:
+        color = "blue";
+        break;
+      case TRAVEL_STATES.IN_PROGRESS:
+        color = "green";
+        break;
+      case TRAVEL_STATES.IN_PROGRESS:
+        color = "green";
+      break;
+      default:
+        color = "neutral";
+    }
+    console.log(color);
+    return color;
+  };
   
   const renderRowMenu = (travelId) => {
       return (
@@ -102,7 +124,7 @@ export const Bookings = () => {
                   {bookingsLoaded && routes.find(rou =>rou.travels.includes(booking.travelId)).destination}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {booking.status}
+                  <Badge color={decideStatusColor(booking.status)} marginRight={8}> {booking.status} </Badge>
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
