@@ -59,21 +59,25 @@ let users = [
           'CGOA3',
         ],
         status: BOOKING_STATES.PENDING,
+        payment: 350
       },
       {
         travelId: 'CGOT2',
         boughtAdditionals: [],
         status: BOOKING_STATES.COMPLETED,
+        payment: 160
       },
       {
         travelId: 'CGOT3',
         boughtAdditionals: [],
         status: BOOKING_STATES.COMPLETED,
+        payment: 200
       },
       {
         travelId: 'CGOT4',
         boughtAdditionals: [],
         status: BOOKING_STATES.ACTIVE,
+        payment: 120
       }
     ],
     vipStatus: VIP_STATUS.NOT_ENROLLED,
@@ -219,7 +223,7 @@ let travels = [
         legalStatus: LEGAL_STATUS.PENDING,
         bookingStatus: BOOKING_STATES.PENDING,
         creditCard: '4444444444444444',
-        payment: 100,
+        payment: 350,
         boughtAdditionals: [ 
           'CGOA1',
           'CGOA3',
@@ -299,7 +303,7 @@ let travels = [
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.ACTIVE,
         creditCard: '4444444444444444',
-        payment: 200,
+        payment: 120,
         boughtAdditionals: [],
       }
     ],

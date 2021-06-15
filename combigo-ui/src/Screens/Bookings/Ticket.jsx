@@ -31,13 +31,6 @@ export const Ticket = () => {
     travelId: "",
     status: "",
     boughtAdditionals: [],
-  });
-  const [passengerDetails, setPassengerDetails] = useState({
-    bookingStatus: "",
-    boughtAdditionals: [],
-    creditCard: "",
-    id: "",
-    legalStatus: "",
     payment: 0
   });
   const [availableAdditionals, setAvailableAdditionals] = useState([]);
@@ -54,7 +47,6 @@ export const Ticket = () => {
       setAvailableAdditionals(additionals);
       setAvailableRoutes(routes);
       setTravel(travelResponse);
-      setPassengerDetails(travelResponse.passengers.find(pas => pas.id === auth.user.id));
     }
     async function initialize() {
       try {
@@ -103,7 +95,6 @@ export const Ticket = () => {
       return <div>No existe el ticket</div>;
     }
     
-    console.log(passengerDetails);
     const options = {
       weekday: "long",
       year: "numeric",
@@ -155,7 +146,7 @@ export const Ticket = () => {
         </Pane>)}
 
         <Strong size={400} marginTop={8}>Total pagado</Strong>
-        <Text>${passengerDetails.payment}</Text>
+        <Text>${bookDetails.payment}</Text>
 
         <Button
           marginTop={16}
@@ -178,7 +169,7 @@ export const Ticket = () => {
   return (
     <div>
       {loading && <Spinner />}
-      {!loading && renderDetails(bookDetails, passengerDetails)}
+      {!loading && renderDetails(bookDetails)}
     </div>
   );
 };

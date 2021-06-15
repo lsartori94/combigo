@@ -273,7 +273,8 @@ router.put('/:id/newBooking', (req, res) => {
   users[userExists].travelHistory.push({
     travelId: travels[exists].id,
     boughtAdditionals: booking.boughtAdditionals,
-    status: BOOKING_STATES.PENDING
+    status: BOOKING_STATES.PENDING,
+    payment: finalBooking.payment
   });
 
   res.send(booking);
