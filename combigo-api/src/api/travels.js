@@ -6,7 +6,7 @@ const ID_BASE = 'CGOT';
 const TICKET_BASE = 'CGOTKT';
 
 const { travels, routes, users, vehicles } = require('./store');
-const { TRAVEL_STATES, BOOKING_STATES, ROLES }= require('./constants');
+const { TRAVEL_STATES, BOOKING_STATES, ROLES, LEGAL_STATUS }= require('./constants');
 
 // Get active travels
 router.get('/', (req, res) => {
@@ -281,7 +281,8 @@ router.put('/:id/newBooking', (req, res) => {
     travelId: travels[exists].id,
     boughtAdditionals: booking.boughtAdditionals,
     status: BOOKING_STATES.PENDING,
-    payment: finalBooking.payment
+    payment: finalBooking.payment,
+    legalStatus: LEGAL_STATUS.PENDING
   });
 
   res.send(booking);

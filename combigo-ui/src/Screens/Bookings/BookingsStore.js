@@ -1,5 +1,6 @@
 import { API_BASE } from '../../constants';
 import { getAdditionals } from '../Additionals/additionalsStore';
+import { getUserInfo } from '../Profile/profileStore';
 import { getRoutes } from '../Routes/routesStore';
 
 //Get bookings
@@ -55,4 +56,8 @@ export function getAvailableAditionals() {
 
 export function getAvailableRoutes() {
   return getRoutes(true);
+}
+
+export function getUserDetails(user) {
+  return getUserInfo(user.username);
 }

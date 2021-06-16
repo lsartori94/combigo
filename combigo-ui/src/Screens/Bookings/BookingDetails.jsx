@@ -7,10 +7,13 @@ import {
   Spinner,
   BackButton,
   Button,
-  Dialog
+  Dialog,
+  EditIcon,
+  Text, 
+  Strong
 } from 'evergreen-ui';
 
-import { TRAVEL_STATES } from '../../constants.js';
+import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
 import { useAuth } from "../../utils/use-auth"; 
 
 import {
@@ -66,6 +69,11 @@ export const BookingDetails = () => {
   const ticketCallback = () => {
     history.push(`/bookingDetails/${travelId}/ticket`);
   }
+
+  const declarationCallback = () => {
+    history.push(`/bookingDetails/${travelId}/declaration`);
+  }
+
 
   const promptCancel = () => {
     setShowRefound(true);
@@ -163,13 +171,22 @@ export const BookingDetails = () => {
           disabled
         />
 
+        <TextInputField
+          width={'65vh'}
+          label="Estado de la declaracion jurada"
+          value={details.legalStatus}
+          disabled
+        />
+
         <Pane display="flex" justifyContent="space-around">
+
           <Button 
             marginRight={16} 
-            intent="danger"
-            onClick={promptCancel}
-            disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
-          > Cancelar Reserva
+            intent="none"
+            iconBefore={EditIcon}
+            onClick={declarationCallback}
+            disabled={details.legalStatus !== LEGAL_STATUS.PENDING}
+          > Declaracion jurada
           </Button>
 
           <Button 
@@ -180,6 +197,16 @@ export const BookingDetails = () => {
           </Button>
       
         </Pane>
+
+        <Button 
+            display="flex-end"
+            marginTop={16} 
+            intent="danger"
+            onClick={promptCancel}
+            disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
+            visible={false}
+          > Cancelar Reserva
+          </Button>
       
       </Pane>
     );

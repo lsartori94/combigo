@@ -22,9 +22,9 @@ const BOOKING_STATES = {
 }
 
 const LEGAL_STATUS = {
-  PENDING: "PENDING",
-  APPROVED: "APPROVED",
-  REJECTED: "REJECTED"
+  PENDING: "Pendiente",
+  APPROVED: "Aprobado",
+  REJECTED: "Rechazado"
 }
 
 const VIP_STATUS = {
