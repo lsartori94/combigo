@@ -68,7 +68,7 @@ export const Ticket = () => {
     history.push(`/bookingDetails/${travelId}/${auth.user.username}`);
   };
 
-  //#TODO QR
+  // TODO: QR
   const qrCallback = () => {
     return;
   };
@@ -106,7 +106,7 @@ export const Ticket = () => {
 
     return (
 
-      //#TODO style pane un poco para que parezca un ticket y se diferencie de bookingDetails
+      // TODO: style pane un poco para que parezca un ticket y se diferencie de bookingDetails
       <Pane
         display="flex"
         flexDirection="column"

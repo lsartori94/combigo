@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router';
 import {
   Pane,
-  TextInputField,
   Spinner,
   Button,
   BackButton,
   SavedIcon,
-  Combobox,
-  FormField,
   Checkbox, 
-  Alert,
   Strong,
-  Text
+  Text,
+  Dialog
 } from 'evergreen-ui';
 
 import { getUserDetails, getTravelDetails, getAvailableRoutes } from './BookingsStore'; 
@@ -22,17 +19,12 @@ export const Declaration = () => {
   let { travelId } = useParams();
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
-  const [formDetails, setFormDetails] = useState({
-    dateAndTime: "",
-    passengerId: "",
-    dni: ""
-  });
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [userDetails, setUserDetails] = useState({});
   const [travelDetails, setTravelDetails] = useState({});
-  const [formDirty, setFormDirty] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [showErrors, setShowErrors] = useState(false);
+  const [confirmChecked, setConfirmChecked] = useState(false);
+  const [symptomsChecked, setSymptomsChecked] = useState([]);
+  const [showConfirmAlert, setShowConfirmAlert] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -53,68 +45,15 @@ export const Declaration = () => {
     }
     initialize();
   }, [travelId, auth.user]);
-  
-  useEffect(() => {
-    const auxErrors = {};
-      setFormDirty(true);
-      for (const [key, value] of Object.entries(formDetails)) {
-        switch (key) {
-          default:
-            if (!value) {
-              auxErrors[key] = true;
-            } else {
-              auxErrors[key] = false;
-            }
-            break;
-        }
-      }
-      setErrors({...auxErrors});
-  }, [formDetails]);
 
-  // const inputCallback = (e, name) => {
-  //     const {value} = e.target;
-  //     switch (name) {
-  //       case 'dateAndTime':
-  //         setDetails({...details, dateAndTime: value});
-  //       break;
-  //       case 'route':
-  //         setDetails({...details, route: value});
-  //       break;
-  //       case 'availableAdditionals':
-  //         setDetails({...details, availableAdditionals: value});
-  //       break;
-  //       case 'passengers':
-  //         setDetails({...details, passengers: value});
-  //       break;
-  //       default:
-  //       break;
-  //     }
-  //   }
-  // }
-
-  // const handleCheckbox = (e) => {
-  //   const {checked, id} = e.target;
-  //   let newAdditionals;
-
-  //   if (!checked) {
-  //     newAdditionals = [...details.availableAdditionals.filter(el => el !== id)];
-  //   } else {
-  //     newAdditionals = [...details.availableAdditionals, id];
-  //   }
-  //   setDetails({...details, availableAdditionals: newAdditionals});
-  // }
-
+  // TODO: save
   const saveCallback = async () => {
-    if (Object.values(errors).find(val => val)) {
-      setShowErrors(true);
-      return;
-    } else {
-      setShowErrors(false);
-    }
+    setShowConfirmAlert(false);
+    return;
     try {
       setLoading(true);
       setLoading(false);
-      history.push(history.goBack());
+      history.push(history.push('/bookings'));
     } catch (e) {
       setLoading(false);
     }
@@ -129,25 +68,23 @@ export const Declaration = () => {
     return `${route.origin}/${route.destination}`;
   };
 
-  // const renderCheckboxes = () => {
-  //   return availableAdditionals.map(elem => {
-  //     const checked = details.availableAdditionals.find(
-  //       el => el === elem.id
-  //     );
-  //     return (
-  //       <li key={elem.id}>
-  //         <Checkbox
-  //           label={elem.name}
-  //           marginLeft={10}
-  //           id={elem.id}
-  //           checked={checked ? true : false}
-  //           onChange={e => handleCheckbox(e)}
-  //         />
-  //       </li>)
-  //     });
-  // }
+  
+  const handleCheckbox = (e) => {
+    const {checked, id} = e.target;
+    let newSymptomsChecked;
+    if (!checked) {
+      newSymptomsChecked = [...symptomsChecked.filter(el => el !== id)];
+    } else {
+      newSymptomsChecked = [...symptomsChecked, id];
+    }
+    setSymptomsChecked(newSymptomsChecked);
+  }
 
-  const renderDetails = (formDetails) => {
+  const isChecked = (symptom) => {
+    return symptomsChecked.includes(symptom);
+  }
+
+  const renderDetails = () => {
 
     const options = {
       weekday: "long",
@@ -158,7 +95,7 @@ export const Declaration = () => {
       minute: "numeric",
     };
 
-    //mejorar style
+    // TODO: mejorar style con <hr>
     return (
       <Pane
         marginTop={20}
@@ -190,42 +127,104 @@ export const Declaration = () => {
           <Strong size={400} marginTop={8}>Datos del viaje</Strong>
           <Text>Ruta: {mapRoute()}</Text>
           <Text>Fecha de salida: {new Date(travelDetails.dateAndTime).toLocaleDateString("es-AR", options)}</Text>
+        
+          <Text> --------------------------------------------------------------------------------------------------------------- </Text>
 
+          <Strong size={400} marginTop={8}>¿Presenta actualmente o presentó dentro de los últimos 10 días los siguientes síntomas?</Strong>
+          <Text size={400} marginTop={8} color="green">Marque la opción en caso afirmativo, deje sin marcar en caso negativo.</Text>
           <Checkbox
-            label="Confirmo que los parrafos anteriores son correctos, reflejan la informacion del viaje y la información perteneciente a mi persona. 
-            Declaro que la reserva para el viaje referenciado y su asiento en el mismo es instransferible y procedo a completar la Declaración Jurada."
+            id='fever'
+            label="Fiebre (37.5º o más)"
+            marginBottom={0}
             width={'65vh'}
+            checked={isChecked('fever')}
+            onChange={e => handleCheckbox(e)}
+          >
+          </Checkbox>
+          <Checkbox
+            id='throat'
+            label="Dolor de garganta"
+            marginBottom={0}
+            width={'65vh'}
+            checked={isChecked('throat')}
+            onChange={e => handleCheckbox(e)}
+          >
+          </Checkbox>
+          <Checkbox
+            id='cough'
+            label="Tos"
+            marginBottom={0}
+            width={'65vh'}
+            checked={isChecked('cough')}
+            onChange={e => handleCheckbox(e)}
+          >
+          </Checkbox>
+          <Checkbox
+            id='taste'
+            label="Pérdida del gusto o del olfato"
+            marginBottom={0}
+            width={'65vh'}
+            checked={isChecked('taste')}
+            onChange={e => handleCheckbox(e)}
+          >
+          </Checkbox>
+          <Checkbox
+            id='respiratory'
+            label="Dificultad respiratoria"
+            marginBottom={0}
+            width={'65vh'}
+            checked={isChecked('respiratory')}
+            onChange={e => handleCheckbox(e)}
           >
           </Checkbox>
 
-          <Pane display="flex" flexWrap="wrap">
-            <ul>
-              {/*renderCheckboxes()*/}
-            </ul>
-          </Pane>
-         
-          {/* <FormField
+          <Strong size={400} marginTop={8}>¿En los últimos 10 días estuvo en contacto estrecho con un caso confirmado de COVID-19?</Strong>
+          <Text size={400} marginTop={8} color="green">Marque la opción en caso afirmativo, deje sin marcar en caso negativo.</Text>
+          <Checkbox
+            id='contact'
+            label="Si"
+            marginBottom={0}
             width={'65vh'}
-            required
-            marginBottom={20}
-            label=""
-            description=""
+            checked={isChecked('contact')}
+            onChange={e => handleCheckbox(e)}
           >
-          </FormField> */}
+          </Checkbox>
+
+          <Text> --------------------------------------------------------------------------------------------------------------- </Text>
+
+          <Checkbox
+            label="Confirmo que los datos anteriores son correctos, reflejan la informacion del viaje y la información perteneciente a mi persona. 
+            Declaro que la reserva para el viaje referenciado y su asiento en el mismo es instransferible y este formulario tiene carácter de Declaración Jurada."
+            checked={confirmChecked}
+            width={'65vh'}
+            onChange={e => setConfirmChecked(e.target.checked)}
+           />
 
           
           <Button
             width={'65vh'}
             display="flex"
+            marginTop={20}
             justifyContent="center"
             appearance="primary"
             intent="warning"
+            onClick={() => setShowConfirmAlert(true)}
             iconBefore={SavedIcon}
-            onClick={() => saveCallback()}
-            disabled={!formDirty}
+            disabled={!confirmChecked}
           >
-            Guardar y enviar
+            Aceptar y enviar
           </Button>
+
+          <Dialog
+            isShown={showConfirmAlert}
+            title="Confirmar envío de declaracion jurada"
+            onCloseComplete={() => saveCallback()}
+            confirmLabel="Confirmar"
+            hasCancel={false}
+            intent="success"
+          > {`En caso de haber marcado afirmativas 2 respuestas o más, sus reservas y compras de los próximos 15 días serán canceladas. 
+              ¿Confirmar envío de declaración jurada?`}
+          </Dialog>
 
       </Pane>
     );
@@ -234,7 +233,7 @@ export const Declaration = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderDetails(formDetails) }
+      { !loading &&  renderDetails() }
     </div>
   );
 };
