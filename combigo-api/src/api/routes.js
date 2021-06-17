@@ -167,11 +167,11 @@ router.delete('/:id', (req, res) => {
   // cancelar todos los viajes
   function cancelTravelBookings(travel) {
     travel.passengers.forEach(p => {
-      p.bookingStatus = BOOKING_STATES.CANCELED;
+      p.bookingStatus = BOOKING_STATES.CANCELED; //sacar esto
       users.find(
         e => e.id === p.id
       ).travelHistory.find(
-        t => t.travelId === travel.id
+        t => (t.travelId === travel.id) && (t.status === BOOKING_STATES.PENDING)
       ).status = BOOKING_STATES.CANCELED;
     });
   }

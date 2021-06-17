@@ -31,7 +31,7 @@ export async function getAllTravels() {
   return result;
 }
 
-export async function cancelBooking(travelId, userId, bookingId) {
+export async function cancelBooking(travelId, user, bookingId) {
   const response = await fetch(
     `${API_BASE}/travels/${travelId}/cancelBooking`,
     {
@@ -40,7 +40,7 @@ export async function cancelBooking(travelId, userId, bookingId) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user: userId, idBooking: bookingId}) //Cambiado para el booking id
+      body: JSON.stringify({user: user.id, idBooking: bookingId}) //Cambiado para el booking id
     }
   );
   if (!response.ok) {

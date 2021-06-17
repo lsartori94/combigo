@@ -109,10 +109,10 @@ function App() {
             <Route path="/bookings">
               <Bookings />
             </Route>
-            <Route path="/bookingDetails/:travelId/ticket"> 
+            <Route path="/bookingDetails/:travelId/:bookingId/ticket"> 
               <Ticket />
             </Route>
-            <Route path="/bookingDetails/:travelId/declaration"> 
+            <Route path="/bookingDetails/:travelId/:bookingId/declaration"> 
               <Declaration />
             </Route>
             <Route path="/bookingDetails/:travelId/:bookingId"> 

@@ -54,7 +54,7 @@ let users = [
     travelHistory: [
       {
         travelId: 'CGOT1',
-        bookingId: 'B0', //Agregado para bookingId
+        bookingId: 'CGOB0', //Agregado para bookingId
         legalStatus: LEGAL_STATUS.PENDING,
         boughtAdditionals: [ 
           'CGOA1',
@@ -65,7 +65,7 @@ let users = [
       },
       {
         travelId: 'CGOT2',
-        bookingId: 'B1',
+        bookingId: 'CGOB1',
         legalStatus: LEGAL_STATUS.APPROVED,
         boughtAdditionals: [],
         status: BOOKING_STATES.COMPLETED,
@@ -73,7 +73,7 @@ let users = [
       },
       {
         travelId: 'CGOT3',
-        bookingId: 'B2',
+        bookingId: 'CGOB2',
         legalStatus: LEGAL_STATUS.APPROVED,
         boughtAdditionals: [],
         status: BOOKING_STATES.COMPLETED,
@@ -81,7 +81,7 @@ let users = [
       },
       {
         travelId: 'CGOT4',
-        bookingId: 'B3',
+        bookingId: 'CGOB3',
         legalStatus: LEGAL_STATUS.APPROVED,
         boughtAdditionals: [],
         status: BOOKING_STATES.ACTIVE,

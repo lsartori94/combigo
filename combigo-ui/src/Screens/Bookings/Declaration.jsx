@@ -16,7 +16,7 @@ import { getUserDetails, getTravelDetails, getAvailableRoutes } from './Bookings
 import { useAuth } from "../../utils/use-auth"; 
 
 export const Declaration = () => {
-  let { travelId } = useParams();
+  let { travelId, bookingId } = useParams();
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [availableRoutes, setAvailableRoutes] = useState([]);
