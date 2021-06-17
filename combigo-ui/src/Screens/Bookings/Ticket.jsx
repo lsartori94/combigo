@@ -24,7 +24,7 @@ import {
 } from "./BookingsStore";
 
 export const Ticket = () => {
-  let { travelId } = useParams();
+  let { travelId, bookingId } = useParams();
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [bookDetails, setBookDetails] = useState({
@@ -51,7 +51,7 @@ export const Ticket = () => {
     async function initialize() {
       try {
         const booksResponse = await getBookings(auth.user);
-        const book = booksResponse.find((b) => b.travelId === travelId);
+        const book = booksResponse.find((b) => b.bookingId === bookingId);
         setNoTravel(false);
         setBookDetails(book);
       } catch (e) {
@@ -62,10 +62,10 @@ export const Ticket = () => {
     }
     initialize();
     initializeExtras();
-  }, [travelId]); // eslint-disable-line
+  }, [travelId, bookingId]); // eslint-disable-line
 
   const backCallback = () => {
-    history.push(`/bookingDetails/${travelId}/${auth.user.username}`);
+    history.push(history.goBack());
   };
 
   // TODO: QR
@@ -160,7 +160,7 @@ export const Ticket = () => {
 
         {(bookDetails.status !== TRAVEL_STATES.NOT_STARTED) && (bookDetails.status !== TRAVEL_STATES.IN_PROGRESS) && (
           <InlineAlert intent="none">
-            El viaje ya finalizó o fue cancelado.
+            El viaje ya finalizó o la reserva fue cancelada.
           </InlineAlert> )}
       </Pane>
     );

@@ -221,11 +221,11 @@ router.delete('/:id', (req, res) => {
   travels[index].active = false;
   travels[index].status = TRAVEL_STATES.CANCELED;
   travels[index].passengers.forEach(p =>{
-    p.bookingStatus = BOOKING_STATES.CANCELED;
+    p.bookingStatus = BOOKING_STATES.CANCELED; //sacar esto
     users.find(
       e => e.id === p.id
     ).travelHistory.find(
-      t => t.travelId === travels[index].id
+      t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
     ).status = BOOKING_STATES.CANCELED;
   });
 
@@ -279,7 +279,7 @@ router.put('/:id/newBooking', (req, res) => {
   travels[exists].passengers.push(finalBooking);
   users[userExists].travelHistory.push({
     travelId: travels[exists].id,
-    bookingId: `B${users[userExists].travelHistory.length + 1}`, //Agregado para el bookingId
+    bookingId: `CGOB${users[userExists].travelHistory.length + 1}`, //Agregado para el bookingId
     boughtAdditionals: booking.boughtAdditionals,
     status: BOOKING_STATES.PENDING,
     payment: finalBooking.payment,
@@ -323,6 +323,10 @@ router.put('/:id/cancelBooking', (req, res) => {
   const now = Date.now();
   const diff = 48 * 60 * 60 * 1000;
   const userI = users.findIndex(u => u.id === user);
+
+  if (userI === -1) {
+    return res.status(405).send(`El usuario no existe`);
+  }
 
   // if (ms - now >= diff) {
   //   // mas de 48hs

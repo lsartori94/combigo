@@ -67,11 +67,11 @@ export const BookingDetails = () => {
   }
 
   const ticketCallback = () => {
-    history.push(`/bookingDetails/${travelId}/ticket`);
+    history.push(`/bookingDetails/${travelId}/${bookingId}/ticket`);
   }
 
   const declarationCallback = () => {
-    history.push(`/bookingDetails/${travelId}/declaration`);
+    history.push(`/bookingDetails/${travelId}/${bookingId}/declaration`);
   }
 
 
@@ -82,7 +82,7 @@ export const BookingDetails = () => {
   const fullRefoundCallback = async () => {
     try {
       setLoading(true);
-      await cancelBooking(travelId, auth.user.id, bookingId); //cambiado para el bookingId
+      await cancelBooking(travelId, auth.user, bookingId); //cambiado para el bookingId
       history.push('/bookings');
     } catch (e) {
       console.log(e);
@@ -187,7 +187,7 @@ export const BookingDetails = () => {
             intent="none"
             iconBefore={EditIcon}
             onClick={declarationCallback}
-            disabled={details.legalStatus !== LEGAL_STATUS.PENDING && details.status !== TRAVEL_STATES.NOT_STARTED}
+            disabled={details.legalStatus !== LEGAL_STATUS.PENDING || details.status !== TRAVEL_STATES.NOT_STARTED}
           > Declaracion jurada
           </Button>
 
