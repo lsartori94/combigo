@@ -279,6 +279,7 @@ router.put('/:id/newBooking', (req, res) => {
   travels[exists].passengers.push(finalBooking);
   users[userExists].travelHistory.push({
     travelId: travels[exists].id,
+    bookingId: `B${users[userExists].travelHistory.length + 1}`, //Agregado para el bookingId
     boughtAdditionals: booking.boughtAdditionals,
     status: BOOKING_STATES.PENDING,
     payment: finalBooking.payment,
@@ -291,7 +292,7 @@ router.put('/:id/newBooking', (req, res) => {
 // Cancel booking
 router.put('/:id/cancelBooking', (req, res) => {
   const {id} = req.params;
-  const {user} = req.body;
+  const {user, idBooking} = req.body; //Cambio para bookingId
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -323,13 +324,21 @@ router.put('/:id/cancelBooking', (req, res) => {
   const diff = 48 * 60 * 60 * 1000;
   const userI = users.findIndex(u => u.id === user);
 
+  // if (ms - now >= diff) {
+  //   // mas de 48hs
+  //   users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.FULL_REFUND;
+  // } else {
+  //   // menos de 48hs
+  //   users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.HALF_REFUND;
+  // } //Cambio para BookingId
+
   if (ms - now >= diff) {
     // mas de 48hs
-    users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.FULL_REFUND;
+    users[userI].travelHistory.find(t => t.bookingId === idBooking).status = BOOKING_STATES.FULL_REFUND;
   } else {
     // menos de 48hs
-    users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.HALF_REFUND;
-  }
+    users[userI].travelHistory.find(t => t.bookingId === idBooking).status = BOOKING_STATES.HALF_REFUND;
+  } 
   
   const newTravel = Object.assign(
     travels[exists],

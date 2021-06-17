@@ -73,11 +73,11 @@ export const Bookings = () => {
     return color;
   };
   
-  const renderRowMenu = (travelId) => {
+  const renderRowMenu = (travelId, bookingId) => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/bookingDetails/${travelId}/${auth.user.username}`}><Menu.Item>Detalles</Menu.Item></Link>
+          <Link to={`/bookingDetails/${travelId}/${bookingId}`}><Menu.Item>Detalles</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
@@ -113,7 +113,7 @@ export const Bookings = () => {
           </Table.Head>
           <Table.Body height={400}>
             {bookings.map(booking => (
-              <Table.Row key={booking.travelId}>
+              <Table.Row key={booking.bookingId}>
                 <Table.TextCell>
                   {travels.length && new Date(travels.find(trv => trv.id === booking.travelId).dateAndTime).toLocaleDateString('es-AR', options)}
                 </Table.TextCell>
@@ -128,7 +128,7 @@ export const Bookings = () => {
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(booking.travelId)}
+                    content={renderRowMenu(booking.travelId, booking.bookingId)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />

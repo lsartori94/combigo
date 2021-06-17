@@ -25,6 +25,7 @@ import {
 
 export const BookingDetails = () => {
   let { travelId } = useParams();
+  let { bookingId } = useParams(); //Cambiado para el bookingId
   const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
@@ -49,7 +50,7 @@ export const BookingDetails = () => {
     async function initialize() {
       try {
         const booksResponse = await getBookings(auth.user);
-        const book = booksResponse.find(b => b.travelId === travelId)
+        const book = booksResponse.find(b => b.bookingId === bookingId) //Cambiado para el bookingId
         setNoTravel(false);
         setDetails(book);
       } catch (e) {
@@ -82,7 +83,7 @@ export const BookingDetails = () => {
   const fullRefoundCallback = async () => {
     try {
       setLoading(true);
-      await cancelBooking(travelId, auth.user.id);
+      await cancelBooking(travelId, auth.user.id, bookingId); //cambiado para el bookingId
       history.push('/bookings');
     } catch (e) {
       console.log(e);

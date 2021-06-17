@@ -111,7 +111,7 @@ function App() {
             <Route path="/bookingDetails/:travelId/declaration"> 
               <Declaration />
             </Route>
-            <Route path="/bookingDetails/:travelId/:uname"> 
+            <Route path="/bookingDetails/:travelId/:bookingId"> 
               <BookingDetails />
             </Route>
             <Route path="/additionals/:addId">
