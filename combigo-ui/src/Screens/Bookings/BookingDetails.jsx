@@ -8,9 +8,7 @@ import {
   BackButton,
   Button,
   Dialog,
-  EditIcon,
-  Text, 
-  Strong
+  EditIcon
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -31,7 +29,8 @@ export const BookingDetails = () => {
   const [details, setDetails] = useState({
     travelId: "",
     status: "",
-    boughtAdditionals: [],
+    legalStatus: "",
+    boughtAdditionals: []
   });
  
   const [availableRoutes, setAvailableRoutes] = useState([]);
@@ -181,12 +180,14 @@ export const BookingDetails = () => {
 
         <Pane display="flex" justifyContent="space-around">
 
+          {/* TODO: habilitar declaracion sólo 1 hora antes y hasta la hora de salida */}
+
           <Button 
             marginRight={16} 
             intent="none"
             iconBefore={EditIcon}
             onClick={declarationCallback}
-            disabled={details.legalStatus !== LEGAL_STATUS.PENDING}
+            disabled={details.legalStatus !== LEGAL_STATUS.PENDING && details.status !== TRAVEL_STATES.NOT_STARTED}
           > Declaracion jurada
           </Button>
 
