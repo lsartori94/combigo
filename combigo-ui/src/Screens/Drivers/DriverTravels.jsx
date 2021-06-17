@@ -59,7 +59,7 @@ export const DriverTravels = () => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/travels/${travelId}`}><Menu.Item>Editar...</Menu.Item></Link>
+          <Link to={``}><Menu.Item>Ver detalles...</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
