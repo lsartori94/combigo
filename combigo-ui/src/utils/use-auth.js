@@ -84,6 +84,10 @@ function useProvideAuth() {
     return user && user.role === ROLES.CLIENT; //para las reservas
   }
 
+  const isDriver = () => {
+    return user && user.role === ROLES.DRIVER; //para las reservas
+  }
+
   // Subscribe to user on mount
   // Because this sets state in the callback it will cause any ...
   // ... component that utilizes this hook to re-render with the ...
@@ -105,6 +109,7 @@ function useProvideAuth() {
     signup,
     signout,
     isAdmin,
-    isClient
+    isClient,
+    isDriver
   };
 }

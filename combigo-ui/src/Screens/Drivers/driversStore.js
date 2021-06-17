@@ -83,3 +83,13 @@ export async function saveUserDetails(user) {
   const result = await response.json();
   return result;
 }
+
+export async function getDriverTravels( driverId ) {
+  const response = await fetch(`${API_BASE}/travels`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+
+  return result.filter( trav => trav.driver === driverId );
+}

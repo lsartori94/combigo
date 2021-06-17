@@ -63,9 +63,6 @@ export const Bookings = () => {
       case TRAVEL_STATES.IN_PROGRESS:
         color = "green";
         break;
-      case TRAVEL_STATES.IN_PROGRESS:
-        color = "green";
-      break;
       default:
         color = "neutral";
     }

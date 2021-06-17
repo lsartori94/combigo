@@ -109,6 +109,14 @@ export const Navigation = () => {
                 </li>
               </>
             )}
+            {auth.user && auth.isDriver() && ( //Esto es para ver los viajes de un chofer
+              <>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/driverTravels">Mis viajes</Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </Pane>
