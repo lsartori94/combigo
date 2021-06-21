@@ -138,7 +138,7 @@ function App() {
         </div>
       </Router>
     </ProvideAuth>
-  ); //Los usernames son unicos no?
+  );
 }
 
 export default App;

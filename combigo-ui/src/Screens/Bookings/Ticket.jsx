@@ -160,7 +160,7 @@ export const Ticket = () => {
 
         {(bookDetails.status !== TRAVEL_STATES.NOT_STARTED) && (bookDetails.status !== TRAVEL_STATES.IN_PROGRESS) && (
           <InlineAlert intent="none">
-            El viaje ya finalizó o la reserva fue cancelada.
+            La reserva se encuentra finalizada. 
           </InlineAlert> )}
       </Pane>
     );

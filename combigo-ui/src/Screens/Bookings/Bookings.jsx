@@ -55,7 +55,6 @@ export const Bookings = () => {
 
   const decideStatusColor = (status) => {
     let color = "";
-    console.log(status);
     switch(status) {
       case TRAVEL_STATES.NOT_STARTED:
         color = "blue";
@@ -66,7 +65,6 @@ export const Bookings = () => {
       default:
         color = "neutral";
     }
-    console.log(color);
     return color;
   };
   
