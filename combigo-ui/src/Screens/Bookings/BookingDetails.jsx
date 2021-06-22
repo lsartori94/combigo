@@ -8,7 +8,8 @@ import {
   BackButton,
   Button,
   Dialog,
-  EditIcon
+  EditIcon,
+  Badge
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -179,8 +180,6 @@ export const BookingDetails = () => {
         />
 
         <Pane display="flex" justifyContent="space-around">
-
-          {/* TODO: habilitar declaracion sólo 1 hora antes y hasta la hora de salida */}
 
           <Button 
             marginRight={16} 

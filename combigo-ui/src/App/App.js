@@ -33,6 +33,7 @@ import { Ticket } from '../Screens/Bookings/Ticket';
 import { Declaration } from '../Screens/Bookings/Declaration'; 
 import TravelListing from "../Screens/TravelListing/TravelListing";
 import Checkout from "../Screens/Checkout/Checkout";
+import { Scanner } from "../Screens/Scanner/Scanner";
 
 function App() {
   useEffect(() => {
@@ -134,6 +135,9 @@ function App() {
             <Route path="/checkout/:travelId">
               <Checkout />
             </Route>
+            <Route path="/scanner">
+              <Scanner />
+            </Route>
             <Route path="/">
               <Home />
             </Route>
@@ -142,7 +146,7 @@ function App() {
         </div>
       </Router>
     </ProvideAuth>
-  ); //Los usernames son unicos no?
+  );
 }
 
 export default App;

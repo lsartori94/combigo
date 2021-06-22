@@ -222,7 +222,7 @@ let routes = [
 let travels = [
   {
     id: 'CGOT1',
-    dateAndTime: '2021-06-10T08:30',
+    dateAndTime: '2021-06-21T21:00',
     route: 'CGOR1',
     stock: 1,
     passengers: [
@@ -373,4 +373,7 @@ let additionals = [
   }
 ];
 
-module.exports = {users, vehicles, additionals, routes, travels};
+// lista de userIds alguna vez rechazados
+let blacklist = [];
+
+module.exports = {users, vehicles, additionals, routes, travels, blacklist};

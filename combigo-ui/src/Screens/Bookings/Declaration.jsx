@@ -9,10 +9,11 @@ import {
   Checkbox, 
   Strong,
   Text,
-  Dialog
+  Dialog,
+  Alert
 } from 'evergreen-ui';
 
-import { getUserDetails, getTravelDetails, getAvailableRoutes } from './BookingsStore'; 
+import { getUserDetails, getTravelDetails, getAvailableRoutes, updateLegalStatus } from './BookingsStore'; 
 import { useAuth } from "../../utils/use-auth"; 
 
 export const Declaration = () => {
@@ -46,16 +47,16 @@ export const Declaration = () => {
     initialize();
   }, [travelId, auth.user]);
 
-  // TODO: save
-  const saveCallback = async () => {
-    setShowConfirmAlert(false);
-    return;
+  const saveCallback = async () => {    
     try {
       setLoading(true);
-      setLoading(false);
+      await updateLegalStatus(travelId, symptomsChecked, auth.user, bookingId.asString); //asString ????
       history.push(history.push('/bookings'));
     } catch (e) {
+      console.log(e);
+    } finally {
       setLoading(false);
+      setShowConfirmAlert(false);
     }
   }
 
@@ -84,6 +85,14 @@ export const Declaration = () => {
     return symptomsChecked.includes(symptom);
   }
 
+  const moreThanAnHourLeft = () => {
+    const travelDate = new Date(travelDetails.dateAndTime);
+    const now = new Date();
+    let hoursLeft = Math.floor((travelDate - now) / (1000*60*60));
+    if (hoursLeft >= 1) return true;
+    return false;
+  };
+
   const renderDetails = () => {
 
     const options = {
@@ -95,7 +104,6 @@ export const Declaration = () => {
       minute: "numeric",
     };
 
-    // TODO: mejorar style con <hr>
     return (
       <Pane
         marginTop={20}
@@ -113,6 +121,13 @@ export const Declaration = () => {
         >
           Volver
         </BackButton>
+
+        {(moreThanAnHourLeft() && 
+          <Alert 
+            intent="danger" 
+            appearance='card'
+            marginTop={10}> Aún no se permite llenar la declaracion jurada, reinténtelo dentro de la hora antes del viaje.
+          </Alert>)}
 
           <Strong size={600} marginTop={8}>DECLARACIÓN JURADA DE SALUD- COVID19</Strong>
 
@@ -134,7 +149,7 @@ export const Declaration = () => {
           <Text size={400} marginTop={8} color="green">Marque la opción en caso afirmativo, deje sin marcar en caso negativo.</Text>
           <Checkbox
             id='fever'
-            label="Fiebre (37.5º o más)"
+            label="Fiebre (38º o más)"
             marginBottom={0}
             width={'65vh'}
             checked={isChecked('fever')}
@@ -210,10 +225,17 @@ export const Declaration = () => {
             intent="warning"
             onClick={() => setShowConfirmAlert(true)}
             iconBefore={SavedIcon}
-            disabled={!confirmChecked}
+            disabled={moreThanAnHourLeft() || !confirmChecked}
           >
             Aceptar y enviar
           </Button>
+
+          {(moreThanAnHourLeft() && 
+          <Alert 
+            intent="danger" 
+            appearance='card'
+            marginTop={10}> Aún no se permite llenar la declaracion jurada, reinténtelo dentro de la hora antes del viaje.
+          </Alert>)}
 
           <Dialog
             isShown={showConfirmAlert}
@@ -222,7 +244,7 @@ export const Declaration = () => {
             confirmLabel="Confirmar"
             hasCancel={false}
             intent="success"
-          > {`En caso de haber marcado afirmativas 2 respuestas o más, sus reservas y compras de los próximos 15 días serán canceladas. 
+          > {`Sus reservas y compras de los próximos 15 días serán canceladas si se presenta como caso sospechoso. 
               ¿Confirmar envío de declaración jurada?`}
           </Dialog>
 

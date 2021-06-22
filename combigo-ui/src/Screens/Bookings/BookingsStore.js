@@ -50,6 +50,27 @@ export async function cancelBooking(travelId, user, bookingId) {
   return result;
 }
 
+export async function updateLegalStatus(travelId, symptoms, user, bookingId) {
+  const response = await fetch(
+    `${API_BASE}/travels/${travelId}/updateLegalStatus`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({symptoms, userId: user.id, bookingId})
+    }
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
+
+
 export function getAvailableAditionals() {
   return getAdditionals();
 }

@@ -12,21 +12,22 @@ import {
   InlineAlert
 } from "evergreen-ui";
 import * as QrCode from 'qrcode.react';
+import QrReader from 'react-qr-reader';
 
 import { TRAVEL_STATES } from '../../constants.js';
 import { useAuth } from "../../utils/use-auth";
 
-import {
-  getTravelDetails,
-  getAvailableAditionals,
-  getAvailableRoutes,
-  getBookings,
-} from "./BookingsStore";
+// import {
+//   getTravelDetails,
+//   getAvailableAditionals,
+//   getAvailableRoutes,
+//   getBookings,
+// } from "./BookingsStore";
 
-export const Ticket = () => {
+export const Scanner = () => {
   let { travelId, bookingId } = useParams();
   const auth = useAuth();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [bookDetails, setBookDetails] = useState({
     travelId: "",
     status: "",
@@ -37,32 +38,33 @@ export const Ticket = () => {
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
   const [travel, setTravel] = useState([]);
-  const [qrStr, setQrStr] = useState('')
+  const [qrStr, setQrStr] = useState('');
+  const [qrResult, setQrResult] = useState(null)
   const history = useHistory();
 
   useEffect(() => {
-    async function initializeExtras() {
-      const additionals = await getAvailableAditionals();
-      const routes = await getAvailableRoutes();
-      const travelResponse = await getTravelDetails(travelId);
-      setAvailableAdditionals(additionals);
-      setAvailableRoutes(routes);
-      setTravel(travelResponse);
-    }
-    async function initialize() {
-      try {
-        const booksResponse = await getBookings(auth.user);
-        const book = booksResponse.find((b) => b.bookingId === bookingId);
-        setNoTravel(false);
-        setBookDetails(book);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    initialize();
-    initializeExtras();
+    // async function initializeExtras() {
+    //   const additionals = await getAvailableAditionals();
+    //   const routes = await getAvailableRoutes();
+    //   const travelResponse = await getTravelDetails(travelId);
+    //   setAvailableAdditionals(additionals);
+    //   setAvailableRoutes(routes);
+    //   setTravel(travelResponse);
+    // }
+    // async function initialize() {
+    //   try {
+    //     const booksResponse = await getBookings(auth.user);
+    //     const book = booksResponse.find((b) => b.bookingId === bookingId);
+    //     setNoTravel(false);
+    //     setBookDetails(book);
+    //   } catch (e) {
+    //     console.error(e);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
+    // initialize();
+    // initializeExtras();
   }, [travelId, bookingId]); // eslint-disable-line
 
   const backCallback = () => {
@@ -94,6 +96,16 @@ export const Ticket = () => {
   function travelNotValid(bookDetails) {
     return (bookDetails.status !== TRAVEL_STATES.NOT_STARTED) && (bookDetails.status !== TRAVEL_STATES.IN_PROGRESS);
   }
+
+  const handleError = err => {
+    console.error(err);
+  };
+
+  const handleScan = data => {
+    if (data) {
+      setQrResult(JSON.parse(data));
+    }
+  };
 
   const renderDetails = (bookDetails) => {
     if (noTravel) {
@@ -187,6 +199,13 @@ export const Ticket = () => {
     <div>
       {loading && <Spinner />}
       {!loading && renderDetails(bookDetails)}
+      <QrReader
+            delay={300}
+            onError={handleError}
+            onScan={handleScan}
+            style={{ width: '100%' }}
+          />
+          <p>{qrResult}</p>
     </div>
   );
 };

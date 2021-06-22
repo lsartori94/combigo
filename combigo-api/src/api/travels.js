@@ -5,7 +5,7 @@ const router = express.Router();
 const ID_BASE = 'CGOT';
 const TICKET_BASE = 'CGOTKT';
 
-const { travels, routes, users, vehicles } = require('./store');
+const { travels, routes, users, vehicles, blacklist} = require('./store');
 const { TRAVEL_STATES, BOOKING_STATES, ROLES, LEGAL_STATUS }= require('./constants');
 
 // Get active travels
@@ -299,7 +299,7 @@ router.put('/:id/cancelBooking', (req, res) => {
   }
 
   const exists = travels.findIndex(travel => travel.id === id);
-  console.log(travels[exists].status);
+
   if (exists === -1) {
     return res.status(409).send(`El viaje no existe`);
   }
@@ -388,6 +388,66 @@ router.get('/:id/validAssigns', (req, res) => {
   res.json(validAssigns);
 });
 
+// Update a passenger legal status (declaration)
+router.put('/:id/updateLegalStatus', (req, res) => {
+  const {id} = req.params;
+  const {symptoms, userId, bookingId} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
+    return res.status(405).send(`Solo se puede llenar la declaracion de un viaje pendiente`);
+  }
+
+  const userExists = users.findIndex(user => user.id === userId);
+  if (userExists === -1) {
+    return res.status(405).send(`El usuario no existe`);
+  }
+
+  const passengerExists = travels[exists].passengers.findIndex(pas => pas.id === userId);
+  if (passengerExists === -1) {
+    return res.status(405).send(`El pasajero no existe`);
+  }
+
+  const bookingExists = users[userExists].travelHistory.findIndex(book => book.id == bookingId);
+  if (bookingExists === -1) {
+    return res.status(405).send(`La reserva no existe`);
+  }
+
+  let rejected = false;
+  if (symptoms.includes("fever") || symptoms.length >= 2) {
+    rejected = true;
+  };
+  
+  if (rejected) {
+    travels[exists].passengers[passengerExists].legalStatus = LEGAL_STATUS.REJECTED;
+    users[userExists].travelHistory[bookingExists].legalStatus = LEGAL_STATUS.REJECTED;
+
+    // TODO: cancelar además sus viajes y compras proximos 15 dias (usando insideFifteenDays())
+    travels[exists].passengers[passengerExists].status = BOOKING_STATES.CANCELED;
+    users[userExists].travelHistory[bookingExists].status = BOOKING_STATES.CANCELED
+
+    blacklist.push(userId); //blacklist
+
+  } else {
+    travels[exists].passengers[passengerExists].legalStatus = LEGAL_STATUS.APPROVED;
+    users[userExists].travelHistory[bookingExists].legalStatus = LEGAL_STATUS.APPROVED;
+  };
+  
+  res.send(travels[exists]);
+});
+
 // Utilities
 function datesOverlap(thisTravel, otherTravel) {
   if (otherTravel.id === thisTravel.id)
@@ -406,5 +466,15 @@ function datesOverlap(thisTravel, otherTravel) {
     return true;
   return false;
 };
+
+function insideFifteenDays(datetime) {
+  let today = new Date();
+  let travelDate = new Date(datetime);
+
+  let days = Math.floor((travelDate - today) / (1000*60*60*24));
+  if (days <= 15) return true;
+  return false;
+};
+
 
 module.exports = router;
