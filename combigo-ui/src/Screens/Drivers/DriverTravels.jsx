@@ -8,25 +8,30 @@ import {
   IconButton,
   Spinner,
   MoreIcon,
-  PlusIcon,
   Pane,
 } from 'evergreen-ui';
 
-import { getDriverTravels } from './driversStore';
+import { getDriverTravels, getAvailableVehicles, getAvailableRoutes } from './driversStore';
 import { useAuth } from "../../utils/use-auth";
 //import {TRAVEL_STATES} from '../../constants'
 
 export const DriverTravels = () => {
   const auth = useAuth();
   const [travels, setTravels] = useState([]);
+  const [routes, setRoutes] = useState([]);
+  //const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const history = useHistory();
+  //const history = useHistory();
 
   useEffect(() => {
     async function initialize() {
       try {
+        const routesResponse = await getAvailableRoutes();
         const response = await getDriverTravels( auth.user.id );
+        //const vehiclesResponse = await getAvailableVehicles();
         setTravels(response);
+        setRoutes(routesResponse);
+        //setVehicles(vehiclesResponse);
       } catch (e) {
         console.error(e);
       } finally {
@@ -34,24 +39,10 @@ export const DriverTravels = () => {
       }
     }
     initialize();
-  });
-
-  const addCallback = () => {
-    history.push('/travels/add');
-  }
+  },[auth.user]);
 
   const renderPlaceholder = () => (
-    <div style={{padding: "30px"}}>No hay Viajes
-      <IconButton
-          alignSelf="flex-end"
-          marginLeft="20px"
-          appearance="minimal"
-          padding="30px"
-          icon={PlusIcon}
-          iconSize={40}
-          intent="success"
-          onClick={() => addCallback()}
-        />
+    <div style={{padding: "30px"}}>No posee viajes asignados activos
     </div>
   );
   
@@ -59,7 +50,7 @@ export const DriverTravels = () => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={``}><Menu.Item>Ver detalles...</Menu.Item></Link>
+          <Link to={`/driverTravels/passengers/${travelId}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
@@ -84,7 +75,10 @@ export const DriverTravels = () => {
               Fecha
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Ruta
+              Origen
+            </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
+              Destino
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
               Vehiculo
@@ -104,10 +98,14 @@ export const DriverTravels = () => {
                   
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.route}
+                  {routes.find(rou => rou.travels.includes(travel.id)).origin}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.vehicle|| "No asignado"}
+                  {routes.find(rou =>rou.travels.includes(travel.id)).destination}
+                </Table.TextCell>
+                <Table.TextCell>
+                  {/* { vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado"} */
+                  travel.vehicle}
                 </Table.TextCell>
                 <Table.TextCell>
                   {travel.status}
@@ -127,15 +125,6 @@ export const DriverTravels = () => {
             ))}
           </Table.Body>
         </Table>
-        <IconButton
-          alignSelf="flex-end"
-          marginRight="30px"
-          appearance="minimal"
-          icon={PlusIcon}
-          iconSize={40}
-          intent="success"
-          onClick={() => addCallback()}
-        />
       </Pane>)
   };
 

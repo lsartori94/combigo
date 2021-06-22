@@ -17,6 +17,7 @@ import { Vehicles } from '../Screens/Vehicles/Vehicles';
 import { Drivers } from '../Screens/Drivers/Drivers';
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';
 import { DriverTravels } from '../Screens/Drivers/DriverTravels'; 
+import { ListPassengers } from '../Screens/Drivers/ListPassengers'; 
 import { RouteDetails } from '../Screens/Routes/RouteDetails';
 import { Routes } from '../Screens/Routes/Routes';
 import { Travels } from '../Screens/Travels/Travels';
@@ -78,6 +79,9 @@ function App() {
             </Route>
             <Route path="/drivers">
               <Drivers />
+            </Route>
+            <Route path="/driverTravels/passengers/:id">
+              <ListPassengers />
             </Route>
             <Route path="/driverTravels">
               <DriverTravels />
