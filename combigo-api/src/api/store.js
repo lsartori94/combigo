@@ -236,6 +236,7 @@ let travels = [
           'CGOA1',
           'CGOA3',
         ],
+        accepted: false,
       }
     ],
     driver: 'CGOU1',
@@ -261,6 +262,7 @@ let travels = [
         creditCard: '4444444444444444',
         payment: 160,
         boughtAdditionals: [],
+        accepted: false,
       }
     ],
     driver: 'CGOU1',
@@ -287,6 +289,7 @@ let travels = [
         creditCard: '4444444444444444',
         payment: 200,
         boughtAdditionals: [],
+        accepted: false,
       }
     ],
     driver: 'CGOU1',
@@ -313,6 +316,7 @@ let travels = [
         creditCard: '4444444444444444',
         payment: 120,
         boughtAdditionals: [],
+        accepted: false,
       }
     ],
     driver: 'CGOU1',

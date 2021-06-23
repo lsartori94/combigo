@@ -448,6 +448,49 @@ router.put('/:id/updateLegalStatus', (req, res) => {
   res.send(travels[exists]);
 });
 
+//Accept passenger on a trip
+router.put('/:id/acceptPassenger', (req, res) => {
+  const {id} = req.params;
+  const {userId} = req.body;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === id);
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
+    return res.status(405).send(`Solo se puede llenar la declaracion de un viaje pendiente`);
+  }
+
+  const userExists = users.findIndex(user => user.id === userId);
+  if (userExists === -1) {
+    return res.status(405).send(`El usuario no existe`);
+  }
+
+  const passengerExists = travels[exists].passengers.findIndex(pas => pas.id === userId);
+  if (passengerExists === -1) {
+    return res.status(405).send(`El pasajero no existe`);
+  }
+
+  const bookingExists = users[userExists].travelHistory.findIndex(book => book.id == bookingId);
+  if (bookingExists === -1) {
+    return res.status(405).send(`La reserva no existe`);
+  }
+  
+
+  travels[exists].passengers[passengerExists].accepted = true;
+
+  res.send(travels[exists]);
+});
+
 // Utilities
 function datesOverlap(thisTravel, otherTravel) {
   if (otherTravel.id === thisTravel.id)

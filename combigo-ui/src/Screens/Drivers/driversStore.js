@@ -114,3 +114,31 @@ export async function getTravelDetails(travelId) {
   const result = await response.json();
   return result;
 }
+
+export async function getClients() {
+  const response = await fetch(`${API_BASE}/users?role=client`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
+export async function acceptPassenger(travelId, userId) {
+  const response = await fetch(
+    `${API_BASE}/travels/${travelId}/acceptPassenger`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({userId})
+    }
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}

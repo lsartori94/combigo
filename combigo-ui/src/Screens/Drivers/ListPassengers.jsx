@@ -19,19 +19,22 @@ import {
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
 
-import { getTravelDetails } from './driversStore';
+import { getTravelDetails, getClients, acceptPassenger } from './driversStore';
 
 export const ListPassengers = () => {
   let { travelId } = useParams();
   const [loading, setLoading] = useState(true);
   const [travel, setTravel] = useState([]);
+  const [clients, setClients] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
     async function initialize() {
       try {
         const travelResponse = await getTravelDetails(travelId);
+        const clientsResponse = await getClients();
         setTravel(travelResponse);
+        setClients(clientsResponse);
       } catch (e) {
         console.error(e);
       } finally {
@@ -45,14 +48,19 @@ export const ListPassengers = () => {
     history.push('/driverTravels');
   }
 
-  const renderRowMenu = () => {
-    return (
-      <Menu>
-        <Menu.Group>
-        <Link to={``}><Menu.Item>Aprovar pasajero</Menu.Item></Link>
-        </Menu.Group>
-      </Menu>
-    )
+  const triggerAccept = async (travelId, userId) => {    
+    try {
+      setLoading(true);
+      await acceptPassenger(travelId, userId);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const triggerReject = () => {
+    
   }
 
   const renderPlaceholder = () => (
@@ -60,7 +68,7 @@ export const ListPassengers = () => {
     </div>
   );
 
-  const renderPassangers = (travelDetails) => {
+  const renderPassangers = (travelDetails, clientDetails) => {
     if (travelDetails.passengers.length < 1) {
       return renderPlaceholder();
     }
@@ -79,22 +87,36 @@ export const ListPassengers = () => {
               Id
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
+              Nombre
+            </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
               Estado legal
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
-            {travelDetails.passengers.map(passgenger => (
-              <Table.Row key={passgenger.id}>
+            {travelDetails.passengers.map(passenger => (
+              <Table.Row key={passenger.id}>
                 <Table.TextCell>
-                  {passgenger.legalStatus}
+                  {passenger.legalStatus}
+                </Table.TextCell>
+                <Table.TextCell>
+                  {clientDetails.find( cl => cl.id === passenger.id ).name}
                 </Table.TextCell>
                 <Table.Cell flex="none">
-                  <Popover
-                    content={renderRowMenu(passgenger.id)}
-                    position={Position.BOTTOM_RIGHT}
+                <Button
+                  onClick={triggerAccept}
+                  disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted}
                   >
-                    <IconButton icon={MoreIcon} height={24} appearance="minimal" />
-                  </Popover>
+                    Aceptar
+                  </Button>
+                </Table.Cell>
+                <Table.Cell flex="none">
+                <Button
+                  onClick={triggerReject}
+                  disabled={passenger.accepted}
+                  >
+                    Rechazar
+                  </Button>
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -106,7 +128,7 @@ export const ListPassengers = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderPassangers(travel) }
+      { !loading &&  renderPassangers(travel, clients) }
     </div>
   );
 };
