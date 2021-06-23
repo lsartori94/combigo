@@ -31,6 +31,20 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
+// get active travels for a driver
+router.get('/driverTravels/:driverId', (req, res) => {
+  const {driverId} = req.params;
+  const activeTravels = travels.filter(travels => travels.active === true);
+  const notFinishedTravels = activeTravels.filter(travels =>  travels.status != TRAVEL_STATES.FINISHED );
+  const notCanceled = notFinishedTravels.filter(travels =>  travels.status != TRAVEL_STATES.CANCELED );
+  const result = notCanceled.filter(tr => tr.driver === driverId );
+
+  if (!result) {
+    res.status(404).send(`Viaje no encontrado`);
+  }
+  res.json(result);
+});
+
 // Create travel with ID
 router.post('/', (req, res) => {
   const {dateAndTime, route} = req.body;

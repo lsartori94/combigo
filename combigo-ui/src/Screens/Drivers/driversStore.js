@@ -88,15 +88,25 @@ export async function saveUserDetails(user) {
   return result;
 }
 
+// export async function getDriverTravels( driverId ) {
+//   const response = await fetch(`${API_BASE}/travels`);
+//   if (!response.ok) {
+//     throw new Error(`HTTP error! status: ${response.status}`);
+//   }
+//   const result = await response.json();
+
+//   return result.filter( trav => (trav.driver === driverId) && (trav.status !== TRAVEL_STATES.FINISHED || trav.status !== TRAVEL_STATES.CANCELED));
+// }
+
 export async function getDriverTravels( driverId ) {
-  const response = await fetch(`${API_BASE}/travels`);
+  const response = await fetch( `${API_BASE}/travels/driverTravels/${driverId}` );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const result = await response.json();
-
-  return result.filter( trav => (trav.driver === driverId) && (trav.status !== TRAVEL_STATES.FINISHED || trav.status !== TRAVEL_STATES.CANCELED));
+  return result;
 }
+
 
 export function getAvailableRoutes() {
   return getRoutes(true);
