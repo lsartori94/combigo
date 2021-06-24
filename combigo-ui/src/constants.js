@@ -1,4 +1,6 @@
-export const API_BASE = 'http://localhost:5000/api/v1';
+const path = window.location.hostname;
+
+export const API_BASE = `http://${path}:5000/api/v1`;
 export const SESSION_KEY = 'CGOSESS';
 
 export const TRAVEL_STATES = {

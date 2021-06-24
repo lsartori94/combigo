@@ -1,7 +1,7 @@
 import { API_BASE } from '../../constants';
 import { getRoutes } from '../Routes/routesStore';
 import { getVehicles } from '../Vehicles/vehiclesStore';
-//import { getTravelDetails } from '../Bookings/BookingsStore';
+import { getTravelDetails } from '../Travels/travelsStore';
 import {TRAVEL_STATES} from '../../constants'
 
 //Get drivers
@@ -89,14 +89,14 @@ export async function saveUserDetails(user) {
 }
 
 export async function getDriverTravels( driverId ) {
-  const response = await fetch(`${API_BASE}/travels`);
+  const response = await fetch( `${API_BASE}/travels/driverTravels/${driverId}` );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const result = await response.json();
-
-  return result.filter( trav => (trav.driver === driverId) && (trav.status !== TRAVEL_STATES.FINISHED || trav.status !== TRAVEL_STATES.CANCELED));
+  return result;
 }
+
 
 export function getAvailableRoutes() {
   return getRoutes(true);
@@ -106,8 +106,31 @@ export function getAvailableVehicles() {
   return getVehicles();
 }
 
-export async function getTravelDetails(travelId) {
-  const response = await fetch(`${API_BASE}/travels/${travelId}`);
+export async function getATravelDetails(travelId) {
+  return getTravelDetails(travelId)
+}
+
+export async function getClients() {
+  const response = await fetch(`${API_BASE}/users?role=client`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
+export async function acceptPassenger(travelId, userId) {
+  const response = await fetch(
+    `${API_BASE}/travels/${travelId}/acceptPassenger`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({userId})
+    }
+  );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

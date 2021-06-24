@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useParams } from 'react-router';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Pane,
   TextInputField,
@@ -19,40 +18,56 @@ import {
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
 
-import { getTravelDetails } from './driversStore';
+import { getATravelDetails, getClients, acceptPassenger } from './driversStore';
 
 export const ListPassengers = () => {
   let { travelId } = useParams();
   const [loading, setLoading] = useState(true);
   const [travel, setTravel] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [travelsLoaded, setTravelsLoaded] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
+    async function initializeExtras() {
+      const clientsResponse = await getClients();
+      setClients(clientsResponse);
+    }
     async function initialize() {
+      setLoading(true);
       try {
-        const travelResponse = await getTravelDetails(travelId);
-        setTravel(travelResponse);
+        const travelResponse = await getATravelDetails(travelId);
+        if (travelResponse.length) {
+          setTravel(travelResponse);
+          setTravelsLoaded(true);
+        }
       } catch (e) {
         console.error(e);
       } finally {
         setLoading(false);
       }
-    };
+    }
     initialize();
-  }, [travelId]); // eslint-disable-line
+    initializeExtras();
+  }, [travelId]);
 
   const backCallback = () => {
     history.push('/driverTravels');
   }
 
-  const renderRowMenu = () => {
-    return (
-      <Menu>
-        <Menu.Group>
-        <Link to={``}><Menu.Item>Aprovar pasajero</Menu.Item></Link>
-        </Menu.Group>
-      </Menu>
-    )
+  const triggerAccept = async (travelId, userId) => {    
+    try {
+      setLoading(true);
+      await acceptPassenger(travelId, userId);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const triggerReject = () => {
+    
   }
 
   const renderPlaceholder = () => (
@@ -60,8 +75,8 @@ export const ListPassengers = () => {
     </div>
   );
 
-  const renderPassangers = (travelDetails) => {
-    if (travelDetails.passengers.length < 1) {
+  const renderPassangers = (travelDetails, clientDetails) => {
+    if (!travelsLoaded || travelDetails.passengers.length < 1) {
       return renderPlaceholder();
     }
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -79,22 +94,36 @@ export const ListPassengers = () => {
               Id
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
+              Nombre
+            </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
               Estado legal
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
-            {travelDetails.passengers.map(passgenger => (
-              <Table.Row key={passgenger.id}>
+            {travelDetails.passengers.map(passenger => (
+              <Table.Row key={passenger.id}>
                 <Table.TextCell>
-                  {passgenger.legalStatus}
+                  {travelsLoaded && passenger.legalStatus}
+                </Table.TextCell>
+                <Table.TextCell>
+                  {travelsLoaded && clientDetails.find( cl => cl.id === passenger.id ).name}
                 </Table.TextCell>
                 <Table.Cell flex="none">
-                  <Popover
-                    content={renderRowMenu(passgenger.id)}
-                    position={Position.BOTTOM_RIGHT}
+                <Button
+                  onClick={triggerAccept}
+                  disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted}
                   >
-                    <IconButton icon={MoreIcon} height={24} appearance="minimal" />
-                  </Popover>
+                    Aceptar
+                  </Button>
+                </Table.Cell>
+                <Table.Cell flex="none">
+                <Button
+                  onClick={triggerReject}
+                  disabled={passenger.accepted}
+                  >
+                    Rechazar
+                  </Button>
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -106,7 +135,7 @@ export const ListPassengers = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderPassangers(travel) }
+      { !loading &&  renderPassangers(travel, clients) }
     </div>
   );
 };

@@ -13,15 +13,16 @@ import {
 
 import { getDriverTravels, getAvailableVehicles, getAvailableRoutes } from './driversStore';
 import { useAuth } from "../../utils/use-auth";
-//import {TRAVEL_STATES} from '../../constants'
+import {TRAVEL_STATES} from '../../constants'
 
 export const DriverTravels = () => {
   const auth = useAuth();
+  const history = useHistory();
   const [travels, setTravels] = useState([]);
   const [routes, setRoutes] = useState([]);
   //const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  //const history = useHistory();
+  const [travelsLoaded, setTravelsLoaded] = useState(false);
 
   useEffect(() => {
     async function initialize() {
@@ -29,9 +30,12 @@ export const DriverTravels = () => {
         const routesResponse = await getAvailableRoutes();
         const response = await getDriverTravels( auth.user.id );
         //const vehiclesResponse = await getAvailableVehicles();
-        setTravels(response);
-        setRoutes(routesResponse);
         //setVehicles(vehiclesResponse);
+        setRoutes(routesResponse);
+        if (response.length) {
+          setTravels(response);
+          setTravelsLoaded(true);
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -39,18 +43,18 @@ export const DriverTravels = () => {
       }
     }
     initialize();
-  },[auth.user]);
+  },[auth.user, history]);
 
   const renderPlaceholder = () => (
     <div style={{padding: "30px"}}>No posee viajes asignados activos
     </div>
   );
   
-  const renderRowMenu = (travelId) => {
+  const renderRowMenu = (id) => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/driverTravels/passengers/${travelId}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
+          <Link to={`/driverTravels/passengers/${id}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
@@ -94,28 +98,30 @@ export const DriverTravels = () => {
             {travels.map(travel => (
               <Table.Row key={travel.id}>
                 <Table.TextCell>
-                  {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
-                  
+                  {travelsLoaded && travel.id}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {routes.find(rou => rou.travels.includes(travel.id)).origin}
+                  {travelsLoaded && new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {routes.find(rou =>rou.travels.includes(travel.id)).destination}
+                  {travelsLoaded && routes.find(rou => rou.travels.includes(travel.id)).origin}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {/* { vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado"} */
-                  travel.vehicle}
+                  {travelsLoaded && routes.find(rou =>rou.travels.includes(travel.id)).destination}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.status}
+                  {/* {travelsLoaded && ( vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado" ) */
+                   travelsLoaded && travel.vehicle}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.passengers.length}
+                  {travelsLoaded && travel.status}
+                </Table.TextCell>
+                <Table.TextCell>
+                  {travelsLoaded && travel.passengers.length}
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(travel.id)}
+                    content={travelsLoaded && renderRowMenu(travel.id)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />
