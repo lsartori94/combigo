@@ -50,11 +50,11 @@ export const DriverTravels = () => {
     </div>
   );
   
-  const renderRowMenu = (travelId) => {
+  const renderRowMenu = (id) => {
       return (
         <Menu>
           <Menu.Group>
-          <Link to={`/driverTravels/passengers/${travelId}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
+          <Link to={`/driverTravels/passengers/${id}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
           </Menu.Group>
         </Menu>
       )
@@ -98,6 +98,9 @@ export const DriverTravels = () => {
             {travels.map(travel => (
               <Table.Row key={travel.id}>
                 <Table.TextCell>
+                  {travelsLoaded && travel.id}
+                </Table.TextCell>
+                <Table.TextCell>
                   {travelsLoaded && new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
                 </Table.TextCell>
                 <Table.TextCell>
@@ -118,7 +121,7 @@ export const DriverTravels = () => {
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(travel.id)}
+                    content={travelsLoaded && renderRowMenu(travel.id)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />

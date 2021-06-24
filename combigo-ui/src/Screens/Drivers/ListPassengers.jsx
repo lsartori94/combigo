@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useParams } from 'react-router';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Pane,
   TextInputField,
@@ -19,30 +18,38 @@ import {
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
 
-import { getTravelDetails, getClients, acceptPassenger } from './driversStore';
+import { getATravelDetails, getClients, acceptPassenger } from './driversStore';
 
 export const ListPassengers = () => {
   let { travelId } = useParams();
   const [loading, setLoading] = useState(true);
   const [travel, setTravel] = useState([]);
   const [clients, setClients] = useState([]);
+  const [travelsLoaded, setTravelsLoaded] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
+    async function initializeExtras() {
+      const clientsResponse = await getClients();
+      setClients(clientsResponse);
+    }
     async function initialize() {
+      setLoading(true);
       try {
-        const travelResponse = await getTravelDetails(travelId);
-        const clientsResponse = await getClients();
-        setTravel(travelResponse);
-        setClients(clientsResponse);
+        const travelResponse = await getATravelDetails(travelId);
+        if (travelResponse.length) {
+          setTravel(travelResponse);
+          setTravelsLoaded(true);
+        }
       } catch (e) {
         console.error(e);
       } finally {
         setLoading(false);
       }
-    };
+    }
     initialize();
-  }, [travelId]); // eslint-disable-line
+    initializeExtras();
+  }, [travelId]);
 
   const backCallback = () => {
     history.push('/driverTravels');
@@ -69,7 +76,7 @@ export const ListPassengers = () => {
   );
 
   const renderPassangers = (travelDetails, clientDetails) => {
-    if (travelDetails.passengers.length < 1) {
+    if (!travelsLoaded || travelDetails.passengers.length < 1) {
       return renderPlaceholder();
     }
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -97,10 +104,10 @@ export const ListPassengers = () => {
             {travelDetails.passengers.map(passenger => (
               <Table.Row key={passenger.id}>
                 <Table.TextCell>
-                  {passenger.legalStatus}
+                  {travelsLoaded && passenger.legalStatus}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {clientDetails.find( cl => cl.id === passenger.id ).name}
+                  {travelsLoaded && clientDetails.find( cl => cl.id === passenger.id ).name}
                 </Table.TextCell>
                 <Table.Cell flex="none">
                 <Button

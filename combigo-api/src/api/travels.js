@@ -23,10 +23,10 @@ router.get('/all', (req, res) => {
 // Search for travel with id
 router.get('/:id', (req, res) => {
   const {id} = req.params;
-  const result = travels.find(travel => travel.id === id);
+  const result = travels.find(tr => tr.id === id);
 
   if (!result) {
-    res.status(404).send(`Viaje no encontrado`);
+    res.status(404).send(`Viaje no encontrado${id}`);
   }
   res.json(result);
 });
