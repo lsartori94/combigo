@@ -54,7 +54,7 @@ let users = [
     travelHistory: [
       {
         travelId: 'CGOT1',
-        bookingId: 'CGOB0', //Agregado para bookingId
+        bookingId: 'CGOB0',
         legalStatus: LEGAL_STATUS.PENDING,
         boughtAdditionals: [ 
           'CGOA1',
