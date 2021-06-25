@@ -111,7 +111,6 @@ export const Ticket = () => {
 
     return (
 
-      // TODO: style pane un poco para que parezca un ticket y se diferencie de bookingDetails
       <Pane
         display="flex"
         flexDirection="column"
@@ -168,7 +167,7 @@ export const Ticket = () => {
           <Text>${bookDetails.payment}</Text>
 
           {travelNotValid(bookDetails) && (
-            <InlineAlert intent="none">
+            <InlineAlert intent="none" marginTop={20}>
               El viaje ya finalizó o la reserva fue cancelada.
             </InlineAlert>
           )}

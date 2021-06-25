@@ -57,7 +57,7 @@ let users = [
     travelHistory: [
       {
         travelId: 'CGOT1',
-        bookingId: 'CGOB0', //Agregado para bookingId
+        bookingId: 'CGOB0',
         legalStatus: LEGAL_STATUS.PENDING,
         boughtAdditionals: [ 
           'CGOA1',
@@ -231,7 +231,7 @@ let routes = [
 let travels = [
   {
     id: 'CGOT1',
-    dateAndTime: '2021-06-21T21:00',
+    dateAndTime: '2021-06-24T22:40',
     route: 'CGOR1',
     stock: 1,
     passengers: [

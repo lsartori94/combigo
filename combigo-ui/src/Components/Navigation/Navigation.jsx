@@ -73,10 +73,6 @@ export const Navigation = () => {
             <li onClick={() => setIsOpen(false)}>
               <Link to="/">Home</Link>
             </li>
-            <hr />
-            <li onClick={() => setIsOpen(false)}>
-              <Link to="/profile">Perfil</Link>
-            </li>
             {auth.user && auth.isAdmin() && (
               <>
                 <hr />
@@ -103,6 +99,10 @@ export const Navigation = () => {
             )}
             {auth.user && auth.isClient() && ( //Esto es para las reservas
               <>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/profile">Perfil</Link>
+                </li>
                 <hr />
                 <li onClick={() => setIsOpen(false)}>
                   <Link to="/bookings">Reservas</Link>
