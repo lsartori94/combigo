@@ -9,7 +9,9 @@ import {
   TickIcon,
   Strong,
   Text,
-  InlineAlert
+  InlineAlert,
+  Button,
+  EditIcon
 } from "evergreen-ui";
 import * as QrCode from 'qrcode.react';
 
@@ -22,6 +24,7 @@ import {
   getAvailableRoutes,
   getBookings,
 } from "./BookingsStore";
+import { LEGAL_STATUS } from "../../constants.js";
 
 export const Ticket = () => {
   let { travelId, bookingId } = useParams();
@@ -93,6 +96,10 @@ export const Ticket = () => {
 
   function travelNotValid(bookDetails) {
     return (bookDetails.status !== TRAVEL_STATES.NOT_STARTED) && (bookDetails.status !== TRAVEL_STATES.IN_PROGRESS);
+  }
+
+  const declarationCallback = () => {
+    history.push(`/bookingDetails/${travelId}/${bookingId}/declaration`);
   }
 
   const renderDetails = (bookDetails) => {
@@ -172,7 +179,23 @@ export const Ticket = () => {
             </InlineAlert>
           )}
 
-          {!travelNotValid(bookDetails) && qrStr !== '' && (
+          {bookDetails.legalStatus === LEGAL_STATUS.PENDING && (
+            <div>
+              <InlineAlert intent="none" marginTop={20}>
+                Complete la declaracion jurada para ver el código QR.
+              </InlineAlert>
+              <Button 
+                marginRight={16} 
+                intent="none"
+                iconBefore={EditIcon}
+                onClick={declarationCallback}
+                disabled={bookDetails.legalStatus !== LEGAL_STATUS.PENDING || bookDetails.status !== TRAVEL_STATES.NOT_STARTED}
+                > Declaracion jurada
+              </Button>
+          </div>
+          )}
+
+          {!travelNotValid(bookDetails) && (bookDetails.legalStatus === LEGAL_STATUS.APPROVED) && (qrStr !== '') && (
             <Pane marginTop={20}>
               <QrCode value={qrStr} size={256}></QrCode>
             </Pane>

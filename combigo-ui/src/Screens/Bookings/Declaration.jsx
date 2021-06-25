@@ -244,8 +244,7 @@ export const Declaration = () => {
             confirmLabel="Confirmar"
             hasCancel={false}
             intent="success"
-          > {`Sus reservas y compras de los próximos 15 días serán canceladas si se presenta como caso sospechoso. 
-              ¿Confirmar envío de declaración jurada?`}
+          > {` ¿Confirmar envío de declaración jurada?`}
           </Dialog>
 
       </Pane>
