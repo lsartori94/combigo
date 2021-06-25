@@ -222,7 +222,7 @@ let routes = [
 let travels = [
   {
     id: 'CGOT1',
-    dateAndTime: '2021-06-21T21:00',
+    dateAndTime: '2021-06-24T22:40',
     route: 'CGOR1',
     stock: 1,
     passengers: [

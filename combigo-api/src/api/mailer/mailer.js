@@ -6,6 +6,7 @@ const vipStartTemplate = require('./vipStartedTemplate');
 const vipEndedTemplate = require('./vipEndedTemplate');
 const bookingConfirmedTemplate = require('./bookingConfirmedTemplate');
 const bookingCanceledTemplate = require('./bookingCanceledTemplate');
+const bookingDDJJCancelationTemplate = require('./bookingDDJJCancelationTemplate');
 
 let initialized = false;
 let transporter;
@@ -77,6 +78,15 @@ function sendBookingCancelationEmail(destination, tripOrigin, tripDestination, t
   sendEmail(destination, subject, text, html);
 }
 
+function sendBookingDDJJCancelation(destination, tripOrigin, tripDestination, tripDate, tripHour, ammount) {
+  const subject = "Reserva Cancelada por caso sospechoso";
+  const text = "Su reserva ha sido cancelada por ser un caso sospechoso";
+  bookingDDJJCancelationTemplate.setVariables(tripOrigin, tripDestination, tripDate, tripHour, ammount)
+  const html = bookingDDJJCancelationTemplate.getHtml();
+  sendEmail(destination, subject, text, html);
+}
+
+
 function sendBookingConfirmationEmail(destination, tripOrigin, tripDestination, tripDate, tripHour) {
   const subject = "Su Reserva ha Sido Confirmada";
   const text = "Su reserva ha sido confirmada";
@@ -106,5 +116,6 @@ module.exports = {
   sendBookingConfirmationEmail,
   sendBookingCancelationEmail,
   vipSubscriptionInitiatedEmail,
-  vipSubscriptionEndedEmail
+  vipSubscriptionEndedEmail,
+  sendBookingDDJJCancelation
 };
