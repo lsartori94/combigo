@@ -94,7 +94,7 @@ export default function Checkout() {
           setUserCardInfo(userInfo.creditCard);
           setUserHasSavedCC(true);
         }
-        if (userInfo.vipStatus && userInfo.vipStatus === VIP_STATUS.ENROLLED)
+        if (userInfo.vip.status && userInfo.vip.status === VIP_STATUS.ENROLLED)
           setUserIsVip(true);
       } catch (e) {
         console.error(e);

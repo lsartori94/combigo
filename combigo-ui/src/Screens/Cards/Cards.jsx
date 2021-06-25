@@ -156,7 +156,7 @@ export const Cards = () => {
         confirmLabel="Eliminar"
         cancelLabel="Cancelar"
       >
-        Esta seguro de que quiere eliminar la tarjeta?
+        Esta seguro de que quiere eliminar la tarjeta? Si usted es VIP, se cobrara el mes correspondiente a la ultima subscripcion.
       </Dialog>
       {error && (
         <Alert intent="danger" 

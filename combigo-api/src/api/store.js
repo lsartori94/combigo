@@ -39,7 +39,10 @@ let users = [
       expDate: '2021-11-12',
       cvv:'123'
     },
-    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
     role: ROLES.CLIENT,
     active: true,
   },
@@ -88,7 +91,10 @@ let users = [
         payment: 120
       }
     ],
-    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
     role: ROLES.CLIENT,
     active: true
   },
@@ -108,7 +114,10 @@ let users = [
       expDate: '2022-11-12',
       cvv:'153'
     },
-    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
     role: ROLES.CLIENT,
     active: true,
   },
