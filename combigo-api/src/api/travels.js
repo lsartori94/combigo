@@ -31,13 +31,14 @@ router.get('/:id', (req, res) => {
   res.json(result);
 });
 
-// get active travels for a driver
+// get active travels for a driver ds
 router.get('/driverTravels/:driverId', (req, res) => {
   const {driverId} = req.params;
   const activeTravels = travels.filter(travels => travels.active === true);
   const notFinishedTravels = activeTravels.filter(travels =>  travels.status != TRAVEL_STATES.FINISHED );
   const notCanceled = notFinishedTravels.filter(travels =>  travels.status != TRAVEL_STATES.CANCELED );
-  const result = notCanceled.filter(tr => tr.driver === driverId );
+  const withVehicle = notCanceled.filter(travels =>  travels.status != TRAVEL_STATES.NO_VEHICLE );
+  const result = withVehicle.filter(tr => tr.driver === driverId );
 
   if (!result) {
     res.status(404).send(`Viaje no encontrado`);
@@ -236,6 +237,28 @@ router.delete('/:id', (req, res) => {
   travels[index].status = TRAVEL_STATES.CANCELED;
   travels[index].passengers.forEach(p =>{
     p.bookingStatus = BOOKING_STATES.CANCELED; //sacar esto
+    users.find(
+      e => e.id === p.id
+    ).travelHistory.find(
+      t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
+    ).status = BOOKING_STATES.CANCELED;
+  });
+
+  res.json(travels);
+});
+
+//cancel travel
+router.put('/cancelTravel/:id', (req, res) => {
+  const {id} = req.params;
+  
+  const index = travels.findIndex(travel => travel.id === id);
+  if (index === -1) {
+    return res.status(404).send(`Viaje no encontrado`);
+  }
+  
+  travels[index].status = TRAVEL_STATES.CANCELED;
+  travels[index].passengers.forEach(p =>{
+    p.bookingStatus = BOOKING_STATES.CANCELED; 
     users.find(
       e => e.id === p.id
     ).travelHistory.find(
@@ -501,6 +524,31 @@ router.put('/:id/acceptPassenger', (req, res) => {
   
 
   travels[exists].passengers[passengerExists].accepted = true;
+
+  res.send(travels[exists]);
+});
+
+router.put('/:travelId/acceptPassenger', (req, res) => {
+  const {travelId} = req.params;
+
+  if (!req.body) {
+    return res.status(400).send(`Bad Request`)
+  }
+
+  const exists = travels.findIndex(travel => travel.id === travelId);
+  if (exists === -1) {
+    return res.status(409).send(`El viaje no existe`);
+  }
+
+  if (travels[exists].active == false) {
+    return res.status(405).send(`El viaje no esta activo`);
+  }
+
+  if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
+    return res.status(405).send(`Solo puede comenzar un viaje pendiente`);
+  }
+
+  travels[exists].status = TRAVEL_STATES.IN_PROGRESS;
 
   res.send(travels[exists]);
 });

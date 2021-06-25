@@ -13,7 +13,8 @@ import {
   Position,
   Menu,
   IconButton,
-  MoreIcon
+  MoreIcon,
+  Checkbox
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -26,18 +27,22 @@ export const ListPassengers = () => {
   const [travel, setTravel] = useState([]);
   const [clients, setClients] = useState([]);
   const [travelsLoaded, setTravelsLoaded] = useState(false);
+  const [ClientsLoaded, setClientsLoaded] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
     async function initializeExtras() {
       const clientsResponse = await getClients();
-      setClients(clientsResponse);
+      if (clientsResponse.length) {
+        setClients(clientsResponse);
+        setClientsLoaded(true);
+      }
     }
     async function initialize() {
       setLoading(true);
       try {
         const travelResponse = await getATravelDetails(travelId);
-        if (travelResponse.length) {
+        if (travelResponse.passengers.length) {
           setTravel(travelResponse);
           setTravelsLoaded(true);
         }
@@ -66,17 +71,24 @@ export const ListPassengers = () => {
     }
   }
 
-  const triggerReject = () => {
-    
-  }
+  // const triggerStartTravel = async (travelId) => {    
+  //   try {
+  //     setLoading(true);
+  //     await startTravel(travelId); //Necesitamos hacerlo
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // } //Esto va a estar en ver viajes fdfsdf
 
   const renderPlaceholder = () => (
     <div style={{padding: "30px"}}>No hay pasajeros para este viaje
     </div>
   );
 
-  const renderPassangers = (travelDetails, clientDetails) => {
-    if (!travelsLoaded || travelDetails.passengers.length < 1) {
+  const renderPassangers = (travel, clients) => {
+    if ( !travelsLoaded || travel.passengers.length < 1) {
       return renderPlaceholder();
     }
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -91,23 +103,28 @@ export const ListPassengers = () => {
         <Table width={"95%"}>
           <Table.Head>
             <Table.TextHeaderCell>
-              Id
-            </Table.TextHeaderCell>
-            <Table.TextHeaderCell>
               Nombre
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
               Estado legal
             </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
+              Aceptado
+            </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
-            {travelDetails.passengers.map(passenger => (
+            {travel.passengers.map(passenger => (
               <Table.Row key={passenger.id}>
+                <Table.TextCell>
+                  {travelsLoaded && ClientsLoaded && clients.find( cl => cl.id === passenger.id ).name}
+                </Table.TextCell>
                 <Table.TextCell>
                   {travelsLoaded && passenger.legalStatus}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travelsLoaded && clientDetails.find( cl => cl.id === passenger.id ).name}
+                  <Checkbox
+                    checked={passenger.accepted}
+                  />
                 </Table.TextCell>
                 <Table.Cell flex="none">
                 <Button
@@ -115,14 +132,6 @@ export const ListPassengers = () => {
                   disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted}
                   >
                     Aceptar
-                  </Button>
-                </Table.Cell>
-                <Table.Cell flex="none">
-                <Button
-                  onClick={triggerReject}
-                  disabled={passenger.accepted}
-                  >
-                    Rechazar
                   </Button>
                 </Table.Cell>
               </Table.Row>

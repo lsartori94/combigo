@@ -81,7 +81,7 @@ function App() {
             <Route path="/drivers">
               <Drivers />
             </Route>
-            <Route path="/driverTravels/passengers/:id">
+            <Route path="/driverTravels/passengers/:travelId">
               <ListPassengers />
             </Route>
             <Route path="/driverTravels">
