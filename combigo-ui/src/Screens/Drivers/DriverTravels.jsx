@@ -21,7 +21,7 @@ export const DriverTravels = () => {
   const history = useHistory();
   const [travels, setTravels] = useState([]);
   const [routes, setRoutes] = useState([]);
-  //const [vehicles, setVehicles] = useState([]);
+  //const [vehicles, setVehicles] = useState([]); //Necesitamos esto para el stock? NO
   const [loading, setLoading] = useState(true);
   const [travelsLoaded, setTravelsLoaded] = useState(false);
 
@@ -56,7 +56,7 @@ export const DriverTravels = () => {
     setLoading(true);
     setTravelsLoaded(false);
     try {
-      const response = await getDriverTravels( auth.user.id );
+      const response = await getDriverTravels( auth.user.id ); //Solo los pendientes y comenzados
       if (response.length) {
         setTravels(response);
         setTravelsLoaded(true);
@@ -90,20 +90,27 @@ export const DriverTravels = () => {
     }
   }
 
-  //Comenzar viaje (terminar) ss
+  //Comenzar viaje 
   const promptStartTravel = async (travelId) => {    
     setSelectedTravel(travelId);
-    setShowStart();
+    setShowStart(true);
   }
 
   const startTravelCallback = async () => {   
-    //startTravel(selectedTravel) 
+    try {
+      await startTravel(selectedTravel); //es el id
+    } catch (e) {
+      console.error(e);
+    } finally {
+      reloadTravel();
+      setShowStart(false);
+    }
   }
 
   //Finalizar viaje (terminar)
   const promptFinishTravel = async (travelId) => {   
     setSelectedTravel(travelId); 
-    setShowFinish();
+    setShowFinish(true);
   }
 
   const finishTravelCallback = async () => {    
@@ -216,10 +223,10 @@ export const DriverTravels = () => {
               Destino
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Vehiculo
+              Estado
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Estado
+              Capacidad
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
               Cantidad de Pasajeros
@@ -238,11 +245,11 @@ export const DriverTravels = () => {
                   {travelsLoaded && routes.find(rou =>rou.travels.includes(travel.id)).destination}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {/* {travelsLoaded && ( vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado" ) */
-                   travelsLoaded && travel.vehicle}
+                  {travelsLoaded && travel.status}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travelsLoaded && travel.status}
+                  {/* {travelsLoaded && ( vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado" ) */
+                   travelsLoaded && travel.stock}
                 </Table.TextCell>
                 <Table.TextCell>
                   {travelsLoaded && travel.passengers.length}

@@ -134,7 +134,7 @@ export const ListPassengers = () => {
               Declaracion jurada
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Listo para viajar
+              Presente
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
@@ -173,6 +173,7 @@ export const ListPassengers = () => {
 
         <Button
           onClick={triggerAddPassenger }
+          disabled={travel.stock <= travel.passengers.length }
         >
           Agregar pasajero sin reserva
         </Button>

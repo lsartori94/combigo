@@ -289,12 +289,14 @@ router.put('/startTravel/:id', (req, res) => {
       t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
     ).status = BOOKING_STATES.ACTIVE;
     } else {
-      p.bookingStatus = BOOKING_STATES.COMPLETED; //Estado para ausente?? // O los saco de aca?
+      p.bookingStatus = BOOKING_STATES.ABSENT; //Estado para ausente?? // O los saco de aca?
       users.find(
         e => e.id === p.id
       ).travelHistory.find(
         t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
-      ).status = BOOKING_STATES.COMPLETED;
+      ).status = BOOKING_STATES.ABSENT;
+
+      //travels[index].stock -= 1; //Stock no es la capacidad maximo? Como cambiamos la capacidad actual?
     }
   });
 

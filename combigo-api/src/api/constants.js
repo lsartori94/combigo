@@ -16,6 +16,7 @@ const BOOKING_STATES = {
   PENDING: "Pendiente",
   ACTIVE: "En Curso",
   COMPLETED: "Finalizada",
+  ABSENT: "Ausente",
   FULL_REFUND: "Reembolsada 100%",
   HALF_REFUND: "Reembolsada 50%",
   CANCELED: "Cancelada (100% Reembolso)"
