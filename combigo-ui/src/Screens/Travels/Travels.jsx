@@ -23,6 +23,7 @@ export const Travels = () => {
   const [selectedTravel, setSelectedTravel] = useState(null);
   const [showDelete, setShowDelete] = useState(false);
   const [showDeleteWithPending, setShowDeleteWithPending] = useState(false);
+  const [showDeleteFinished, setShowDeleteFinished] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -51,6 +52,9 @@ export const Travels = () => {
 
   const promptDelete = (travelId) => {
     setSelectedTravel(travelId);
+    const finished = travels.find(travel => (travel.id === travelId) && (travel.status === TRAVEL_STATES.FINISHED));
+    if (finished)
+      setShowDeleteFinished(true);
     const pending = travels.find(travel => (travel.id === travelId) && (travel.status === TRAVEL_STATES.NOT_STARTED));
     if (pending && pending.passengers.length > 0)
       setShowDeleteWithPending(true);
@@ -118,15 +122,16 @@ export const Travels = () => {
       >
         <Dialog
           isShown={showDelete}
-          title="Confirmar Eliminacion"
+          title="Eliminar viaje"
           intent="danger"
           onConfirm={() => deleteCallback()}
-          onCloseComplete={() => {setShowDelete(false); setShowDeleteWithPending(false)}}
+          onCloseComplete={() => {setShowDelete(false); setShowDeleteWithPending(false); setShowDeleteFinished(false)}}
           confirmLabel="Eliminar"
+          isConfirmDisabled={showDeleteFinished}
           cancelLabel="Cancelar"
         >
           {showDeleteWithPending ? "El viaje tiene reservas hechas, ¿esta seguro de que quiere eliminar el Viaje?" 
-            : "¿Esta seguro de que quiere eliminar el Viaje?"}
+            : showDeleteFinished ? "No puede eliminarse un viaje terminado" : "¿Esta seguro de que quiere eliminar el Viaje?"}
         </Dialog>
         <Table width={"95%"}>
           <Table.Head>
@@ -162,8 +167,7 @@ export const Travels = () => {
                   <Link to={`/travels/${travel.id}`}>{travel.id}</Link>
                 </Table.TextCell>
                 <Table.TextCell>
-                  {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}
-                  
+                  {new Date(travel.dateAndTime).toLocaleDateString('es-AR', options)}               
                 </Table.TextCell>
                 <Table.TextCell>
                   <Link to={`/routes/${travel.route}`}>{travel.route}</Link>

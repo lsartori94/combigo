@@ -38,8 +38,7 @@ router.get('/:routeId/travels', (req, res) => {
   const result = travels.filter(t => {
     return (
       t.route === routeId &&
-      t.status === TRAVEL_STATES.NOT_STARTED &&
-      t.stock > 0
+      t.status === TRAVEL_STATES.NOT_STARTED
     );
   });
 

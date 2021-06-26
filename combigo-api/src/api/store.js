@@ -190,7 +190,8 @@ let routes = [
     distanceKm: 30,
     durationMin: 40,
     travels: [
-      'CGOT1'
+      'CGOT1',
+      'CGOT5'
     ],
     active: true
   },
@@ -338,7 +339,23 @@ let travels = [
     ],
     price: 120,
     active: true
-  }
+  },
+  {
+    id: 'CGOT5',
+    dateAndTime: '2021-08-24T22:40',
+    route: 'CGOR1',
+    stock: 1,
+    passengers: [],
+    driver: 'CGOU1',
+    vehicle: 'CGOV4',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      'CGOA1',
+      'CGOA3'
+    ],
+    price: 100,
+    active: true
+  },
 ];
 
 let additionals = [

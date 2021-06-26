@@ -50,6 +50,10 @@ export default function TravelListing() {
     }
   };
 
+  const soldOut = (travelInfo) => {
+    return travelInfo.stock <= 0;
+  };
+
   const backCallback = () => history.push('/');
 
   const travelItem = (info) => (
@@ -85,15 +89,15 @@ export default function TravelListing() {
           </Pane>
         </Pane>
         <Button
-          disabled={alreadyReserved(info)}
+          disabled={alreadyReserved(info) || soldOut(info)}
           appearance="primary"
           intent="none"
           onClick={() =>handleBtnClick(info)}
         >
-          {alreadyReserved(info) ? 'Reservado' : 'Comenzar reserva'}
+          {alreadyReserved(info) ? 'Reservado' : soldOut(info) ? 'Agotado' : 'Comenzar reserva'}
         </Button>
       </Pane>
-      {info.stock < 3 && <Pane fontSize={12} fontStyle="italic" color="#FFB020">Ultimos Asientos!</Pane>}
+      {(info.stock < 3 && info.stock > 0) && <Pane fontSize={12} fontStyle="italic" color="#FFB020">Ultimos Asientos!</Pane>}
     </Pane>
   );
 

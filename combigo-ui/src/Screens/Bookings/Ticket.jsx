@@ -184,8 +184,9 @@ export const Ticket = () => {
               <InlineAlert intent="none" marginTop={20}>
                 Complete la declaracion jurada para ver el código QR.
               </InlineAlert>
-              <Button 
-                marginRight={16} 
+              <Button
+                marginTop={12}
+                marginLeft={110} //ALINEAR BIEN ESTO
                 intent="none"
                 iconBefore={EditIcon}
                 onClick={declarationCallback}
