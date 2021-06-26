@@ -303,6 +303,30 @@ router.put('/startTravel/:id', (req, res) => {
   res.json(travels);
 });
 
+//Finish Travel
+router.put('/finishtTravel/:id', (req, res) => {
+  const {id} = req.params;
+  
+  const index = travels.findIndex(travel => travel.id === id);
+  if (index === -1) {
+    return res.status(404).send(`Viaje no encontrado`);
+  }
+  
+  travels[index].status = TRAVEL_STATES.FINISHED; //Esto necesita mas pensamiento del que esperaba...
+  travels[index].passengers.forEach(p =>{
+    if ( p.accepted ) {
+    p.bookingStatus = BOOKING_STATES.COMPLETED; 
+    users.find(
+      e => e.id === p.id
+    ).travelHistory.find(
+      t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.ACTIVE)
+    ).status = BOOKING_STATES.COMPLETED;
+    } 
+  });
+
+  res.json(travels);
+});
+
 // Add new booking
 router.put('/:id/newBooking', (req, res) => {
   const {id} = req.params;

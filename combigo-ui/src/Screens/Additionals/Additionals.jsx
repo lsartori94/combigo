@@ -37,7 +37,7 @@ export const Additionals = () => {
     initialize();
   }, []);
 
-  const deleteDriver = async (uname) =>{
+  const deleteAditional = async (uname) =>{
     try {
       await deleteAdditional(uname);
       const response = await getAdditionals();
@@ -53,7 +53,7 @@ export const Additionals = () => {
   }
 
   const deleteCallback = () => {
-    deleteDriver(selectedAdditional);
+    deleteAditional(selectedAdditional);
     setShowDelete(false);
   }
 

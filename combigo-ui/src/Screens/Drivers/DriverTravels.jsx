@@ -12,7 +12,7 @@ import {
   Dialog,
 } from 'evergreen-ui';
 
-import { getDriverTravels, getAvailableVehicles, getAvailableRoutes, cancelTravel, startTravel } from './driversStore';
+import { getDriverTravels, getAvailableVehicles, getAvailableRoutes, cancelTravel, startTravel, finishTravel } from './driversStore';
 import { useAuth } from "../../utils/use-auth";
 import {TRAVEL_STATES} from '../../constants'
 
@@ -57,10 +57,10 @@ export const DriverTravels = () => {
     setTravelsLoaded(false);
     try {
       const response = await getDriverTravels( auth.user.id ); //Solo los pendientes y comenzados
-      if (response.length) {
+      //if (response.length) {
         setTravels(response);
         setTravelsLoaded(true);
-      }
+      //}                         //Si el if esta no se actualiza el placeholder
     } catch (e) {
       console.error(e);
     } finally {
@@ -107,13 +107,21 @@ export const DriverTravels = () => {
     }
   }
 
-  //Finalizar viaje (terminar)
+  //Finalizar viaje
   const promptFinishTravel = async (travelId) => {   
     setSelectedTravel(travelId); 
     setShowFinish(true);
   }
 
-  const finishTravelCallback = async () => {    
+  const finishTravelCallback = async () => {   
+    try {
+      await finishTravel(selectedTravel); //es el id
+    } catch (e) {
+      console.error(e);
+    } finally {
+      reloadTravel();
+      setShowFinish(false);
+    } 
   }
 
   //probar si faltan 8 horas para una fecha s

@@ -156,6 +156,25 @@ export async function startTravel(travelId) {
   return result;
 }
 
+export async function finishTravel(travelId) {
+  const response = await fetch(
+    `${API_BASE}/travels/finishtTravel/${travelId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    }
+  );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
 export async function cancelTravel(travelId) {
   const response = await fetch(
     `${API_BASE}/travels/cancelTravel/${travelId}`,
