@@ -6,6 +6,7 @@ const ID_BASE = 'CGOU';
 
 const CONSTANTS = require('./constants');
 const users = require('./store').users;
+const blacklist = require('./store').blacklist;
 
 // Get all users by role
 router.get('/', (req, res) => {
@@ -290,6 +291,11 @@ router.post('/login', (req, res) => {
   }
 
   res.json(result);
+});
+
+// Get blacklist
+router.get('/blacklist/all', (req, res) => {
+  res.json(blacklist);
 });
 
 module.exports = router;

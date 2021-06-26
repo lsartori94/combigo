@@ -9,7 +9,8 @@ import {
   Button,
   Dialog,
   EditIcon,
-  Badge
+  Badge,
+  Alert
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -208,6 +209,15 @@ export const BookingDetails = () => {
             visible={false}
           > Cancelar Reserva
           </Button>
+
+          {details.legalStatus === LEGAL_STATUS.REJECTED && (
+            <Alert
+            intent="danger"
+            appearance="card"
+            marginTop={12}> 
+              Su declaracion jurada fue rechazada, se canceló la reserva de su viaje y las de los próximos 15 días.
+              No puede realizar nuevas reservas en los próximos 15 días.
+            </Alert>)}
       
       </Pane>
     );

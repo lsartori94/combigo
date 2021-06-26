@@ -347,6 +347,12 @@ router.put('/:id/newBooking', (req, res) => {
     return res.status(409).send(`El usuario no existe`);
   }
 
+  const onBlacklist = blacklist.find(u => u.userId === booking.id);
+
+  if (onBlacklist && (onBlacklist.endDate >= Date.now())) {
+    return res.status(405).send(`El usuario está inhabilitado por caso sospechoso hasta el ${onBlacklist.endDate.toLocaleString('es-AR')}`);
+  }
+
   if (travels[exists].active == false) {
     return res.status(405).send(`El viaje no esta activo`);
   }
@@ -362,6 +368,7 @@ router.put('/:id/newBooking', (req, res) => {
   if (booking.creditCard === '3333333333333333') { //tarjeta invalida
     return res.status(405).send(`La tarjeta es inválida.`);
   }
+
 
   travels[exists].stock = travels[exists].stock - 1;
   const finalBooking = Object.assign(
@@ -545,7 +552,19 @@ router.put('/:id/updateLegalStatus', (req, res) => {
           users[userExists].email, rutita.origin, rutita.destination, travels[travelito].dateAndTime.split('T')[0], travels[travelito].dateAndTime.split('T')[1], '100%');
       };
     });
-    blacklist.push(userId); //blacklist
+
+    //blacklist
+    const startDate = new Date();
+    const endDate =  new Date();
+    endDate.setDate(startDate.getDate() + 15);
+    const userBlacklisted = blacklist.findIndex(u => u.userId === userId);
+    if (userBlacklisted === -1) {
+      blacklist.push({userId, startDate, endDate, history: []});
+    } else {
+      blacklist[userBlacklisted].history.push(blacklist[userBlacklisted].startDate);
+      blacklist[userBlacklisted].startDate = startDate;
+      blacklist[userBlacklisted].endDate = endDate;
+    }
 
   } else {
     travels[exists].passengers[passengerExists].legalStatus = LEGAL_STATUS.APPROVED;

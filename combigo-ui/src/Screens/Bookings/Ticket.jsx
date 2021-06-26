@@ -180,20 +180,24 @@ export const Ticket = () => {
           )}
 
           {bookDetails.legalStatus === LEGAL_STATUS.PENDING && (
-            <div>
+            <Pane
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              >
               <InlineAlert intent="none" marginTop={20}>
                 Complete la declaracion jurada para ver el código QR.
               </InlineAlert>
               <Button
                 marginTop={12}
-                marginLeft={110} //ALINEAR BIEN ESTO
+                maxWidth={200}
                 intent="none"
                 iconBefore={EditIcon}
                 onClick={declarationCallback}
                 disabled={bookDetails.legalStatus !== LEGAL_STATUS.PENDING || bookDetails.status !== TRAVEL_STATES.NOT_STARTED}
                 > Declaracion jurada
               </Button>
-          </div>
+          </Pane>
           )}
 
           {!travelNotValid(bookDetails) && (bookDetails.legalStatus === LEGAL_STATUS.APPROVED) && (qrStr !== '') && (

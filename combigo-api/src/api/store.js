@@ -31,7 +31,16 @@ let users = [
     password: '123@Pass',
     bdate: '1990-11-12',
     dni: '37502385',
-    travelHistory: [], 
+    travelHistory: [
+      {
+        travelId: 'CGOT3',
+        bookingId: 'CGOB0',
+        legalStatus: LEGAL_STATUS.REJECTED,
+        boughtAdditionals: [],
+        status: BOOKING_STATES.CANCELED,
+        payment: 200
+      },
+    ], 
     creditCard: {
       issuer: 'Visa',
       number: '4983794057102007',
@@ -299,6 +308,15 @@ let travels = [
         creditCard: '4444444444444444',
         payment: 200,
         boughtAdditionals: [],
+        accepted: true,
+      },
+      {
+        id: 'CGOU2',
+        legalStatus: LEGAL_STATUS.REJECTED,
+        bookingStatus: BOOKING_STATES.CANCELED,
+        creditCard: '5555555555555555',
+        payment: 200,
+        boughtAdditionals: [],
         accepted: false,
       }
     ],
@@ -404,6 +422,13 @@ let additionals = [
 ];
 
 // lista de userIds alguna vez rechazados
-let blacklist = [];
+let blacklist = [
+  {
+    userId: 'CGOU2',
+    startDate: '2021-06-1T21:10:38.299Z',
+    endDate: '2021-06-15T21:10:38.299Z',
+    history: []
+  }
+];
 
 module.exports = {users, vehicles, additionals, routes, travels, blacklist};
