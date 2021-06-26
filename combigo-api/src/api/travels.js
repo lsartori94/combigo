@@ -296,7 +296,7 @@ router.put('/startTravel/:id', (req, res) => {
         t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
       ).status = BOOKING_STATES.ABSENT;
 
-      //travels[index].stock -= 1; //Stock no es la capacidad maximo? Como cambiamos la capacidad actual?
+      travels[index].stock += 1; //Stock son los asientos que quedan
     }
   });
 
@@ -550,7 +550,7 @@ router.put('/acceptPassenger/:id', (req, res) => {
   }
 
   if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
-    return res.status(405).send(`Solo se puede llenar la declaracion de un viaje pendiente`);
+    return res.status(405).send(`Solo se puede aceptar un pasajero en un viaje pendiente`);
   }
 
   const userExists = users.findIndex(user => user.id === userId);

@@ -116,7 +116,7 @@ export const DriverTravels = () => {
   const finishTravelCallback = async () => {    
   }
 
-  //probar si faltan 8 horas para una fecha
+  //probar si faltan 8 horas para una fecha s
   const moreThanSixHoursLeft = (atravel) => {
     const travelDate = new Date(atravel.dateAndTime);
     const now = new Date();
@@ -226,10 +226,10 @@ export const DriverTravels = () => {
               Estado
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Capacidad
+              Pasajeros presentes
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Cantidad de Pasajeros
+              Asientos libres
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
@@ -248,11 +248,11 @@ export const DriverTravels = () => {
                   {travelsLoaded && travel.status}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {/* {travelsLoaded && ( vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado" ) */
-                   travelsLoaded && travel.stock}
+                  {travelsLoaded && travel.passengers.filter( p => p.accepted ).length}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travelsLoaded && travel.passengers.length}
+                  {/* {travelsLoaded && ( vehicles.find(ve => ve.id === travel.vehicle ) || "No asignado" ) */
+                   travelsLoaded && travel.stock}
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover

@@ -153,8 +153,9 @@ export const ListPassengers = () => {
                 </Table.TextCell>
                 <Table.Cell flex="none">
                   <Button
+                    intent="success"
                     onClick={() => triggerAccept(travel.id, passenger.id) }
-                    disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted }
+                    disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted || travel.status !== TRAVEL_STATES.NOT_STARTED }
                   >
                     Aceptar
                   </Button>
@@ -173,7 +174,7 @@ export const ListPassengers = () => {
 
         <Button
           onClick={triggerAddPassenger }
-          disabled={travel.stock <= travel.passengers.length }
+          disabled={travel.stock <= 0 }
         >
           Agregar pasajero sin reserva
         </Button>
