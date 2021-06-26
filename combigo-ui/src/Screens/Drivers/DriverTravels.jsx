@@ -12,7 +12,7 @@ import {
   Dialog,
 } from 'evergreen-ui';
 
-import { getDriverTravels, getAvailableVehicles, getAvailableRoutes, cancelTravel, startTravel, finishTravel } from './driversStore';
+import { getDriverTravels, getAvailableRoutes, cancelTravel, startTravel, finishTravel } from './driversStore';
 import { useAuth } from "../../utils/use-auth";
 import {TRAVEL_STATES} from '../../constants'
 
@@ -212,27 +212,27 @@ export const DriverTravels = () => {
       >
         <Dialog
           isShown={showCancel}
-          title="Confirm Cancel"
+          title="Confirmar cancelación"
           intent="danger"
           onConfirm={() => cancelCallback()}
           onCloseComplete={() => setShowCancel(false)}
           confirmLabel="Continuar"
           cancelLabel="Cancelar"
-        > { "Si cancela el viaje las reservas de los pasageros seran reenvolsadas ¿Desea continuar?"}
+        > { "Si cancela el viaje las reservas de los pasajeros seran reembolsadas ¿Desea continuar?"}
         </Dialog>
         <Dialog
           isShown={showStart}
-          title="Confirm Start Travel"
+          title="Confirmar comenzar viaje"
           intent="success"
           onConfirm={() => startTravelCallback()}
           onCloseComplete={() => setShowStart(false)}
           confirmLabel="Comenzar"
           cancelLabel="Cancelar"
-        > { "Los pasajeros que no esten aceptados seran registrados como ausentes"}
+        > { "Los pasajeros que no esten aceptados seran registrados como ausentes."}
         </Dialog>
         <Dialog
           isShown={showFinish}
-          title="Confirm Finish Travel"
+          title="Confirmar finalizar viaje"
           intent="success"
           onConfirm={() => finishTravelCallback()}
           onCloseComplete={() => setShowFinish(false)}

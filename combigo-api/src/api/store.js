@@ -54,6 +54,7 @@ let users = [
     },
     role: ROLES.CLIENT,
     active: true,
+    registerDate: '2021-1-1'
   },
   {
     id: 'CGOU3',
@@ -105,7 +106,8 @@ let users = [
       startDate: ''
     },
     role: ROLES.CLIENT,
-    active: true
+    active: true,
+    registerDate: '2021-1-20'
   },
   {
     id: 'CGOU4',
@@ -129,6 +131,7 @@ let users = [
     },
     role: ROLES.CLIENT,
     active: true,
+    registerDate: '2021-4-20'
   },
   {
     id: 'CGOU5',

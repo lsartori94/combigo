@@ -17,12 +17,6 @@ import QrReader from 'react-qr-reader';
 import { TRAVEL_STATES } from '../../constants.js';
 import { useAuth } from "../../utils/use-auth";
 
-// import {
-//   getTravelDetails,
-//   getAvailableAditionals,
-//   getAvailableRoutes,
-//   getBookings,
-// } from "./BookingsStore";
 
 export const Scanner = () => {
   let { travelId, bookingId } = useParams();

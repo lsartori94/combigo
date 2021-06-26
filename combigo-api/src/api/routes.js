@@ -7,6 +7,7 @@ const { TRAVEL_STATES, BOOKING_STATES } = require('./constants');
 const ID_BASE = 'CGOR';
 
 const {routes, travels, users} = require('./store');
+const mailer = require('./mailer/mailer');
 
 // Get routes
 router.get('/', (req, res) => {
@@ -166,12 +167,17 @@ router.delete('/:id', (req, res) => {
   // cancelar todos los viajes
   function cancelTravelBookings(travel) {
     travel.passengers.forEach(p => {
-      p.bookingStatus = BOOKING_STATES.CANCELED; //sacar esto
-      users.find(
-        e => e.id === p.id
-      ).travelHistory.find(
+      p.bookingStatus = BOOKING_STATES.CANCELED;
+      const user = users.find(e => e.id === p.id);
+      user.travelHistory.find(
         t => (t.travelId === travel.id) && (t.status === BOOKING_STATES.PENDING)
       ).status = BOOKING_STATES.CANCELED;
+  
+      //send email
+      const rutita = routes.find(r => r.id === travel.route);
+      mailer.sendBookingCancelationEmail(
+        user.email, rutita.origin, rutita.destination, travel.dateAndTime.split('T')[0], travel.dateAndTime.split('T')[1], '100%'
+      );
     });
   }
   
@@ -186,6 +192,7 @@ router.delete('/:id', (req, res) => {
       )
     ) {
       travels[travelIndex].status = TRAVEL_STATES.CANCELED;
+      travels[travelIndex].active = false;
       cancelTravelBookings(travels[travelIndex]);
     }
   });

@@ -507,7 +507,7 @@ function getHtml() {
       
           <div style="Margin-left: 20px;Margin-right: 20px;">
     <div style="mso-line-height-rule: exactly;mso-text-raise: 11px;vertical-align: middle;">
-      <p style="Margin-top: 0;Margin-bottom: 20px;text-align: center;">Tu cuenta ha sido creada. Utiliza tu email y la contrase&#241;a provista por el chofer para iniciar a tu cuenta.</p>
+      <p style="Margin-top: 0;Margin-bottom: 20px;text-align: center;">Tu cuenta ha sido creada. Utiliza tu email y la contrase&#241;a que elegiste o la provista por el chofer para iniciar sesion en tu cuenta.</p>
     </div>
   </div>
       

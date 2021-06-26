@@ -237,12 +237,17 @@ router.delete('/:id', (req, res) => {
   travels[index].active = false;
   travels[index].status = TRAVEL_STATES.CANCELED;
   travels[index].passengers.forEach(p =>{
-    p.bookingStatus = BOOKING_STATES.CANCELED; //sacar esto
-    users.find(
-      e => e.id === p.id
-    ).travelHistory.find(
+    p.bookingStatus = BOOKING_STATES.CANCELED;
+    const user = users.find(e => e.id === p.id);
+    user.travelHistory.find(
       t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
     ).status = BOOKING_STATES.CANCELED;
+
+    //send email
+    const rutita = routes.find(r => r.id === travels[index].route);
+    mailer.sendBookingCancelationEmail(
+      user.email, rutita.origin, rutita.destination, travels[index].dateAndTime.split('T')[0], travels[index].dateAndTime.split('T')[1], '100%'
+    );
   });
 
   res.json(travels);
@@ -388,6 +393,10 @@ router.put('/:id/newBooking', (req, res) => {
     legalStatus: LEGAL_STATUS.PENDING,
   });
 
+  const rutita = routes.find(r => r.id === travels[exists].route);
+    mailer.sendBookingConfirmationEmail(
+      users[userExists].email, rutita.origin, rutita.destination, travels[exists].dateAndTime.split('T')[0], travels[exists].dateAndTime.split('T')[1]);
+
   res.send(booking);
 });
 
@@ -429,21 +438,15 @@ router.put('/:id/cancelBooking', (req, res) => {
   if (userI === -1) {
     return res.status(405).send(`El usuario no existe`);
   }
-
-  // if (ms - now >= diff) {
-  //   // mas de 48hs
-  //   users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.FULL_REFUND;
-  // } else {
-  //   // menos de 48hs
-  //   users[userI].travelHistory.find(t => t.travelId === id).status = BOOKING_STATES.HALF_REFUND;
-  // } //Cambio para BookingId
-
+  let refundP = '';
   if (ms - now >= diff) {
     // mas de 48hs
     users[userI].travelHistory.find(t => t.bookingId === idBooking).status = BOOKING_STATES.FULL_REFUND;
+    refundP = '100%';
   } else {
     // menos de 48hs
     users[userI].travelHistory.find(t => t.bookingId === idBooking).status = BOOKING_STATES.HALF_REFUND;
+    refundP = '50%';
   } 
   
   const newTravel = Object.assign(
@@ -454,6 +457,12 @@ router.put('/:id/cancelBooking', (req, res) => {
     }
   );
   travels[exists] = newTravel;
+
+  //send email
+  const rutita = routes.find(r => r.id === travels[exists].route);
+  mailer.sendBookingCancelationEmail(
+    users[userI].email, rutita.origin, rutita.destination, travels[exists].dateAndTime.split('T')[0], travels[exists].dateAndTime.split('T')[1], refundP
+  );
 
   res.send(travels[exists]);
 });
@@ -532,7 +541,6 @@ router.put('/:id/updateLegalStatus', (req, res) => {
     rejected = true;
   };
   
-  // TODO: inhabilitar compras
   if (rejected) {
     travels[exists].passengers[passengerExists].legalStatus = LEGAL_STATUS.REJECTED;
     users[userExists].travelHistory[bookingExists].legalStatus = LEGAL_STATUS.REJECTED;

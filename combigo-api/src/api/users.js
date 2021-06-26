@@ -7,6 +7,7 @@ const ID_BASE = 'CGOU';
 const CONSTANTS = require('./constants');
 const users = require('./store').users;
 const blacklist = require('./store').blacklist;
+const mailer = require('./mailer/mailer');
 
 // Get all users by role
 router.get('/', (req, res) => {
@@ -82,9 +83,13 @@ router.post('/', (req, res) => {
     dni,
     role,
     active: true,
+    registerDate: new Date()
   }
 
   users.push(newUser);
+
+  //send email
+  mailer.sendActivationEmail(newUser.email);
 
   res.send(newUser);
 });

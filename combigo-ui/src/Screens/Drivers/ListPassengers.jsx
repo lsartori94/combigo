@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Pane,
-  TextInputField,
   Spinner,
   BackButton,
   Button,
-  Dialog,
-  EditIcon,
   Table,
-  Popover,
-  Position,
-  Menu,
-  IconButton,
-  MoreIcon,
   Checkbox,
-  UpdatedIcon
+  PlusIcon
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -99,15 +91,28 @@ export const ListPassengers = () => {
   }
 
   const renderPlaceholder = () => (
-    <div style={{padding: "30px"}}>No hay pasajeros para este viaje
-    </div>
+    <Pane
+      marginTop={20}
+      display="flex"
+      alignItems="center"
+      flexDirection="column">
+      <BackButton
+        appearance="minimal"
+        alignSelf="flex-start"
+        marginLeft={10}
+        marginBottom={10}
+        onClick={() => backCallback()}
+      >
+        Volver
+      </BackButton>
+    <div style={{padding: "30px"}}>No hay pasajeros para este viaje</div>
+  </Pane>
   );
 
   const renderPassangers = (travel, clients) => {
     if ( !travelsLoaded || travel.passengers.length < 1) {
       return renderPlaceholder();
     }
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     return (
       <Pane
         marginTop={20}
@@ -149,6 +154,7 @@ export const ListPassengers = () => {
                 <Table.TextCell>
                   <Checkbox
                     checked={passenger.accepted}
+                    disabled
                   />
                 </Table.TextCell>
                 <Table.Cell flex="none">
@@ -168,13 +174,17 @@ export const ListPassengers = () => {
         <Button
           onClick={triggerScanQR}
           disabled={travel.status === TRAVEL_STATES.IN_PROGRESS}
+          appearance="primary"
         >
-          Escanear QR
+          Escanear QR de ticket
         </Button>
 
         <Button
+          iconBefore={PlusIcon}
           onClick={triggerAddPassenger }
           disabled={travel.stock <= 0 }
+          marginTop={10}
+          intent="success"
         >
           Agregar pasajero sin reserva
         </Button>
