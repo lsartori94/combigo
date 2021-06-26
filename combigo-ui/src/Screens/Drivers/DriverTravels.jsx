@@ -124,12 +124,21 @@ export const DriverTravels = () => {
     } 
   }
 
-  //probar si faltan 8 horas para una fecha s
+  //probar si faltan 6 horas para un viaje
   const moreThanSixHoursLeft = (atravel) => {
     const travelDate = new Date(atravel.dateAndTime);
     const now = new Date();
     let hoursLeft = Math.floor((travelDate - now) / (1000*60*60));
     if (hoursLeft >= 6) return true;
+    return false;
+  };
+
+  //probar si falta 1 hora para u viaje
+  const beforeStartingTime = (atravel) => {
+    const travelDate = new Date(atravel.dateAndTime);
+    const now = new Date();
+    let hoursLeft = Math.floor((travelDate - now) / (1000*60*60));
+    if (hoursLeft >= 0) return true;
     return false;
   };
   
@@ -140,6 +149,18 @@ export const DriverTravels = () => {
         <Menu>
           <Menu.Group>
             <Link to={`/driverTravels/passengers/${atravel.id}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
+          </Menu.Group>
+        </Menu>
+      )
+    }
+    if ( beforeStartingTime(atravel) ){
+      return (
+        <Menu>
+          <Menu.Group>
+            <Link to={`/driverTravels/passengers/${atravel.id}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
+          </Menu.Group>
+          <Menu.Group>
+            <Menu.Item intent="danger" onClick={() => promptCancel(atravel.id)}>Cancelar...</Menu.Item>
           </Menu.Group>
         </Menu>
       )
@@ -234,7 +255,7 @@ export const DriverTravels = () => {
               Estado
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Pasajeros presentes
+              Pasajeros aceptados
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
               Asientos libres
