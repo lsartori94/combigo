@@ -39,7 +39,10 @@ let users = [
       expDate: '2021-11-12',
       cvv:'123'
     },
-    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
     role: ROLES.CLIENT,
     active: true,
   },
@@ -54,7 +57,7 @@ let users = [
     travelHistory: [
       {
         travelId: 'CGOT1',
-        bookingId: 'CGOB0', //Agregado para bookingId
+        bookingId: 'CGOB0',
         legalStatus: LEGAL_STATUS.PENDING,
         boughtAdditionals: [ 
           'CGOA1',
@@ -88,7 +91,10 @@ let users = [
         payment: 120
       }
     ],
-    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
     role: ROLES.CLIENT,
     active: true
   },
@@ -108,7 +114,10 @@ let users = [
       expDate: '2022-11-12',
       cvv:'153'
     },
-    vipStatus: VIP_STATUS.NOT_ENROLLED,
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
     role: ROLES.CLIENT,
     active: true,
   },
@@ -222,7 +231,7 @@ let routes = [
 let travels = [
   {
     id: 'CGOT1',
-    dateAndTime: '2021-06-21T21:00',
+    dateAndTime: '2021-06-24T22:40',
     route: 'CGOR1',
     stock: 1,
     passengers: [

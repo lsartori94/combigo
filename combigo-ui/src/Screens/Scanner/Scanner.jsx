@@ -39,7 +39,7 @@ export const Scanner = () => {
   const [noTravel, setNoTravel] = useState(true);
   const [travel, setTravel] = useState([]);
   const [qrStr, setQrStr] = useState('');
-  const [qrResult, setQrResult] = useState(null)
+  const [qrResult, setQrResult] = useState('')
   const history = useHistory();
 
   useEffect(() => {
@@ -205,7 +205,7 @@ export const Scanner = () => {
             onScan={handleScan}
             style={{ width: '100%' }}
           />
-          <p>{qrResult}</p>
+      {qrResult && (<p>HOLAA {JSON.stringify(qrResult)}</p>)}
     </div>
   );
 };

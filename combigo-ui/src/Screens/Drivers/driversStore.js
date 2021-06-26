@@ -2,7 +2,6 @@ import { API_BASE } from '../../constants';
 import { getRoutes } from '../Routes/routesStore';
 import { getVehicles } from '../Vehicles/vehiclesStore';
 import { getTravelDetails } from '../Travels/travelsStore';
-import {TRAVEL_STATES} from '../../constants'
 
 //Get drivers
 export async function getDrivers() {

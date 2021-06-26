@@ -32,7 +32,7 @@ export const Subscription = () => {
 
   const handleVipChange = async () => {
     steChangingVip(true);
-    let value = userInfo.vipStatus;
+    let value = userInfo.vip.status;
     if (value === VIP_STATUS.ENROLLED) {
       value = VIP_STATUS.NOT_ENROLLED;
     } else {
@@ -85,13 +85,13 @@ export const Subscription = () => {
               <Pane display={'flex'} alignItems={'center'}>
                 <TextInputField
                   label="Estado"
-                  value={VIP_STATUS_MSG[userInfo.vipStatus]}
+                  value={VIP_STATUS_MSG[userInfo.vip.status]}
                   disabled
                   marginRight={30}
                 />
                 <Button disabled={!vipAvailable} onClick={() => handleVipChange()} isLoading={changingVip}>
                   {
-                    (userInfo.vipStatus && userInfo.vipStatus === VIP_STATUS.ENROLLED)
+                    (userInfo.vip.status && userInfo.vip.status === VIP_STATUS.ENROLLED)
                       ? `Cancelar Membresía`
                       : `Subscribirse a Membresía`
                   }

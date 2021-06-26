@@ -87,7 +87,7 @@ app.get('/demo/mailer/bookingCanceled', (req, res) => {
     "50%" //porcentaje de reintegro
   );
   res.json({
-    message: 'MAILER DEMO WOOOO ====> Desubscripcion VIP ====> Mira la consola para tener la URL del mensaje'
+    message: 'MAILER DEMO WOOOO ====> Reserva cancelada por el usuario ====> Mira la consola para tener la URL del mensaje'
   });
 })
 

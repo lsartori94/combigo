@@ -7,6 +7,7 @@ const TICKET_BASE = 'CGOTKT';
 
 const { travels, routes, users, vehicles, blacklist} = require('./store');
 const { TRAVEL_STATES, BOOKING_STATES, ROLES, LEGAL_STATUS }= require('./constants');
+const mailer = require('./mailer/mailer');
 
 // Get active travels
 router.get('/', (req, res) => {
@@ -467,14 +468,26 @@ router.put('/:id/updateLegalStatus', (req, res) => {
     rejected = true;
   };
   
+  // TODO: inhabilitar compras
   if (rejected) {
     travels[exists].passengers[passengerExists].legalStatus = LEGAL_STATUS.REJECTED;
     users[userExists].travelHistory[bookingExists].legalStatus = LEGAL_STATUS.REJECTED;
 
-    // TODO: cancelar además sus viajes y compras proximos 15 dias (usando insideFifteenDays())
+    //cancelar proximos 15 dias
     travels[exists].passengers[passengerExists].status = BOOKING_STATES.CANCELED;
-    users[userExists].travelHistory[bookingExists].status = BOOKING_STATES.CANCELED
-
+    users[userExists].travelHistory.forEach(t => {
+      const travelito = travels.findIndex(tra => tra.id === t.travelId);
+      if (insideFifteenDays(travels[travelito].dateAndTime)) {
+        if (t.status !== BOOKING_STATES.PENDING) 
+          return;
+        t.status = BOOKING_STATES.CANCELED;
+        const p = travels[travelito].passengers.findIndex(tr => tr.id = userId);
+        travels[travelito].passengers[p].bookingStatus = BOOKING_STATES.CANCELED;
+        const rutita = routes.find(r => r.id === travels[travelito].route);
+        mailer.sendBookingDDJJCancelation(
+          users[userExists].email, rutita.origin, rutita.destination, travels[travelito].dateAndTime.split('T')[0], travels[travelito].dateAndTime.split('T')[1], '100%');
+      };
+    });
     blacklist.push(userId); //blacklist
 
   } else {
@@ -575,7 +588,6 @@ function datesOverlap(thisTravel, otherTravel) {
 function insideFifteenDays(datetime) {
   let today = new Date();
   let travelDate = new Date(datetime);
-
   let days = Math.floor((travelDate - today) / (1000*60*60*24));
   if (days <= 15) return true;
   return false;

@@ -6,7 +6,6 @@ const ID_BASE = 'CGOU';
 
 const CONSTANTS = require('./constants');
 const users = require('./store').users;
-const travels = require('./store').travels;
 
 // Get all users by role
 router.get('/', (req, res) => {
@@ -212,11 +211,25 @@ router.delete('/:uname/card', (req, res) => {
   }
 
   users[exists].creditCard = {};
+  users[exists].vip.status = CONSTANTS.VIP_STATUS.NOT_ENROLLED;
+  users[exists].vip.startDate = '';
 
   return res.send({});
 });
 
 // VIP
+router.get('/:uname/vip', (req, res) => {
+  const {uname} = req.params;
+
+  const exists = users.findIndex(user => user.username === uname);
+
+  if (exists === -1) {
+    return res.status(409).send(`Usuario no encontrado`);
+  }
+
+  return res.send(users[exists].vipStatus);
+});
+
 router.put('/:uname/vip', (req, res) => {
   const {uname} = req.params;
   const {vipStatus} = req.body;
@@ -235,7 +248,8 @@ router.put('/:uname/vip', (req, res) => {
     return res.status(400).send(`Bad Request`);
   }
 
-  users[exists].vipStatus = CONSTANTS.VIP_STATUS[vipStatus];
+  users[exists].vip.status = CONSTANTS.VIP_STATUS[vipStatus];
+  users[exists].vip.startDate = Date.now();
 
   return res.send(users[exists]);
 });
