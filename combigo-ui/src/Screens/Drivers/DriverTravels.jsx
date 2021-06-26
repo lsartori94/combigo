@@ -12,7 +12,7 @@ import {
   Dialog,
 } from 'evergreen-ui';
 
-import { getDriverTravels, getAvailableVehicles, getAvailableRoutes, cancelTravel } from './driversStore';
+import { getDriverTravels, getAvailableVehicles, getAvailableRoutes, cancelTravel, startTravel } from './driversStore';
 import { useAuth } from "../../utils/use-auth";
 import {TRAVEL_STATES} from '../../constants'
 
@@ -26,7 +26,9 @@ export const DriverTravels = () => {
   const [travelsLoaded, setTravelsLoaded] = useState(false);
 
   const [showCancel, setShowCancel] = useState(false);
-  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [showStart, setShowStart] = useState(false);
+  const [showFinish, setShowFinish] = useState(false);
+  const [selectedTravel, setSelectedTravel] = useState(null);
 
   useEffect(() => {
     async function initialize() {
@@ -49,56 +51,62 @@ export const DriverTravels = () => {
     initialize();
   },[auth.user, history]);
 
+  //Recarga los viajes despues de un cambio en la api
+  async function reloadTravel() {
+    setLoading(true);
+    setTravelsLoaded(false);
+    try {
+      const response = await getDriverTravels( auth.user.id );
+      if (response.length) {
+        setTravels(response);
+        setTravelsLoaded(true);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const renderPlaceholder = () => (
     <div style={{padding: "30px"}}>No posee viajes asignados activos
     </div>
   );
 
+  //cancelar viaje
   const promptCancel = async (travelId) => {    
-    setSelectedRoute(travelId);
+    setSelectedTravel(travelId);
     setShowCancel(true);
   }
 
-  const cancelCallback = async (travelId) => {    
+  const cancelCallback = async () => {    
     try {
-      await cancelTravel(travelId);
+      await cancelTravel(selectedTravel); //es el id
     } catch (e) {
       console.error(e);
     } finally {
+      reloadTravel();
       setShowCancel(false);
     }
   }
 
-  //Comenzar viaje (terminar)
+  //Comenzar viaje (terminar) ss
   const promptStartTravel = async (travelId) => {    
-    setSelectedRoute(travelId);
-    setShowCancel(true);
+    setSelectedTravel(travelId);
+    setShowStart();
   }
 
-  const startTravelCallback = async (travelId) => {    
-    try {
-      await cancelTravel(travelId);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setShowCancel(false);
-    }
+  const startTravelCallback = async () => {   
+    //startTravel(selectedTravel) 
   }
 
   //Finalizar viaje (terminar)
-  const promptEndTravel = async (travelId) => {    
-    setSelectedRoute(travelId);
-    setShowCancel(true);
+  const promptFinishTravel = async (travelId) => {   
+    setSelectedTravel(travelId); 
+    setShowFinish();
   }
 
-  const endTravelCallback = async (travelId) => {    
-    try {
-      await cancelTravel(travelId);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setShowCancel(false);
-    }
+  const finishTravelCallback = async () => {    
   }
 
   //probar si faltan 8 horas para una fecha
@@ -143,7 +151,7 @@ export const DriverTravels = () => {
             <Link to={`/driverTravels/passengers/${atravel.id}`}><Menu.Item>Ver pasajeros</Menu.Item></Link>
           </Menu.Group>
           <Menu.Group>
-            <Menu.Item intent="success" onClick={() => promptEndTravel(atravel.id)}>Finalizar viaje</Menu.Item>
+            <Menu.Item intent="success" onClick={() => promptFinishTravel(atravel.id)}>Finalizar viaje</Menu.Item>
           </Menu.Group>
           <Menu.Group>
             <Menu.Item intent="danger" onClick={() => promptCancel(atravel.id)}>Cancelar...</Menu.Item>
@@ -168,13 +176,33 @@ export const DriverTravels = () => {
       >
         <Dialog
           isShown={showCancel}
-          title="Confirmar Eliminacion"
+          title="Confirm Cancel"
           intent="danger"
           onConfirm={() => cancelCallback()}
           onCloseComplete={() => setShowCancel(false)}
           confirmLabel="Continuar"
           cancelLabel="Cancelar"
         > { "Si cancela el viaje las reservas de los pasageros seran reenvolsadas ¿Desea continuar?"}
+        </Dialog>
+        <Dialog
+          isShown={showStart}
+          title="Confirm Start Travel"
+          intent="success"
+          onConfirm={() => startTravelCallback()}
+          onCloseComplete={() => setShowStart(false)}
+          confirmLabel="Comenzar"
+          cancelLabel="Cancelar"
+        > { "Los pasajeros que no esten aceptados seran registrados como ausentes"}
+        </Dialog>
+        <Dialog
+          isShown={showFinish}
+          title="Confirm Finish Travel"
+          intent="success"
+          onConfirm={() => finishTravelCallback()}
+          onCloseComplete={() => setShowFinish(false)}
+          confirmLabel="Terminar"
+          cancelLabel="Cancelar"
+        > { "Confirmar final del viaje"}
         </Dialog>
         <Table width={"95%"}>
           <Table.Head>

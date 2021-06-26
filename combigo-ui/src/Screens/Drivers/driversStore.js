@@ -120,7 +120,7 @@ export async function getClients() {
 
 export async function acceptPassenger(travelId, userId) {
   const response = await fetch(
-    `${API_BASE}/travels/${travelId}/acceptPassenger`,
+    `${API_BASE}/travels/acceptPassenger/${travelId}`,
     {
       method: 'PUT',
       headers: {
@@ -139,7 +139,7 @@ export async function acceptPassenger(travelId, userId) {
 
 export async function startTravel(travelId) {
   const response = await fetch(
-    `${API_BASE}/travels/${travelId}/startTravel`,
+    `${API_BASE}/travels/startTravel/${travelId}`,
     {
       method: 'PUT',
       headers: {

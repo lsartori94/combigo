@@ -14,7 +14,8 @@ import {
   Menu,
   IconButton,
   MoreIcon,
-  Checkbox
+  Checkbox,
+  UpdatedIcon
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -60,6 +61,23 @@ export const ListPassengers = () => {
     history.push('/driverTravels');
   }
 
+  //Recarga los viajes para que las checkbox se actualicen
+  async function reloadTravel() {
+    setLoading(true);
+    try {
+      const travelResponse = await getATravelDetails(travelId);
+      if (travelResponse.passengers.length) {
+        setTravel(travelResponse);
+        setTravelsLoaded(true);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  //Ocurre cuand ose apreta aceptar
   const triggerAccept = async (travelId, userId) => {    
     try {
       setLoading(true);
@@ -68,19 +86,17 @@ export const ListPassengers = () => {
       console.log(e);
     } finally {
       setLoading(false);
+      reloadTravel();
     }
   }
 
-  // const triggerStartTravel = async (travelId) => {    
-  //   try {
-  //     setLoading(true);
-  //     await startTravel(travelId); //Necesitamos hacerlo
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // } //Esto va a estar en ver viajes fdfsdf
+  //Scan QR (Programar)
+  const triggerScanQR = async () => {    
+  }
+
+  //Add new passanger (Programar)
+  const triggerAddPassenger = async () => {    
+  }
 
   const renderPlaceholder = () => (
     <div style={{padding: "30px"}}>No hay pasajeros para este viaje
@@ -100,16 +116,25 @@ export const ListPassengers = () => {
         flexDirection="column"
         className="travel-container"
       >
+        <BackButton
+          appearance="minimal"
+          alignSelf="flex-start"
+          marginLeft={10}
+          marginBottom={10}
+          onClick={() => backCallback()}
+        >
+          Volver
+        </BackButton>
         <Table width={"95%"}>
           <Table.Head>
             <Table.TextHeaderCell>
               Nombre
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Estado legal
+              Declaracion jurada
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Aceptado
+              Listo para viajar
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
@@ -127,9 +152,9 @@ export const ListPassengers = () => {
                   />
                 </Table.TextCell>
                 <Table.Cell flex="none">
-                <Button
-                  onClick={triggerAccept}
-                  disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted}
+                  <Button
+                    onClick={() => triggerAccept(travel.id, passenger.id) }
+                    disabled={!(passenger.legalStatus === LEGAL_STATUS.APPROVED) || passenger.accepted }
                   >
                     Aceptar
                   </Button>
@@ -138,6 +163,20 @@ export const ListPassengers = () => {
             ))}
           </Table.Body>
         </Table>
+
+        <Button
+          onClick={triggerScanQR}
+          disabled={travel.status === TRAVEL_STATES.IN_PROGRESS}
+        >
+          Escanear QR
+        </Button>
+
+        <Button
+          onClick={triggerAddPassenger }
+        >
+          Agregar pasajero sin reserva
+        </Button>
+
       </Pane>)
   };
 

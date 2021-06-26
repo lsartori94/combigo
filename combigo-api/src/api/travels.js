@@ -270,6 +270,36 @@ router.put('/cancelTravel/:id', (req, res) => {
   res.json(travels);
 });
 
+//Start travel
+router.put('/startTravel/:id', (req, res) => {
+  const {id} = req.params;
+  
+  const index = travels.findIndex(travel => travel.id === id);
+  if (index === -1) {
+    return res.status(404).send(`Viaje no encontrado`);
+  }
+  
+  travels[index].status = TRAVEL_STATES.IN_PROGRESS; //Esto necesita mas pensamiento del que esperaba...
+  travels[index].passengers.forEach(p =>{
+    if ( p.accepted ) {
+    p.bookingStatus = BOOKING_STATES.ACTIVE; 
+    users.find(
+      e => e.id === p.id
+    ).travelHistory.find(
+      t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
+    ).status = BOOKING_STATES.ACTIVE;
+    } else {
+      p.bookingStatus = BOOKING_STATES.COMPLETED; //Estado para ausente?? // O los saco de aca?
+      users.find(
+        e => e.id === p.id
+      ).travelHistory.find(
+        t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
+      ).status = BOOKING_STATES.COMPLETED;
+    }
+  });
+
+  res.json(travels);
+});
 
 // Add new booking
 router.put('/:id/newBooking', (req, res) => {
@@ -311,7 +341,8 @@ router.put('/:id/newBooking', (req, res) => {
   const finalBooking = Object.assign(
     booking,
     {
-      ticketId: `${TICKET_BASE}${travels[exists].passengers.length + 1}`
+      ticketId: `${TICKET_BASE}${travels[exists].passengers.length + 1}`,
+      legalStatus: LEGAL_STATUS.PENDING,
     }
   );
   travels[exists].passengers.push(finalBooking);
@@ -321,7 +352,7 @@ router.put('/:id/newBooking', (req, res) => {
     boughtAdditionals: booking.boughtAdditionals,
     status: BOOKING_STATES.PENDING,
     payment: finalBooking.payment,
-    legalStatus: LEGAL_STATUS.PENDING
+    legalStatus: LEGAL_STATUS.PENDING,
   });
 
   res.send(booking);
@@ -498,8 +529,8 @@ router.put('/:id/updateLegalStatus', (req, res) => {
   res.send(travels[exists]);
 });
 
-//Accept passenger on a trip
-router.put('/:id/acceptPassenger', (req, res) => {
+//Accept passenger on a trip dsds
+router.put('/acceptPassenger/:id', (req, res) => {
   const {id} = req.params;
   const {userId} = req.body;
 
@@ -530,17 +561,12 @@ router.put('/:id/acceptPassenger', (req, res) => {
     return res.status(405).send(`El pasajero no existe`);
   }
 
-  const bookingExists = users[userExists].travelHistory.findIndex(book => book.id == bookingId);
-  if (bookingExists === -1) {
-    return res.status(405).send(`La reserva no existe`);
-  }
-  
-
   travels[exists].passengers[passengerExists].accepted = true;
 
   res.send(travels[exists]);
 });
 
+//Aceptar pasajeros en un viaje
 router.put('/:travelId/acceptPassenger', (req, res) => {
   const {travelId} = req.params;
 
