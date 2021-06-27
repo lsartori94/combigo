@@ -84,7 +84,6 @@ function App() {
             <Route path="/drivers">
               <Drivers />
             </Route>
-<<<<<<< Updated upstream
             <Route path="/clients">
               <Clients />
             </Route>
@@ -93,10 +92,9 @@ function App() {
             </Route>
             <Route path="/clientsBlacklist">
               <ClientsBlacklist />
-=======
+            </Route>
             <Route path="/driverTravels/passengers/addNewPassanger/:travelId">
               <AddNewPassanger />
->>>>>>> Stashed changes
             </Route>
             <Route path="/driverTravels/passengers/:travelId">
               <ListPassengers />

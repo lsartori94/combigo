@@ -18,13 +18,8 @@ import {
   Dialog
 } from "evergreen-ui";
 
-<<<<<<< Updated upstream
 import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking, getUserBlacklist } from "./checkoutStore";
-import { VIP_STATUS } from "../../constants";
-=======
-import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking } from "./checkoutStore";
 import { LEGAL_STATUS, VIP_STATUS } from "../../constants";
->>>>>>> Stashed changes
 
 export default function Checkout() {
   let { travelId } = useParams();
