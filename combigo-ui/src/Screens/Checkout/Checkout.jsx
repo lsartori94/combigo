@@ -18,7 +18,7 @@ import {
   Dialog
 } from "evergreen-ui";
 
-import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking } from "./checkoutStore";
+import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking, getUserBlacklist } from "./checkoutStore";
 import { VIP_STATUS } from "../../constants";
 
 export default function Checkout() {
@@ -29,6 +29,7 @@ export default function Checkout() {
   const [isShownSuccess, setIsShownSuccess] = useState(false);
   const [checkedSavedCC, setCheckedSavedCC] = useState(false);
   const [userHasSavedCC, setUserHasSavedCC] = useState(false);
+  const [clientBlacklisted, setClientBlacklisted] = useState(false);
   const [error, setError] = useState(false);
   const [userIsVIP, setUserIsVip] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
@@ -87,6 +88,7 @@ export default function Checkout() {
         const travelResponse = await getTravelDetails(travelId);
         const routeResponse = await getRouteDetails(travelResponse.route);
         const userInfo = await getUserDetails(auth.user);
+        const userBlacklist = await getUserBlacklist(auth.user);
         setDetails(travelResponse);
         setRouteDetails(routeResponse);
         setSubtotal(travelResponse.price)
@@ -96,6 +98,8 @@ export default function Checkout() {
         }
         if (userInfo.vip.status && userInfo.vip.status === VIP_STATUS.ENROLLED)
           setUserIsVip(true);
+        if (userBlacklist.id && (new Date() <= new Date(userBlacklist.endDate)))
+          setClientBlacklisted(true);
       } catch (e) {
         console.error(e);
       } finally {
@@ -292,6 +296,19 @@ export default function Checkout() {
       history.push(`/login?callbackUrl=${url}`);
     }
 
+    if (clientBlacklisted) {
+      return (
+      <div>
+        <Alert
+          intent="danger"
+          hasIcon={true}
+          appearance="card"
+          title="Su usuario se encuentra inhabilitado temporalmente por caso sospechoso."
+          marginTop={20}
+        />
+      </div>)
+    }
+
     if (alreadyReserved(details)) {
       return (
       <div>
@@ -304,7 +321,7 @@ export default function Checkout() {
         />
       </div>)
     }
-  
+    console.log(details);
     if (details.stock < 1) {
       return (
       <div>

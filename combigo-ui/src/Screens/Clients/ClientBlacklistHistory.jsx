@@ -80,7 +80,7 @@ export const ClientBlacklistHistory = () => {
               <Table.Row key={blacklist.userId}>
                 <Table.TextCell>{new Date(each.startDate).toLocaleDateString('es-AR', options)}</Table.TextCell>
               <Table.TextCell>{new Date(each.endDate).toLocaleDateString('es-AR', options)}</Table.TextCell>
-              <Table.TextCell>{(new Date() < new Date(each.endDate)) ? 
+              <Table.TextCell>{(new Date() <= new Date(each.endDate)) ? 
                 <Badge color='red'> Vigente </Badge> : <Badge color='neutral'> Vencida </Badge>}
               </Table.TextCell>
                 <Table.Cell flex="none">

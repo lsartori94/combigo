@@ -308,11 +308,8 @@ router.get('/blacklist/client/:userId', (req, res) => {
   const {userId} = req.params;
 
   const userB = blacklist.find(b => b.userId === userId);
-  if (!userB) {
-    return res.status(409).send(`Usuario no encontrado`);
-  }
 
-  res.json(userB);
+  res.json(userB || {});
 });
 
 module.exports = router;

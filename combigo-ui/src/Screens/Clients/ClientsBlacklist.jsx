@@ -64,7 +64,7 @@ export const ClientsBlacklist = () => {
   function currentlyBlacklisted(clientId) {
     const endDate = new Date(blacklist.find(b => b.userId === clientId).endDate);
     const today = new Date();
-    return today < endDate;
+    return today <= endDate;
   };
 
   const renderClients = (clients, blacklist) => {

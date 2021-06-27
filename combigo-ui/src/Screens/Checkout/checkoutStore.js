@@ -1,6 +1,7 @@
 import { API_BASE } from '../../constants';
 import { getAdditionals } from "../Additionals/additionalsStore";
 import { getUserInfo } from "../Profile/profileStore";
+import { getClientBlacklist } from "../Clients/listClientsStore";
 
 export async function getRouteDetails(routeId) {
     const response = await fetch(`${API_BASE}/routes/${routeId}`);
@@ -46,4 +47,8 @@ export async function getAvailableAdditionals(travelId) {
 
 export async function getUserDetails(user) {
   return getUserInfo(user.username);
+}
+
+export async function getUserBlacklist(user) {
+  return getClientBlacklist(user.id);
 }
