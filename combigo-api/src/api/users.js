@@ -255,7 +255,7 @@ router.put('/:uname/vip', (req, res) => {
   }
 
   users[exists].vip.status = CONSTANTS.VIP_STATUS[vipStatus];
-  users[exists].vip.startDate = Date.now();
+  users[exists].vip.startDate = new Date();
 
   return res.send(users[exists]);
 });

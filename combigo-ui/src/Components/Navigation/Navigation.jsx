@@ -73,7 +73,7 @@ export const Navigation = () => {
             <li onClick={() => setIsOpen(false)}>
               <Link to="/">Home</Link>
             </li>
-            {auth.user && auth.isAdmin() && (
+            {auth.user && auth.isAdmin() && ( //admin
               <>
                 <hr />
                 <li onClick={() => setIsOpen(false)}>
@@ -95,9 +95,13 @@ export const Navigation = () => {
                 <li onClick={() => setIsOpen(false)}>
                   <Link to="/additionals">Adicionales</Link>
                 </li>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/clients">Clientes</Link>
+                </li>
               </>
             )}
-            {auth.user && auth.isClient() && ( //Esto es para las reservas
+            {auth.user && auth.isClient() && ( //client
               <>
                 <hr />
                 <li onClick={() => setIsOpen(false)}>
@@ -109,7 +113,7 @@ export const Navigation = () => {
                 </li>
               </>
             )}
-            {auth.user && auth.isDriver() && ( //Esto es para ver los viajes de un chofer
+            {auth.user && auth.isDriver() && ( //driver
               <>
                 <hr />
                 <li onClick={() => setIsOpen(false)}>
