@@ -14,7 +14,7 @@ import {
 
 import { getDriverTravels, getAvailableRoutes, cancelTravel, startTravel, finishTravel } from './driversStore';
 import { useAuth } from "../../utils/use-auth";
-import {TRAVEL_STATES} from '../../constants'
+import { TRAVEL_STATES } from '../../constants'
 
 export const DriverTravels = () => {
   const auth = useAuth();

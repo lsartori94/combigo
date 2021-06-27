@@ -251,6 +251,7 @@ let travels = [
     passengers: [
       {
         id: 'CGOU3',
+        ticketId: 'CGOTKT1',
         legalStatus: LEGAL_STATUS.PENDING,
         bookingStatus: BOOKING_STATES.PENDING,
         creditCard: '4444444444444444',
@@ -280,6 +281,7 @@ let travels = [
     passengers: [
       {
         id: 'CGOU3',
+        ticketId: 'CGOTKT1',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
         creditCard: '4444444444444444',
@@ -307,6 +309,7 @@ let travels = [
     passengers: [
       {
         id: 'CGOU3',
+        ticketId: 'CGOTKT1',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.COMPLETED,
         creditCard: '4444444444444444',
@@ -316,6 +319,7 @@ let travels = [
       },
       {
         id: 'CGOU2',
+        ticketId: 'CGOTKT2',
         legalStatus: LEGAL_STATUS.REJECTED,
         bookingStatus: BOOKING_STATES.CANCELED,
         creditCard: '5555555555555555',
@@ -343,6 +347,7 @@ let travels = [
     passengers: [
       {
         id: 'CGOU3',
+        ticketId: 'CGOTKT1',
         legalStatus: LEGAL_STATUS.APPROVED,
         bookingStatus: BOOKING_STATES.ACTIVE,
         creditCard: '4444444444444444',

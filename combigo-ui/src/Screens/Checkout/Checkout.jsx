@@ -18,8 +18,13 @@ import {
   Dialog
 } from "evergreen-ui";
 
+<<<<<<< Updated upstream
 import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking, getUserBlacklist } from "./checkoutStore";
 import { VIP_STATUS } from "../../constants";
+=======
+import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking } from "./checkoutStore";
+import { LEGAL_STATUS, VIP_STATUS } from "../../constants";
+>>>>>>> Stashed changes
 
 export default function Checkout() {
   let { travelId } = useParams();
@@ -278,7 +283,7 @@ export default function Checkout() {
 
   //habria que chequear si travel.dateAndTime > Date.now()
   const paymentCallback = async () => {
-    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard.number, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id});
+    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard.number, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id, accepted: false, legalStatus: LEGAL_STATUS.PENDING});
     try {
       setLoading(true);
       await createBooking(booking, travelId);

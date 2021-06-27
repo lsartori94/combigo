@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+=======
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
+>>>>>>> Stashed changes
 import {
   Pane,
   Spinner,
@@ -121,7 +126,8 @@ export const ListPassengers = () => {
   };
 
   //Add new passanger (Programar)
-  const triggerAddPassenger = async () => {    
+  const triggerAddNewPassenger = async () => {    
+    
   }
 
   const renderPlaceholder = () => (
@@ -234,7 +240,8 @@ export const ListPassengers = () => {
         </Popover>
         <Button
           iconBefore={PlusIcon}
-          onClick={triggerAddPassenger }
+          is={Link}
+          to={`/driverTravels/passengers/addNewPassanger/${travel.id}`}
           disabled={travel.stock <= 0 }
           marginTop={10}
           intent="success"
@@ -244,7 +251,7 @@ export const ListPassengers = () => {
 
       </Pane>)
   };
-
+  
   return (
     <Pane>
       <span ref={closeRef} style={{display:'none'}}></span>

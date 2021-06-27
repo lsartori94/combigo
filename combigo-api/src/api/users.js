@@ -50,6 +50,18 @@ router.get('/id/:id', (req, res) => {
   res.json(result);
 });
 
+// Search for user with email
+router.get('/email/:email', (req, res) => {
+  const {email} = req.params;
+  const result = users.find(user => user.email === email);
+
+  if (!result) {
+    res.status(404).send(`Usuario no encontrado`);
+  }
+
+  res.json(result);
+});
+
 // Create user
 router.post('/', (req, res) => {
   const {username, email, password, dni, name, bdate, role} = req.body;

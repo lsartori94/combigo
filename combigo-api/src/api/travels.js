@@ -335,7 +335,8 @@ router.put('/finishtTravel/:id', (req, res) => {
 // Add new booking
 router.put('/:id/newBooking', (req, res) => {
   const {id} = req.params;
-  const booking = req.body;
+  const booking = req.body; //Booking deberia incluir legal status
+  // const legalStatus = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -380,7 +381,7 @@ router.put('/:id/newBooking', (req, res) => {
     booking,
     {
       ticketId: `${TICKET_BASE}${travels[exists].passengers.length + 1}`,
-      legalStatus: LEGAL_STATUS.PENDING,
+      // legalStatus: legalStatus,
     }
   );
   travels[exists].passengers.push(finalBooking);
@@ -390,7 +391,7 @@ router.put('/:id/newBooking', (req, res) => {
     boughtAdditionals: booking.boughtAdditionals,
     status: BOOKING_STATES.PENDING,
     payment: finalBooking.payment,
-    legalStatus: LEGAL_STATUS.PENDING,
+    legalStatus: booking.legalStatus,
   });
 
   const rutita = routes.find(r => r.id === travels[exists].route);

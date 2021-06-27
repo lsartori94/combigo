@@ -21,6 +21,7 @@ import { ClientBlacklistHistory } from '../Screens/Clients/ClientBlacklistHistor
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';
 import { DriverTravels } from '../Screens/Drivers/DriverTravels'; 
 import { ListPassengers } from '../Screens/Drivers/ListPassengers'; 
+import { AddNewPassanger } from '../Screens/Drivers/AddNewPassanger'; 
 import { RouteDetails } from '../Screens/Routes/RouteDetails';
 import { Routes } from '../Screens/Routes/Routes';
 import { Travels } from '../Screens/Travels/Travels';
@@ -83,6 +84,7 @@ function App() {
             <Route path="/drivers">
               <Drivers />
             </Route>
+<<<<<<< Updated upstream
             <Route path="/clients">
               <Clients />
             </Route>
@@ -91,6 +93,10 @@ function App() {
             </Route>
             <Route path="/clientsBlacklist">
               <ClientsBlacklist />
+=======
+            <Route path="/driverTravels/passengers/addNewPassanger/:travelId">
+              <AddNewPassanger />
+>>>>>>> Stashed changes
             </Route>
             <Route path="/driverTravels/passengers/:travelId">
               <ListPassengers />

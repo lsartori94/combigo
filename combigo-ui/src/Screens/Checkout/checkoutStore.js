@@ -3,6 +3,9 @@ import { getAdditionals } from "../Additionals/additionalsStore";
 import { getUserInfo } from "../Profile/profileStore";
 import { getClientBlacklist } from "../Clients/listClientsStore";
 
+import { LEGAL_STATUS } from "../../constants";
+
+
 export async function getRouteDetails(routeId) {
     const response = await fetch(`${API_BASE}/routes/${routeId}`);
     if (!response.ok) {

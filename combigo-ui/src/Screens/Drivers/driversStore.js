@@ -3,6 +3,8 @@ import { getRoutes } from '../Routes/routesStore';
 import { getVehicles } from '../Vehicles/vehiclesStore';
 import { getTravelDetails } from '../Travels/travelsStore';
 
+import { LEGAL_STATUS } from "../../constants";
+
 //Get drivers
 export async function getDrivers() {
   const response = await fetch(`${API_BASE}/users?role=driver`);
@@ -190,6 +192,35 @@ export async function cancelTravel(travelId) {
   );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
+export async function getClientWithEmail(email) {
+  const response = await fetch(`${API_BASE}/users/email/${email}`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
+
+export async function createApprovedBooking(details, travelId) {
+  const response = await fetch(
+    `${API_BASE}/travels/${travelId}/newBooking`,
+    {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(details)
+    }
+  );
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error);
   }
   const result = await response.json();
   return result;

@@ -16,6 +16,16 @@ export const LEGAL_STATUS = {
   REJECTED: "Rechazado"
 }
 
+export const BOOKING_STATES = {
+  PENDING: "Pendiente",
+  ACTIVE: "En Curso",
+  COMPLETED: "Finalizada",
+  ABSENT: "Ausente",
+  FULL_REFUND: "Reembolsada 100%",
+  HALF_REFUND: "Reembolsada 50%",
+  CANCELED: "Cancelada (100% Reembolso)"
+}
+
 export const VIP_STATUS = {
   ENROLLED: "ENROLLED",
   NOT_ENROLLED: "NOT_ENROLLED"
