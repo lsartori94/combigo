@@ -8,8 +8,9 @@ import {
   BackButton,
 } from 'evergreen-ui';
 
-import { getClientWithEmail, getATravelDetails, createApprovedBooking } from './driversStore';
+import { getClientWithEmail, getATravelDetails, createApprovedBooking, createUserByDefault } from './driversStore';
 import { VIP_STATUS, BOOKING_STATES, LEGAL_STATUS } from "../../constants";
+import { useAuth } from "../../utils/use-auth";
 
 
 export const AddNewPassanger = () => {
@@ -58,6 +59,17 @@ export const AddNewPassanger = () => {
     setEmail(value);
   }
 
+  const createUser = async () => {
+    try {
+      setLoading(true);
+      createUserByDefault( email );
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const clientExistsCallback = async () => {
     try {
       setLoading(true);
@@ -76,6 +88,9 @@ export const AddNewPassanger = () => {
   }
 
   const bookingCallback = async () => {
+    if (!clientExists){
+      await createUser();
+    }
     const booking = Object.assign({
       id: client.id, bookingStatus: BOOKING_STATES.ACTIVE, 
       creditCard: 'efectivo', payment: (userIsVIP ? subtotal * 0.90 : subtotal), 
