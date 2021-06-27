@@ -109,7 +109,7 @@ export const ListPassengers = () => {
           });
         }
       } else {
-        toaster.danger('El ticket no es valido', {
+        toaster.danger('Ticket no Valido', {
           id: 'scan-error',
           duration: 10
         });
