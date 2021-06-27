@@ -94,6 +94,7 @@ router.post('/', (req, res) => {
     bdate,
     dni,
     role,
+    travelHistory: [],
     active: true,
     registerDate: new Date()
   }

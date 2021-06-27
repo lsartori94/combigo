@@ -229,8 +229,8 @@ export async function createApprovedBooking(details, travelId) {
 export const createUserByDefault = async (email) => {
   const user = {
     email: email,
-    username: '',
-    name: '',
+    username: email,
+    name: email,
     password: '123@Pass',
     bdate: '',
     dni: '',

@@ -48,21 +48,14 @@ export const AddNewPassanger = () => {
 
   const inputCallback = (e, name) => {
     const {value} = e.target;
-    // switch (name) {
-    //   case 'email':
-    //     setEmail(value);
-    //   break;
-    //   default:
-    //   break;
-    // }
-
     setEmail(value);
   }
 
   const createUser = async () => {
     try {
       setLoading(true);
-      createUserByDefault( email );
+      const newUser = await createUserByDefault(email);
+      return newUser;
     } catch (e) {
       console.log(e);
     } finally {
@@ -88,11 +81,14 @@ export const AddNewPassanger = () => {
   }
 
   const bookingCallback = async () => {
+    let id = client.id;
     if (!clientExists){
-      await createUser();
+      const newUser = await createUser();
+      id = newUser.id;
     }
     const booking = Object.assign({
-      id: client.id, bookingStatus: BOOKING_STATES.ACTIVE, 
+      id,
+      bookingStatus: BOOKING_STATES.ACTIVE, 
       creditCard: 'efectivo', payment: (userIsVIP ? subtotal * 0.90 : subtotal), 
       boughtAdditionals: [], 
       accepted: true,
