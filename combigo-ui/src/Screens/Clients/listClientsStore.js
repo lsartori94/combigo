@@ -17,3 +17,12 @@ export async function getBlacklist() {
   const result = await response.json();
   return result;
 }
+
+export async function getClientBlacklist(userId) {
+  const response = await fetch(`${API_BASE}/users/blacklist/client/${userId}`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Table,
   Spinner,
   Pane,
   Badge,
-  BackButton,
+  BackButton
 } from 'evergreen-ui';
 
 import { getClients, getBlacklist } from './listClientsStore';
+import './clients.css';
 
 export const ClientsBlacklist = () => {
   const [clients, setClients] = useState([]);
@@ -59,18 +60,14 @@ export const ClientsBlacklist = () => {
       <div style={{padding: "30px"}}>Aun no existen casos de pasajeros rechazados.</div>
   </Pane>
   );
-  
-  // const renderRowMenu = (uname) => {
-  //     return (
-  //       <Menu>
-  //         <Menu.Group>
-  //         <Link to={`/clients/${uname}`}><Menu.Item>Detalles</Menu.Item></Link>
-  //         </Menu.Group>
-  //       </Menu>
-  //     )
-  // }
 
-  const renderClients = (clients) => {
+  function currentlyBlacklisted(clientId) {
+    const endDate = new Date(blacklist.find(b => b.userId === clientId).endDate);
+    const today = new Date();
+    return today < endDate;
+  };
+
+  const renderClients = (clients, blacklist) => {
     if (clients.length < 1) {
       return renderPlaceholder();
     }
@@ -83,6 +80,7 @@ export const ClientsBlacklist = () => {
         display="flex"
         alignItems="center"
         flexDirection="column"
+        className="clients-container"
       >
         <Table width={"95%"}>
           <Table.Head>
@@ -107,16 +105,14 @@ export const ClientsBlacklist = () => {
               <Table.Row key={client.username}>
                 <Table.TextCell>{client.username}</Table.TextCell>
                 <Table.TextCell>{client.name}</Table.TextCell>
-                <Table.TextCell>TODO</Table.TextCell>
-                <Table.TextCell>TODO</Table.TextCell>
-                <Table.TextCell>TODO</Table.TextCell>
+                <Table.TextCell>{currentlyBlacklisted(client.id) ? 
+                  <Badge color='red'> Inhabilitado </Badge> : <Badge color='green'> Habilitado </Badge>}
+                </Table.TextCell>
+                <Table.TextCell>{new Date(blacklist.find(b => b.userId === client.id).startDate).toLocaleDateString('es-AR', options)}</Table.TextCell>
+                <Table.TextCell> {` ${blacklist.find(b => b.userId === client.id).history.length + 1} - `} 
+                  <Link to={`/clientsBlacklist/history/${client.id}`}>Ver historial</Link> 
+                </Table.TextCell> 
                 <Table.Cell flex="none">
-                  {/* <Popover
-                    content={renderRowMenu(client.username)}
-                    position={Position.BOTTOM_RIGHT}
-                  >
-                    <IconButton icon={MoreIcon} height={24} appearance="minimal" />
-                  </Popover> */}
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -128,7 +124,7 @@ export const ClientsBlacklist = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderClients(clients) }
+      { !loading &&  renderClients(clients, blacklist) }
     </div>
   );
 };

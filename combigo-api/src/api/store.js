@@ -127,8 +127,8 @@ let users = [
       cvv:'153'
     },
     vip: {
-      status: VIP_STATUS.NOT_ENROLLED,
-      startDate: ''
+      status: VIP_STATUS.ENROLLED,
+      startDate: '2021-04-25T09:08:00'
     },
     role: ROLES.CLIENT,
     active: true,
@@ -429,7 +429,7 @@ let additionals = [
 let blacklist = [
   {
     userId: 'CGOU2',
-    startDate: '2021-06-1T21:10:38.299Z',
+    startDate: '2021-06-01T21:10:38.299Z',
     endDate: '2021-06-15T21:10:38.299Z',
     history: []
   }

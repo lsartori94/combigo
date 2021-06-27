@@ -1,0 +1,7 @@
+.clients-container a,
+.clients-container a:visited {
+  color: #1070CA;
+}
+.clients-container a:hover {
+  text-decoration: underline;
+}
