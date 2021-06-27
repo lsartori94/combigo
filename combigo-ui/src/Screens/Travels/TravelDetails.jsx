@@ -285,7 +285,7 @@ export const TravelDetails = () => {
 
           <FormField
             width={'65vh'}
-            marginBottom={20}
+            marginBottom={12}
             label="Adicionales"
             description="El adicional ya debe existir en el sistema"
             required
@@ -302,8 +302,7 @@ export const TravelDetails = () => {
             disabled
             validationMessage={showErrors && errors.status ? "Campo Requerido" : null}
             label="Estado"
-            placeholder="Pendiente"
-            value={TRAVEL_STATES[details.status]}
+            value={details.status}
           />
           <Button
             width={'65vh'}

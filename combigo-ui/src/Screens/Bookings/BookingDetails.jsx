@@ -10,7 +10,8 @@ import {
   Dialog,
   EditIcon,
   Badge,
-  Alert
+  Alert,
+  Strong
 } from 'evergreen-ui';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
@@ -111,6 +112,21 @@ export const BookingDetails = () => {
       return false
   }
 
+  const decideStatusColor = (status) => {
+    let color = "";
+    switch(status) {
+      case LEGAL_STATUS.REJECTED:
+        color = "red";
+        break;
+      case LEGAL_STATUS.APPROVED:
+        color = "green";
+        break;
+      default:
+        color = "blue";
+    }
+    return color;
+  };
+
   const renderDetails = (details) => {
     if (noTravel) {
       return (<div>No existe la reserva</div>)
@@ -173,12 +189,9 @@ export const BookingDetails = () => {
           disabled
         />
 
-        <TextInputField
-          width={'65vh'}
-          label="Estado de la declaracion jurada"
-          value={details.legalStatus}
-          disabled
-        />
+        <Strong size={400} marginBottom={30} marginTop={12}>Estado de la declaracion jurada:  
+          <Badge color={decideStatusColor(details.legalStatus)} marginLeft={8}> {details.legalStatus} </Badge> 
+        </Strong>
 
         <Pane display="flex" justifyContent="space-around">
 

@@ -8,3 +8,12 @@ export async function getClients() {
   const result = await response.json();
   return result;
 }
+
+export async function getBlacklist() {
+  const response = await fetch(`${API_BASE}/users/blacklist/all`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}

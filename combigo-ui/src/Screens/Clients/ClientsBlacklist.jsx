@@ -8,19 +8,26 @@ import {
   BackButton,
 } from 'evergreen-ui';
 
-import { getClients } from './listClientsStore';
-import { VIP_STATUS, VIP_STATUS_MSG } from "../../constants";
+import { getClients, getBlacklist } from './listClientsStore';
 
-export const Clients = () => {
+export const ClientsBlacklist = () => {
   const [clients, setClients] = useState([]);
+  const [blacklist, setBlacklist] = useState([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
     async function initialize() {
       try {
-        const response = await getClients();
-        setClients(response);
+        const blacklistResponse = await getBlacklist();
+        const clientsResponse = await getClients();
+
+        console.log(blacklistResponse);
+        console.log(clientsResponse);
+        
+        const blacklistedClients = clientsResponse.filter(c => blacklistResponse.some(b => b.userId === c.id));
+        setBlacklist(blacklistResponse);
+        setClients(blacklistedClients);
       } catch (e) {
         console.error(e);
       } finally {
@@ -49,8 +56,8 @@ export const Clients = () => {
       >
         Volver
       </BackButton>
-      <div style={{padding: "30px"}}>No hay clientes registrados en el sistema.</div>
-    </Pane>
+      <div style={{padding: "30px"}}>Aun no existen casos de pasajeros rechazados.</div>
+  </Pane>
   );
   
   // const renderRowMenu = (uname) => {
@@ -86,16 +93,13 @@ export const Clients = () => {
               Nombre
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Email
+              Estado actual
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Fecha de alta
+              Fecha de último rechazo
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Tiene tarjeta asociada
-            </Table.TextHeaderCell>
-            <Table.TextHeaderCell>
-              Estado VIP
+              Cantidad de veces rechazado
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={240}>
@@ -103,12 +107,9 @@ export const Clients = () => {
               <Table.Row key={client.username}>
                 <Table.TextCell>{client.username}</Table.TextCell>
                 <Table.TextCell>{client.name}</Table.TextCell>
-                <Table.TextCell>{client.email}</Table.TextCell>
-                <Table.TextCell>{new Date(client.registerDate).toLocaleDateString('es-AR', options)}</Table.TextCell>
-                <Table.TextCell>{`${(client.creditCard && client.creditCard.issuer) ? 'Si' : 'No' }`}</Table.TextCell>
-                {client.vip.status === VIP_STATUS.ENROLLED ? (
-                  <Table.TextCell> <Badge color='green'> {VIP_STATUS_MSG[client.vip.status]}</Badge> desde el: {new Date(client.vip.startDate).toLocaleDateString('es-AR').split('T')} </Table.TextCell>) : (
-                  <Table.TextCell> <Badge color='neutral'> {VIP_STATUS_MSG[client.vip.status]}</Badge> </Table.TextCell>)}
+                <Table.TextCell>TODO</Table.TextCell>
+                <Table.TextCell>TODO</Table.TextCell>
+                <Table.TextCell>TODO</Table.TextCell>
                 <Table.Cell flex="none">
                   {/* <Popover
                     content={renderRowMenu(client.username)}

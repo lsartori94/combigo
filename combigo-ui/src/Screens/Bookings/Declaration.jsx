@@ -50,8 +50,8 @@ export const Declaration = () => {
   const saveCallback = async () => {    
     try {
       setLoading(true);
-      await updateLegalStatus(travelId, symptomsChecked, auth.user, bookingId.asString); //asString ????
-      history.push(history.push('/bookings'));
+      await updateLegalStatus(travelId, symptomsChecked, auth.user, bookingId);
+      history.push(history.goBack());
     } catch (e) {
       console.log(e);
     } finally {
@@ -244,7 +244,7 @@ export const Declaration = () => {
             confirmLabel="Confirmar"
             hasCancel={false}
             intent="success"
-          > {` ¿Confirmar envío de declaración jurada?`}
+          > {`¿Confirmar envío de declaración jurada?`}
           </Dialog>
 
       </Pane>

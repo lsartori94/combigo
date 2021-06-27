@@ -101,6 +101,7 @@ let users = [
         payment: 120
       }
     ],
+    creditCard: {},
     vip: {
       status: VIP_STATUS.NOT_ENROLLED,
       startDate: ''
@@ -424,7 +425,7 @@ let additionals = [
   }
 ];
 
-// lista de userIds alguna vez rechazados
+// lista de users rechazados
 let blacklist = [
   {
     userId: 'CGOU2',

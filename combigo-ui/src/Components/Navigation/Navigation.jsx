@@ -99,6 +99,10 @@ export const Navigation = () => {
                 <li onClick={() => setIsOpen(false)}>
                   <Link to="/clients">Clientes</Link>
                 </li>
+                <hr />
+                <li onClick={() => setIsOpen(false)}>
+                  <Link to="/clientsBlacklist">Rechazados</Link>
+                </li>
               </>
             )}
             {auth.user && auth.isClient() && ( //client

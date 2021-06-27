@@ -503,7 +503,7 @@ router.get('/:id/validAssigns', (req, res) => {
 router.put('/:id/updateLegalStatus', (req, res) => {
   const {id} = req.params;
   const {symptoms, userId, bookingId} = req.body;
-
+  
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
   }
@@ -530,8 +530,8 @@ router.put('/:id/updateLegalStatus', (req, res) => {
   if (passengerExists === -1) {
     return res.status(405).send(`El pasajero no existe`);
   }
-
-  const bookingExists = users[userExists].travelHistory.findIndex(book => book.id == bookingId);
+  
+  const bookingExists = users[userExists].travelHistory.findIndex(book => book.id === bookingId.asString); //asString???
   if (bookingExists === -1) {
     return res.status(405).send(`La reserva no existe`);
   }
