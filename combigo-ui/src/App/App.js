@@ -17,6 +17,7 @@ import { Vehicles } from '../Screens/Vehicles/Vehicles';
 import { Drivers } from '../Screens/Drivers/Drivers';
 import { Clients } from '../Screens/Clients/Clients';
 import { ClientsBlacklist } from '../Screens/Clients/ClientsBlacklist';
+import { ClientBlacklistHistory } from '../Screens/Clients/ClientBlacklistHistory';
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';
 import { DriverTravels } from '../Screens/Drivers/DriverTravels'; 
 import { ListPassengers } from '../Screens/Drivers/ListPassengers'; 
@@ -84,6 +85,9 @@ function App() {
             </Route>
             <Route path="/clients">
               <Clients />
+            </Route>
+            <Route path="/clientsBlacklist/history/:userId">
+              <ClientBlacklistHistory />
             </Route>
             <Route path="/clientsBlacklist">
               <ClientsBlacklist />

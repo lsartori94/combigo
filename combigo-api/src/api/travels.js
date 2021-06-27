@@ -530,8 +530,8 @@ router.put('/:id/updateLegalStatus', (req, res) => {
   if (passengerExists === -1) {
     return res.status(405).send(`El pasajero no existe`);
   }
-  
-  const bookingExists = users[userExists].travelHistory.findIndex(book => book.id === bookingId.asString); //asString???
+
+  const bookingExists = users[userExists].travelHistory.findIndex(book => book.bookingId === bookingId);
   if (bookingExists === -1) {
     return res.status(405).send(`La reserva no existe`);
   }
@@ -569,7 +569,7 @@ router.put('/:id/updateLegalStatus', (req, res) => {
     if (userBlacklisted === -1) {
       blacklist.push({userId, startDate, endDate, history: []});
     } else {
-      blacklist[userBlacklisted].history.push(blacklist[userBlacklisted].startDate);
+      blacklist[userBlacklisted].history.push({startDate: blacklist[userBlacklisted].startDate, endDate: blacklist[userBlacklisted].startDate});
       blacklist[userBlacklisted].startDate = startDate;
       blacklist[userBlacklisted].endDate = endDate;
     }
