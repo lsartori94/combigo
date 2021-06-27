@@ -47,6 +47,24 @@ router.get('/driverTravels/:driverId', (req, res) => {
   res.json(result);
 });
 
+// get driver history
+router.get('/driverHistory/:driverId', (req, res) => {
+  const {driverId} = req.params;
+  const userExists = users.find(u => u.id === driverId);
+
+  if (!driverId) {
+    return res.status(404).send(`Bad Request`);
+  }
+
+  if (!userExists) {
+    return res.status(404).send(`Usuario no existe`);
+  }
+
+  const result = travels.filter(tr => tr.driver === userExists.id);
+
+  return res.json(result);
+});
+
 // Create travel with ID
 router.post('/', (req, res) => {
   const {dateAndTime, route} = req.body;
