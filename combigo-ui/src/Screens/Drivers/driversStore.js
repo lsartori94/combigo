@@ -131,7 +131,8 @@ export async function acceptPassenger(travelId, userId) {
     }
   );
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const error = await response.text();
+    throw new Error(error);
   }
   const result = await response.json();
   return result;

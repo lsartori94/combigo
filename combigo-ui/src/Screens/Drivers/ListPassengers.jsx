@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {
   Pane,
@@ -7,8 +7,12 @@ import {
   Button,
   Table,
   Checkbox,
-  PlusIcon
+  PlusIcon,
+  Popover,
+  toaster
 } from 'evergreen-ui';
+
+import QrReader from 'react-qr-reader';
 
 import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
 
@@ -21,6 +25,7 @@ export const ListPassengers = () => {
   const [clients, setClients] = useState([]);
   const [travelsLoaded, setTravelsLoaded] = useState(false);
   const [ClientsLoaded, setClientsLoaded] = useState(false);
+  const closeRef = useRef();
   const history = useHistory();
 
   useEffect(() => {
@@ -82,9 +87,38 @@ export const ListPassengers = () => {
     }
   }
 
-  //Scan QR (Programar)
-  const triggerScanQR = async () => {    
-  }
+  const handleError = (err, close) => {
+    console.error(err);
+    toaster.danger('Tuvimos un error iniciando el scanner');
+  };
+
+  const handleScan = async (data, close) => {
+    if (data) {
+      const result = JSON.parse(data);
+      if (result.travelId && result.userId) {
+        try {
+          await acceptPassenger(result.travelId, result.userId);
+          toaster.success('Ticket Valido', {
+            id: 'scan-success',
+            duration: 5
+          });
+        } catch (e) {
+          toaster.danger(e.toString(), {
+            id: 'scan-error',
+            duration: 10
+          });
+        }
+      } else {
+        toaster.danger('El ticket no es valido', {
+          id: 'scan-error',
+          duration: 10
+        });
+      }
+      // Ocultar popover
+      closeRef.current.click();
+      reloadTravel();
+    }
+  };
 
   //Add new passanger (Programar)
   const triggerAddPassenger = async () => {    
@@ -170,15 +204,34 @@ export const ListPassengers = () => {
             ))}
           </Table.Body>
         </Table>
-
-        <Button
-          onClick={triggerScanQR}
-          disabled={travel.status === TRAVEL_STATES.IN_PROGRESS}
-          appearance="primary"
+        <Popover
+          content={({close}) => (
+            <Pane
+              width={'80vw'}
+              height={'60vh'}
+              paddingX={40}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              <QrReader
+                delay={300}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ width: '100%' }}
+              />
+              <Button marginTop={10} onClick={close}>Cerrar</Button>
+            </Pane>
+          )}
         >
-          Escanear QR de ticket
-        </Button>
-
+          <Button
+            disabled={travel.status === TRAVEL_STATES.IN_PROGRESS}
+            appearance="primary"
+          >
+            Escanear QR de ticket
+          </Button>
+        </Popover>
         <Button
           iconBefore={PlusIcon}
           onClick={triggerAddPassenger }
@@ -193,9 +246,10 @@ export const ListPassengers = () => {
   };
 
   return (
-    <div>
+    <Pane>
+      <span ref={closeRef} style={{display:'none'}}></span>
       { loading && <Spinner /> }
       { !loading &&  renderPassangers(travel, clients) }
-    </div>
+    </Pane>
   );
 };

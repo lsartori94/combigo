@@ -614,6 +614,18 @@ router.put('/acceptPassenger/:id', (req, res) => {
     return res.status(405).send(`El pasajero no existe`);
   }
 
+  if (travels[exists].passengers[passengerExists].legalStatus === LEGAL_STATUS.PENDING) {
+    return res.status(405).send(`El pasajero no lleno DDJJ`);
+  }
+
+  if (travels[exists].passengers[passengerExists].legalStatus === LEGAL_STATUS.REJECTED) {
+    return res.status(405).send(`El pasajero fallo DDJJ`);
+  }
+
+  if (travels[exists].passengers[passengerExists].accepted) {
+    return res.status(405).send(`El pasajero ya ha sido aceptado`);
+  }
+
   travels[exists].passengers[passengerExists].accepted = true;
 
   res.send(travels[exists]);

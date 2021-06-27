@@ -65,7 +65,6 @@ function useProvideAuth() {
       throw new Error(error);
     }
     const result = await response.json();
-    debugger;
     setUser(result);
     session.setUser(result);
     return result;

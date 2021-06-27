@@ -66,16 +66,19 @@ export const Ticket = () => {
     }
     initialize();
     initializeExtras();
-  }, [travelId, bookingId]); // eslint-disable-line
+  }, [travelId, bookingId, auth.user]); // eslint-disable-line
 
   const backCallback = () => {
     history.push(history.goBack());
   };
 
   useEffect(() => {
-    const data = JSON.stringify(bookDetails);
+    const qrData = Object.assign(bookDetails, {
+      userId: auth.user ? auth.user.id: ''
+    });
+    const data = JSON.stringify(qrData);
     setQrStr(data)
-  }, [bookDetails]);
+  }, [bookDetails, auth.user]);
 
   const renderAdditionals = () => {
     const filtered = availableAdditionals.filter((a) =>
