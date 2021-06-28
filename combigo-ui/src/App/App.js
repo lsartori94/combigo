@@ -19,6 +19,7 @@ import { Clients } from '../Screens/Clients/Clients';
 import { ClientsBlacklist } from '../Screens/Clients/ClientsBlacklist';
 import { ClientBlacklistHistory } from '../Screens/Clients/ClientBlacklistHistory';
 import { DriverDetails } from '../Screens/Drivers/DriverDetails';
+import { DriverResume } from '../Screens/Drivers/DriverResume';
 import { DriverTravels } from '../Screens/Drivers/DriverTravels'; 
 import { ListPassengers } from '../Screens/Drivers/ListPassengers'; 
 import { AddNewPassanger } from '../Screens/Drivers/AddNewPassanger'; 
@@ -74,6 +75,9 @@ function App() {
             </Route>
             <Route path="/vehicles">
               <Vehicles />
+            </Route>
+            <Route path="/drivers/resume/:driverId">
+              <DriverResume />
             </Route>
             <Route path="/drivers/:uname">
               <DriverDetails />

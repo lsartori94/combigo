@@ -76,9 +76,13 @@ export const Drivers = () => {
     </div>
   );
   
-  const renderRowMenu = (uname) => {
+  const renderRowMenu = (uname, id) => {
       return (
         <Menu>
+          <Menu.Group>
+          <Link to={`/drivers/resume/${id}`}><Menu.Item>Resumen</Menu.Item></Link>
+          </Menu.Group>
+          <Menu.Divider />
           <Menu.Group>
           <Link to={`/drivers/${uname}`}><Menu.Item>Editar...</Menu.Item></Link>
           </Menu.Group>
@@ -86,6 +90,7 @@ export const Drivers = () => {
           <Menu.Group>
             <Menu.Item intent="danger" onClick={() => promptDelete(uname)}>Eliminar...</Menu.Item>
           </Menu.Group>
+          
         </Menu>
       )
   }
@@ -136,7 +141,7 @@ export const Drivers = () => {
                 <Table.TextCell>{driver.bdate}</Table.TextCell>
                 <Table.Cell flex="none">
                   <Popover
-                    content={renderRowMenu(driver.username)}
+                    content={renderRowMenu(driver.username, driver.id)}
                     position={Position.BOTTOM_RIGHT}
                   >
                     <IconButton icon={MoreIcon} height={24} appearance="minimal" />

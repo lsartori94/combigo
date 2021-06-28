@@ -98,6 +98,14 @@ export async function getDriverTravels( driverId ) {
   return result;
 }
 
+export async function getDriverHistory( driverId ) {
+  const response = await fetch( `${API_BASE}/travels/driverHistory/${driverId}` );
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result;
+}
 
 export function getAvailableRoutes() {
   return getRoutes(true);
