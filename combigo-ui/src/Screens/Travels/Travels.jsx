@@ -52,8 +52,8 @@ export const Travels = () => {
 
   const promptDelete = (travelId) => {
     setSelectedTravel(travelId);
-    const finished = travels.find(travel => (travel.id === travelId) && (travel.status === TRAVEL_STATES.FINISHED));
-    if (finished)
+    const cantDelete = travels.find(travel => (travel.id === travelId) && (travel.status !== TRAVEL_STATES.NOT_STARTED && travel.status !== TRAVEL_STATES.NO_VEHICLE));
+    if (cantDelete)
       setShowDeleteFinished(true);
     const pending = travels.find(travel => (travel.id === travelId) && (travel.status === TRAVEL_STATES.NOT_STARTED));
     if (pending && pending.passengers.length > 0)
@@ -131,7 +131,7 @@ export const Travels = () => {
           cancelLabel="Cancelar"
         >
           {showDeleteWithPending ? "El viaje tiene reservas hechas, ¿esta seguro de que quiere eliminar el Viaje?" 
-            : showDeleteFinished ? "No puede eliminarse un viaje terminado" : "¿Esta seguro de que quiere eliminar el Viaje?"}
+            : showDeleteFinished ? "No puede eliminarse un viaje terminado o en curso" : "¿Esta seguro de que quiere eliminar el Viaje?"}
         </Dialog>
         <Table width={"95%"}>
           <Table.Head>
