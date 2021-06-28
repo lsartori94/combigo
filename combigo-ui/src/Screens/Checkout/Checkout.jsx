@@ -98,7 +98,7 @@ export default function Checkout() {
         }
         if (userInfo.vip.status && userInfo.vip.status === VIP_STATUS.ENROLLED)
           setUserIsVip(true);
-        if (userBlacklist.id && (new Date() <= new Date(userBlacklist.endDate)))
+        if (userBlacklist.userId && (new Date() <= new Date(userBlacklist.endDate)))
           setClientBlacklisted(true);
       } catch (e) {
         console.error(e);
@@ -321,7 +321,7 @@ export default function Checkout() {
         />
       </div>)
     }
-    console.log(details);
+    
     if (details.stock < 1) {
       return (
       <div>
