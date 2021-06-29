@@ -213,7 +213,7 @@ export const DriverTravels = () => {
           onCloseComplete={() => setShowCancel(false)}
           confirmLabel="Continuar"
           cancelLabel="Cancelar"
-        > { "Si cancela el viaje las reservas de los pasajeros seran reembolsadas ¿Desea continuar?"}
+        > { "Si cancela el viaje las reservas de los pasajeros seran reembolsadas. ¿Desea continuar?"}
         </Dialog>
         <Dialog
           isShown={showStart}
@@ -233,7 +233,7 @@ export const DriverTravels = () => {
           onCloseComplete={() => setShowFinish(false)}
           confirmLabel="Terminar"
           cancelLabel="Cancelar"
-        > { "Confirmar final del viaje"}
+        > { "Confirmar final del viaje."}
         </Dialog>
         <Table width={"95%"}>
           <Table.Head>

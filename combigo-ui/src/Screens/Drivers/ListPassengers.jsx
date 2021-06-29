@@ -174,7 +174,7 @@ export const ListPassengers = () => {
               Declaracion jurada
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Presente
+              Aceptado
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>

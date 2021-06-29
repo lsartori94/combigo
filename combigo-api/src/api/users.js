@@ -100,7 +100,12 @@ router.post('/', (req, res) => {
     role,
     travelHistory: [],
     active: true,
-    registerDate: new Date()
+    registerDate: new Date(),
+    creditCard: {},
+    vip: {
+      status: CONSTANTS.VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
   }
 
   users.push(newUser);
