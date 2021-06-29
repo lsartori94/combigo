@@ -23,7 +23,7 @@ export const DriverResume = () => {
   const [travelsLoaded, settravelsLoaded] = useState(true);
   const [driverHistory, setDriverHistory] = useState({});
   const [routes, setRoutes] = useState({});
-  const [payPerHour, setPayPerHour] = useState(0); //Paga por defecto
+  //const [payPerHour, setPayPerHour] = useState(0); //Paga por defecto
   const [name, setName] = useState('');
   const [noTravels, setNoTravels] = useState(true);
   const history = useHistory();
@@ -54,7 +54,6 @@ export const DriverResume = () => {
       }
     }
     initialize();
-    setPayPerHour(100); //paga por defecto
   }, [driverId]); // eslint-disable-line
 
   const backCallback = () => {
@@ -83,9 +82,9 @@ export const DriverResume = () => {
     return ( minutos / 60 ).toFixed(2);
   }
 
-  const payPerMonth = (travels) => {
-    return ( horasTrabajadas(travels) * payPerHour )
-  }
+  // const payPerMonth = (travels) => {
+  //   return ( horasTrabajadas(travels) * payPerHour )
+  // }
 
   const renderDetails = (travels) => {
     if (noTravels) {
@@ -153,16 +152,10 @@ export const DriverResume = () => {
               Mes
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Cantidad de viajes
+              Cantidad de viajes finalizados
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
-              Cantidad de horas
-            </Table.TextHeaderCell>
-            <Table.TextHeaderCell>
-              Paga por horas (pesos)
-            </Table.TextHeaderCell>
-            <Table.TextHeaderCell>
-              total mes (pesos)
+              Cantidad de horas trabajdas
             </Table.TextHeaderCell>
           </Table.Head>
           <Table.Body height={400}>
@@ -176,12 +169,6 @@ export const DriverResume = () => {
                 </Table.TextCell>
                 <Table.TextCell>
                   {travelsLoaded && horasTrabajadas(travelsForThisMonth.travels)}
-                </Table.TextCell>
-                <Table.TextCell>
-                  {travelsLoaded && payPerHour}
-                </Table.TextCell>
-                <Table.TextCell>
-                  {travelsLoaded && payPerMonth(travelsForThisMonth.travels)}
                 </Table.TextCell>
               </Table.Row>
             ))}
