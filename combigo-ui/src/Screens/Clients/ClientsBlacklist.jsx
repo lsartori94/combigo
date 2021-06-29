@@ -22,10 +22,6 @@ export const ClientsBlacklist = () => {
       try {
         const blacklistResponse = await getBlacklist();
         const clientsResponse = await getClients();
-
-        console.log(blacklistResponse);
-        console.log(clientsResponse);
-        
         const blacklistedClients = clientsResponse.filter(c => blacklistResponse.some(b => b.userId === c.id));
         setBlacklist(blacklistResponse);
         setClients(blacklistedClients);

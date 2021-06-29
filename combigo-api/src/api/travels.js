@@ -135,8 +135,6 @@ router.put('/:id/vehicle', (req, res) => {
     }
   );
 
-  console.log(travels)
-
   res.send(travels[exists]);
 });
 
