@@ -19,7 +19,7 @@ import {
 } from "evergreen-ui";
 
 import { getRouteDetails, getTravelDetails, getAvailableAdditionals, getUserDetails, createBooking, getUserBlacklist } from "./checkoutStore";
-import { LEGAL_STATUS, VIP_STATUS } from "../../constants";
+import { LEGAL_STATUS, VIP_STATUS, BOOKING_STATES } from "../../constants";
 
 export default function Checkout() {
   let { travelId } = useParams();
@@ -278,7 +278,13 @@ export default function Checkout() {
 
   //habria que chequear si travel.dateAndTime > Date.now()
   const paymentCallback = async () => {
-    const booking = Object.assign(newPassengerDetails, {creditCard: selectedCard.number, payment: (userIsVIP ? subtotal * 0.90 : subtotal), id: auth.user.id, accepted: false, legalStatus: LEGAL_STATUS.PENDING});
+    const booking = Object.assign(newPassengerDetails, {
+      creditCard: selectedCard.number, 
+      payment: (userIsVIP ? subtotal * 0.90 : subtotal), 
+      id: auth.user.id, 
+      accepted: false, 
+      legalStatus: LEGAL_STATUS.PENDING,
+      bookingStatus: BOOKING_STATES.PENDING});
     try {
       setLoading(true);
       await createBooking(booking, travelId);
@@ -451,11 +457,11 @@ export default function Checkout() {
                   marginBottom={20}
                   required
                   label="Fecha de Vencimiento"
-                  value={newCardInfo.expDate}
                   validationMessage={showCcErrors && ccErrors.expDate ? "Campo Requerido o inválido" : null}
                 >
                   <input
                     type="date"
+                    value={newCardInfo.expDate}
                     onChange={e => handleInput('expDate', e.target.value)}
                     min={(new Date()).day}
                     max="2030-31-12"
