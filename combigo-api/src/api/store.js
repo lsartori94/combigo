@@ -256,7 +256,7 @@ let travels = [
         bookingStatus: BOOKING_STATES.PENDING,
         creditCard: '4444444444444444',
         payment: 350,
-        boughtAdditionals: [ 
+        boughtAdditionals: [
           'CGOA1',
           'CGOA3',
         ],

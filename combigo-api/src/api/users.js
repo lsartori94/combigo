@@ -278,6 +278,11 @@ router.put('/:uname/vip', (req, res) => {
 
   users[exists].vip.status = CONSTANTS.VIP_STATUS[vipStatus];
   users[exists].vip.startDate = new Date();
+  if (users[exists].vip.status === CONSTANTS.VIP_STATUS.ENROLLED) {
+    mailer.vipSubscriptionInitiatedEmail(users[exists].email);
+  } else {
+    mailer.vipSubscriptionEndedEmail(users[exists].email);
+  };
 
   return res.send(users[exists]);
 });

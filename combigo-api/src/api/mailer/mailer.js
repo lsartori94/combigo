@@ -7,6 +7,7 @@ const vipEndedTemplate = require('./vipEndedTemplate');
 const bookingConfirmedTemplate = require('./bookingConfirmedTemplate');
 const bookingCanceledTemplate = require('./bookingCanceledTemplate');
 const bookingDDJJCancelationTemplate = require('./bookingDDJJCancelationTemplate');
+const bookingMissedTemplate = require('./missedBookingTemplate');
 
 let initialized = false;
 let transporter;
@@ -109,6 +110,15 @@ function vipSubscriptionEndedEmail(destination) {
   sendEmail(destination, subject, text, html);
 }
 
+
+function sendBookingMissedEmail(destination, tripOrigin, tripDestination, tripDate, tripHour) {
+  const subject = "Reserva perdida";
+  const text = "Usted ha perdido su reserva";
+  bookingMissedTemplate.setVariables(tripOrigin, tripDestination, tripDate, tripHour)
+  const html = bookingMissedTemplate.getHtml();
+  sendEmail(destination, subject, text, html);
+}
+
 module.exports = {
   init,
   sendActivationEmail,
@@ -117,5 +127,6 @@ module.exports = {
   sendBookingCancelationEmail,
   vipSubscriptionInitiatedEmail,
   vipSubscriptionEndedEmail,
-  sendBookingDDJJCancelation
+  sendBookingDDJJCancelation,
+  sendBookingMissedEmail
 };

@@ -281,11 +281,17 @@ router.put('/cancelTravel/:id', (req, res) => {
   travels[index].status = TRAVEL_STATES.CANCELED;
   travels[index].passengers.forEach(p => {
     p.bookingStatus = BOOKING_STATES.CANCELED; 
-    users.find(
-      e => e.id === p.id
-    ).travelHistory.find(
+    const user = users.find(e => e.id === p.id);
+    user.travelHistory.find(
       t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
     ).status = BOOKING_STATES.CANCELED;
+
+    //send email
+    const rutita = routes.find(r => r.id === travels[index].route);
+    mailer.sendBookingCancelationEmail(
+      user.email, rutita.origin, rutita.destination, travels[index].dateAndTime.split('T')[0], travels[index].dateAndTime.split('T')[1], '100%'
+    );
+
   });
 
   res.json(travels);
@@ -311,13 +317,19 @@ router.put('/startTravel/:id', (req, res) => {
     } 
     if (p.bookingStatus === BOOKING_STATES.PENDING) {
       p.bookingStatus = BOOKING_STATES.ABSENT; //Estado para ausente
-      users.find(
-        e => e.id === p.id
-      ).travelHistory.find(
+      const user = users.find(e => e.id === p.id);
+      user.travelHistory.find(
         t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
       ).status = BOOKING_STATES.ABSENT;
 
       travels[index].stock += 1; //Stock son los asientos que quedan
+
+      //send email
+      const rutita = routes.find(r => r.id === travels[index].route);
+      mailer.sendBookingMissedEmail(
+        user.email, rutita.origin, rutita.destination, travels[index].dateAndTime.split('T')[0], travels[index].dateAndTime.split('T')[1]
+      );
+
     }
   });
 
@@ -565,18 +577,19 @@ router.put('/:id/updateLegalStatus', (req, res) => {
     users[userExists].travelHistory[bookingExists].legalStatus = LEGAL_STATUS.REJECTED;
 
     //cancelar proximos 15 dias
-    travels[exists].passengers[passengerExists].status = BOOKING_STATES.CANCELED;
+    travels[exists].passengers[passengerExists].bookingStatus = BOOKING_STATES.CANCELED;
     users[userExists].travelHistory.forEach(t => {
       const travelito = travels.findIndex(tra => tra.id === t.travelId);
       if (insideFifteenDays(travels[travelito].dateAndTime)) {
-        if (t.status !== BOOKING_STATES.PENDING) 
-          return;
+        if (t.status === BOOKING_STATES.PENDING) {
         t.status = BOOKING_STATES.CANCELED;
-        const p = travels[travelito].passengers.findIndex(tr => tr.id = userId);
+        const p = travels[travelito].passengers.findIndex(tr => tr.id === userId);
         travels[travelito].passengers[p].bookingStatus = BOOKING_STATES.CANCELED;
+        travels[travelito].stock = travels[travelito].stock + 1;
         const rutita = routes.find(r => r.id === travels[travelito].route);
         mailer.sendBookingDDJJCancelation(
           users[userExists].email, rutita.origin, rutita.destination, travels[travelito].dateAndTime.split('T')[0], travels[travelito].dateAndTime.split('T')[1], '100%');
+        }
       };
     });
 
