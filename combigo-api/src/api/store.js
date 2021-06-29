@@ -1,7 +1,7 @@
 const { ROLES, TRAVEL_STATES, BOOKING_STATES, LEGAL_STATUS, VIP_STATUS } = require('./constants');
 
 let users = [
-  {
+  { //admin
     id: 'CGOU0',
     username: 'admin',
     email: 'admin',
@@ -11,7 +11,7 @@ let users = [
     role: ROLES.ADMIN,
     active: true
   },
-  {
+  { //drivers
     id: 'CGOU1',
     username: 'jose.traffic',
     email: 'joset@gmail.com',
@@ -24,6 +24,30 @@ let users = [
     active: true
   },
   {
+    id: 'CGOU5',
+    username: 'manuel.volvo',
+    email: 'manuelv@gmail.com',
+    name: 'Manuel',
+    password: '123@Pass',
+    bdate: '1980-12-12',
+    dni: '34516758',
+    completedTravels: [],
+    role: ROLES.DRIVER,
+    active: true
+  },
+  {
+    id: 'CGOU6',
+    username: 'john.volvo',
+    email: 'johnv@gmail.com',
+    name: 'John',
+    password: '123@Pass',
+    bdate: '1970-12-12',
+    dni: '34616758',
+    completedTravels: [],
+    role: ROLES.DRIVER,
+    active: true
+  },
+  { //clients
     id: 'CGOU2',
     username: 'juan.perez',
     email: 'juanp@gmail.com',
@@ -133,31 +157,7 @@ let users = [
     role: ROLES.CLIENT,
     active: true,
     registerDate: '2021-04-20T09:12:00'
-  },
-  {
-    id: 'CGOU5',
-    username: 'manuel.volvo',
-    email: 'manuelv@gmail.com',
-    name: 'Manuel',
-    password: '123@Pass',
-    bdate: '1980-12-12',
-    dni: '34516758',
-    completedTravels: [],
-    role: ROLES.DRIVER,
-    active: true
-  },
-  {
-    id: 'CGOU6',
-    username: 'john.volvo',
-    email: 'johnv@gmail.com',
-    name: 'John',
-    password: '123@Pass',
-    bdate: '1970-12-12',
-    dni: '34616758',
-    completedTravels: [],
-    role: ROLES.DRIVER,
-    active: true
-  },
+  }
 ];
 
 let vehicles = [

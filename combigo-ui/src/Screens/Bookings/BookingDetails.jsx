@@ -219,7 +219,6 @@ export const BookingDetails = () => {
             intent="danger"
             onClick={promptCancel}
             disabled={details.status !== TRAVEL_STATES.NOT_STARTED}
-            visible={false}
           > Cancelar Reserva
           </Button>
 
