@@ -299,18 +299,18 @@ router.put('/startTravel/:id', (req, res) => {
   if (index === -1) {
     return res.status(404).send(`Viaje no encontrado`);
   }
-  
-  travels[index].status = TRAVEL_STATES.IN_PROGRESS; //Esto necesita mas pensamiento del que esperaba..
+
   travels[index].passengers.forEach(p =>{
     if ( p.accepted ) {
-    p.bookingStatus = BOOKING_STATES.ACTIVE; 
-    users.find(
-      e => e.id === p.id
-    ).travelHistory.find(
-      t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
-    ).status = BOOKING_STATES.ACTIVE;
-    } else {
-      p.bookingStatus = BOOKING_STATES.ABSENT; //Estado para ausente?? // O los saco de aca?
+      p.bookingStatus = BOOKING_STATES.ACTIVE; 
+      users.find(
+        e => e.id === p.id
+      ).travelHistory.find(
+        t => (t.travelId === travels[index].id) && (t.status === BOOKING_STATES.PENDING)
+      ).status = BOOKING_STATES.ACTIVE;
+    } 
+    if (p.bookingStatus === BOOKING_STATES.PENDING) {
+      p.bookingStatus = BOOKING_STATES.ABSENT; //Estado para ausente
       users.find(
         e => e.id === p.id
       ).travelHistory.find(
@@ -320,6 +320,8 @@ router.put('/startTravel/:id', (req, res) => {
       travels[index].stock += 1; //Stock son los asientos que quedan
     }
   });
+
+  travels[index].status = TRAVEL_STATES.IN_PROGRESS;
 
   res.json(travels);
 });
@@ -648,31 +650,31 @@ router.put('/acceptPassenger/:id', (req, res) => {
   res.send(travels[exists]);
 });
 
-//Aceptar pasajeros en un viaje
-router.put('/:travelId/acceptPassenger', (req, res) => {
-  const {travelId} = req.params;
+//Aceptar pasajeros en un viaje WATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+// router.put('/:travelId/acceptPassenger', (req, res) => {
+//   const {travelId} = req.params;
 
-  if (!req.body) {
-    return res.status(400).send(`Bad Request`)
-  }
+//   if (!req.body) {
+//     return res.status(400).send(`Bad Request`)
+//   }
 
-  const exists = travels.findIndex(travel => travel.id === travelId);
-  if (exists === -1) {
-    return res.status(409).send(`El viaje no existe`);
-  }
+//   const exists = travels.findIndex(travel => travel.id === travelId);
+//   if (exists === -1) {
+//     return res.status(409).send(`El viaje no existe`);
+//   }
 
-  if (travels[exists].active == false) {
-    return res.status(405).send(`El viaje no esta activo`);
-  }
+//   if (travels[exists].active == false) {
+//     return res.status(405).send(`El viaje no esta activo`);
+//   }
 
-  if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
-    return res.status(405).send(`Solo puede comenzar un viaje pendiente`);
-  }
+//   if (travels[exists].status !== TRAVEL_STATES.NOT_STARTED ) {
+//     return res.status(405).send(`Solo puede comenzar un viaje pendiente`);
+//   }
 
-  travels[exists].status = TRAVEL_STATES.IN_PROGRESS;
+//   travels[exists].status = TRAVEL_STATES.IN_PROGRESS;
 
-  res.send(travels[exists]);
-});
+//   res.send(travels[exists]);
+// });
 
 // Utilities
 function datesOverlap(thisTravel, otherTravel) {

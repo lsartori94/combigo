@@ -171,6 +171,9 @@ export const ListPassengers = () => {
               Nombre
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
+              Estado reserva
+            </Table.TextHeaderCell>
+            <Table.TextHeaderCell>
               Declaracion jurada
             </Table.TextHeaderCell>
             <Table.TextHeaderCell>
@@ -182,6 +185,9 @@ export const ListPassengers = () => {
               <Table.Row key={passenger.id}>
                 <Table.TextCell>
                   {travelsLoaded && ClientsLoaded && clients.find( cl => cl.id === passenger.id ).name}
+                </Table.TextCell>
+                <Table.TextCell>
+                  {travelsLoaded && passenger.bookingStatus}
                 </Table.TextCell>
                 <Table.TextCell>
                   {travelsLoaded && passenger.legalStatus}
