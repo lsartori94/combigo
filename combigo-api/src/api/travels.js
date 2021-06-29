@@ -271,7 +271,7 @@ router.delete('/:id', (req, res) => {
   res.json(travels);
 });
 
-//cancel travel
+//cancel travel (driver)
 router.put('/cancelTravel/:id', (req, res) => {
   const {id} = req.params;
   
@@ -281,7 +281,7 @@ router.put('/cancelTravel/:id', (req, res) => {
   }
   
   travels[index].status = TRAVEL_STATES.CANCELED;
-  travels[index].passengers.forEach(p =>{
+  travels[index].passengers.forEach(p => {
     p.bookingStatus = BOOKING_STATES.CANCELED; 
     users.find(
       e => e.id === p.id
@@ -293,7 +293,7 @@ router.put('/cancelTravel/:id', (req, res) => {
   res.json(travels);
 });
 
-//Start travel
+//start travel (driver)
 router.put('/startTravel/:id', (req, res) => {
   const {id} = req.params;
   
@@ -302,7 +302,7 @@ router.put('/startTravel/:id', (req, res) => {
     return res.status(404).send(`Viaje no encontrado`);
   }
   
-  travels[index].status = TRAVEL_STATES.IN_PROGRESS; //Esto necesita mas pensamiento del que esperaba...
+  travels[index].status = TRAVEL_STATES.IN_PROGRESS; //Esto necesita mas pensamiento del que esperaba..
   travels[index].passengers.forEach(p =>{
     if ( p.accepted ) {
     p.bookingStatus = BOOKING_STATES.ACTIVE; 
@@ -326,7 +326,7 @@ router.put('/startTravel/:id', (req, res) => {
   res.json(travels);
 });
 
-//Finish Travel
+//finish Travel (driver)
 router.put('/finishtTravel/:id', (req, res) => {
   const {id} = req.params;
   
@@ -407,7 +407,7 @@ router.put('/:id/newBooking', (req, res) => {
     travelId: travels[exists].id,
     bookingId: `CGOB${users[userExists].travelHistory.length + 1}`, //Agregado para el bookingId
     boughtAdditionals: booking.boughtAdditionals,
-    status: BOOKING_STATES.PENDING,
+    status: booking.bookingStatus,
     payment: finalBooking.payment,
     legalStatus: booking.legalStatus,
   });

@@ -89,7 +89,8 @@ export const AddNewPassanger = () => {
     const booking = Object.assign({
       id,
       bookingStatus: BOOKING_STATES.ACTIVE, 
-      creditCard: 'efectivo', payment: (userIsVIP ? subtotal * 0.90 : subtotal), 
+      creditCard: 'Efectivo', 
+      payment: (userIsVIP ? subtotal * 0.90 : subtotal), 
       boughtAdditionals: [], 
       accepted: true,
       legalStatus: LEGAL_STATUS.APPROVED,

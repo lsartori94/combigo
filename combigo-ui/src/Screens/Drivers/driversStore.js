@@ -238,10 +238,11 @@ export const createUserByDefault = async (email) => {
     username: email,
     name: email,
     password: '123@Pass',
-    bdate: '',
-    dni: '',
+    bdate: 'Fecha',
+    dni: 'default',
+    role: 'CLIENT'
   }
-  user.role = 'CLIENT';
+  // user.role = 'CLIENT';
   const response = await fetch(
     `${API_BASE}/users`,
     {
