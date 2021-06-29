@@ -64,11 +64,15 @@ router.get('/email/:email', (req, res) => {
 
 // Create user
 router.post('/', (req, res) => {
-  const {username, email, password, dni, name, bdate, role} = req.body;
+  const {username, email, password, name, bdate, role} = req.body;
+  let {dni} = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
   }
+
+  //default user
+  if (dni === 'default') dni = `${ID_BASE}${users.length + 1}DNI`
 
   // check if username/email already exists
   const usernameExists = users.find(user => user.username === username);

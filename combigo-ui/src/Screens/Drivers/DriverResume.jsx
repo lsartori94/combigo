@@ -89,7 +89,22 @@ export const DriverResume = () => {
 
   const renderDetails = (travels) => {
     if (noTravels) {
-      return (<div>No hay viajes pertenecientes al chofer</div>)
+      return (
+      <Pane
+        marginTop={20}
+        display="flex"
+        alignItems="center"
+        flexDirection="column">
+          <BackButton
+            appearance="minimal"
+            alignSelf="flex-start"
+            marginLeft={10}
+            marginBottom={10}
+            onClick={() => backCallback()}
+          > Volver
+        </BackButton> 
+        No hay viajes pertenecientes al chofer
+      </Pane>)
     }
 
     //Perdon. NO SE QUE ESTOY HACIENDO :D, pero funciona?

@@ -237,7 +237,7 @@ export const ListPassengers = () => {
           iconBefore={PlusIcon}
           is={Link}
           to={`/driverTravels/passengers/addNewPassanger/${travel.id}`}
-          disabled={travel.stock <= 0 }
+          disabled={(travel.stock <= 0) || (travel.status !== TRAVEL_STATES.IN_PROGRESS)}
           marginTop={10}
           intent="success"
         >

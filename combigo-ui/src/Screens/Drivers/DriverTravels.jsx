@@ -187,9 +187,6 @@ export const DriverTravels = () => {
           <Menu.Group>
             <Menu.Item intent="success" onClick={() => promptFinishTravel(atravel.id)}>Finalizar viaje</Menu.Item>
           </Menu.Group>
-          <Menu.Group>
-            <Menu.Item intent="danger" onClick={() => promptCancel(atravel.id)}>Cancelar...</Menu.Item>
-          </Menu.Group>
         </Menu>
       )
     }
