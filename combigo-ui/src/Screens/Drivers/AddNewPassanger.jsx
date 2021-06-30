@@ -9,7 +9,7 @@ import {
 } from 'evergreen-ui';
 
 import { getClientWithEmail, getATravelDetails, createApprovedBooking, createUserByDefault } from './driversStore';
-import { VIP_STATUS, BOOKING_STATES, LEGAL_STATUS } from "../../constants";
+import { VIP_STATUS, BOOKING_STATES, LEGAL_STATUS, ROLES } from "../../constants";
 import { useAuth } from "../../utils/use-auth";
 
 
@@ -20,8 +20,10 @@ export const AddNewPassanger = () => {
   const [client, setClient] = useState([]);
   //const [travel, setTravel] = useState([]);
   const [clientExists, setClientExists] = useState(false);
+  //const [clientIsDriver, setClientIsDriver] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showSuccess, setshowSuccess] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showCantBeDriver, setShowCantBeDriver] = useState(false); //Que no elijan un driver
 
   const [userIsVIP, setUserIsVip] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
@@ -71,16 +73,26 @@ export const AddNewPassanger = () => {
         setClient(response);
         setClientExists(true);
         setUserIsVip( response.vip.status === VIP_STATUS.ENROLLED);
+        // if ( client.role === ROLES.DRIVER){ //sss
+        //   setClientIsDriver(true )
+        // }
       }
     } catch (e) {
       console.log(e);
     } finally {
       setLoading(false);
-      setShowConfirm(true);
+      setShowConfirm(true); 
     }
   }
 
   const bookingCallback = async () => {
+
+    if ( client.role === ROLES.DRIVER) {
+      setShowConfirm(false);
+      setShowCantBeDriver(true);
+      return;
+    }
+
     let id = client.id;
     if (!clientExists){
       const newUser = await createUser();
@@ -99,7 +111,7 @@ export const AddNewPassanger = () => {
       setLoading(true);
       const bookingResponse = await createApprovedBooking(booking, travelId);
       if (bookingResponse.accepted){
-        setshowSuccess( true );
+        setShowSuccess( true );
       }
     } catch (e) {
       console.log(e);
@@ -129,16 +141,23 @@ export const AddNewPassanger = () => {
         onCloseComplete={() => setShowConfirm(false)}
         confirmLabel="Continuar"
         cancelLabel="Cancelar"
-      > { clientExists ? "El cliente existe, el pago sera registrado" : "El cliente no tiene cuenta, se creara una con el email dado y una contraseña por defecto '123@Pass'"}
+      > {( clientExists ? "El usuario existe" : "El cliente no tiene cuenta, se creara una con el email dado y una contraseña por defecto '123@Pass'" )}
       </Dialog>
       <Dialog
         isShown={showSuccess}
         title="Reserva exitosa"
         intent="success"
         onConfirm={() => backCallback()}
-        onCloseComplete={() => setshowSuccess(false)}
+        onCloseComplete={() => setShowSuccess(false)}
         confirmLabel="Continuar"
       > { "Reserva exitosa" }
+      </Dialog>
+      <Dialog
+        isShown={showCantBeDriver}
+        title="No puede ser chofer"
+        onCloseComplete={() => setShowCantBeDriver(false)}
+        confirmLabel="Continuar"
+      > { "El mail pertenece a un chofer, use otro mail" }
       </Dialog>
       {!loading && (
         <>

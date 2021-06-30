@@ -3,6 +3,12 @@ const path = window.location.hostname;
 export const API_BASE = `http://${path}:5000/api/v1`;
 export const SESSION_KEY = 'CGOSESS';
 
+export const ROLES = {
+  ADMIN: 'ADMIN',
+  DRIVER: 'DRIVER',
+  CLIENT: 'CLIENT'
+}
+
 export const TRAVEL_STATES = {
   NOT_STARTED: "Pendiente",
   IN_PROGRESS: "En Curso",
