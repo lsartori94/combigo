@@ -40,7 +40,7 @@ export const ListPassengers = () => {
       setLoading(true);
       try {
         const travelResponse = await getATravelDetails(travelId);
-        if (travelResponse.passengers.length) {
+        if (travelResponse.passengers) { //Antes era travelResponse.passengers.length que da negativo si es igual a 0 parece
           setTravel(travelResponse);
           setTravelsLoaded(true);
         }
@@ -58,7 +58,7 @@ export const ListPassengers = () => {
     history.push('/driverTravels');
   }
 
-  //Recarga los viajes para que las checkbox se actualicen
+  //Recarga los viajes para que las checkbox se actualicen sss
   async function reloadTravel() {
     setLoading(true);
     try {
@@ -120,12 +120,8 @@ export const ListPassengers = () => {
     }
   };
 
-  //Add new passanger (Programar)
-  const triggerAddNewPassenger = async () => {    
-    
-  }
-
   const renderPlaceholder = () => (
+    
     <Pane
       marginTop={20}
       display="flex"
@@ -144,9 +140,44 @@ export const ListPassengers = () => {
   </Pane>
   );
 
+  //Solo cuando no hay pasageros
+  const renderPlaceholderAddNewPassenger = ( travel ) => (
+
+    <Pane
+      marginTop={20}
+      display="flex"
+      alignItems="center"
+      flexDirection="column">
+      <BackButton
+        appearance="minimal"
+        alignSelf="flex-start"
+        marginLeft={10}
+        marginBottom={10}
+        onClick={() => backCallback()}
+      >
+        Volver
+      </BackButton>
+    <div style={{padding: "30px"}}>No hay pasajeros para este viaje</div>
+
+      <Button
+        iconBefore={PlusIcon}
+        is={Link}
+        to={`/driverTravels/passengers/addNewPassanger/${travel.id}`}
+        disabled={ (travel.stock <= 0) || (travel.status !== TRAVEL_STATES.IN_PROGRESS)}
+        marginTop={10}
+        intent="success"
+      >
+        Agregar pasajero sin reserva
+      </Button>
+  </Pane>
+  );
+
   const renderPassangers = (travel, clients) => {
-    if ( !travelsLoaded || travel.passengers.length < 1) {
+    if ( !travelsLoaded ) {
       return renderPlaceholder();
+    }
+    if (travel.passengers.length < 1 ) {
+      return renderPlaceholderAddNewPassenger( travel );
     }
     return (
       <Pane
