@@ -6,12 +6,11 @@ import {
   Pane,
   Dialog,
   BackButton,
-  TrendingUpIcon,
+  Strong
 } from 'evergreen-ui';
 
 import { getClientWithEmail, getATravelDetails, createApprovedBooking, createUserByDefault } from './driversStore';
 import { VIP_STATUS, BOOKING_STATES, LEGAL_STATUS, ROLES } from "../../constants";
-import { useAuth } from "../../utils/use-auth";
 
 
 export const AddNewPassanger = () => {
@@ -186,7 +185,7 @@ export const AddNewPassanger = () => {
         title="No puede ser chofer"
         onCloseComplete={() => setShowCantBeDriver(false)}
         confirmLabel="Continuar"
-      > { "El mail pertenece a un chofer, use otro mail" }
+      > { "El mail pertenece a un chófer, use otro mail" }
       </Dialog>
       <Dialog
         isShown={showAlredyBooked}
@@ -197,7 +196,7 @@ export const AddNewPassanger = () => {
       </Dialog>
       <Dialog
         isShown={bookingError}
-        title="Cliente esta en lista negra"
+        title="Cliente esta en lista negra u otro error e la api"
         onCloseComplete={() => setBookingError(false)}
         confirmLabel="Continuar"
       > { 'Error al registrar pago: ' + apiError }
@@ -242,6 +241,9 @@ export const AddNewPassanger = () => {
               Agregar pasajero
             </Button>
           </Pane>
+          <Strong size={400} marginTop={8} marginSide={30} center>Al agregar el pasajero en el viaje en curso está firmando un declaración jurada,</Strong>
+          <Strong size={400} marginSide={30} center>jurando que el pasajero no presenta síntomas de COVID-19 (fiebre, dolor de garganta, tos, perdida del gusto o del olfato, dificultad respiratoria)</Strong>
+          <Strong size={400} marginSide={30} center>y que en los últimos 10 días no estuvo en contacto con ningún caso confirmado de COVID-19</Strong>
         </>
       )}
     </Pane>
