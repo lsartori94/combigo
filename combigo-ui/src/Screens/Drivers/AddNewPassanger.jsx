@@ -114,7 +114,7 @@ export const AddNewPassanger = () => {
         setShowSuccess( true );
       }
     } catch (e) {
-      console.log(e);
+      console.log(e); //Puede estar blacklisted
     } finally {
       setLoading(false);
     }
