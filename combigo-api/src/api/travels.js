@@ -579,7 +579,9 @@ router.put('/:id/updateLegalStatus', (req, res) => {
     //cancelar proximos 15 dias
     travels[exists].passengers[passengerExists].bookingStatus = BOOKING_STATES.CANCELED;
     users[userExists].travelHistory.forEach(t => {
+
       const travelito = travels.findIndex(tra => tra.id === t.travelId);
+
       if (insideFifteenDays(travels[travelito].dateAndTime)) {
         if (t.status === BOOKING_STATES.PENDING) {
         t.status = BOOKING_STATES.CANCELED;
@@ -616,8 +618,8 @@ router.put('/:id/updateLegalStatus', (req, res) => {
 
 //Accept passenger on a trip dsds
 router.put('/acceptPassenger/:id', (req, res) => {
-  const {id} = req.params;
-  const {userId} = req.body;
+  const { id } = req.params;
+  const { userId } = req.body;
 
   if (!req.body) {
     return res.status(400).send(`Bad Request`)
@@ -647,7 +649,7 @@ router.put('/acceptPassenger/:id', (req, res) => {
   }
 
   if (travels[exists].passengers[passengerExists].legalStatus === LEGAL_STATUS.PENDING) {
-    return res.status(405).send(`El pasajero no lleno DDJJ`);
+    return res.status(405).send( `El pasajero no lleno DDJJ`);
   }
 
   if (travels[exists].passengers[passengerExists].legalStatus === LEGAL_STATUS.REJECTED) {

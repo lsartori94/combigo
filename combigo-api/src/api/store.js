@@ -353,7 +353,7 @@ let travels = [
         creditCard: '4444444444444444',
         payment: 120,
         boughtAdditionals: [],
-        accepted: false,
+        accepted: true,
       }
     ],
     driver: 'CGOU1',

@@ -182,7 +182,7 @@ export const ListPassengers = () => {
           </Table.Head>
           <Table.Body height={400}>
             {travel.passengers.map(passenger => (
-              <Table.Row key={passenger.id}>
+              <Table.Row key={passenger.ticketId}>
                 <Table.TextCell>
                   {travelsLoaded && ClientsLoaded && clients.find( cl => cl.id === passenger.id ).name}
                 </Table.TextCell>
