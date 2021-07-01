@@ -24,7 +24,13 @@ export const RouteDetails = () => {
     durationMin: 0,
     travels: [],
   });
-  const [oldDetails, setOldDetails] = useState({});
+  const [oldDetails, setOldDetails] = useState({
+    origin: "",
+    destination: "",
+    distanceKm: 0,
+    durationMin: 0,
+    travels: [],
+  });
   const [noRoute, setNoRoute] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);

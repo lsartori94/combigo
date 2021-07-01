@@ -22,7 +22,12 @@ export const VehicleDetails = () => {
     plate: "",
     capacity: ""
   });
-  const [oldDetails, setOldDetails] = useState({});
+  const [oldDetails, setOldDetails] = useState({
+    name: "",
+    brand: "",
+    plate: "",
+    capacity: ""
+  });
   const [noVehicle, setNoVehicle] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);

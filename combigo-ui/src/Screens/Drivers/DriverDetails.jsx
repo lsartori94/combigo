@@ -30,7 +30,14 @@ export const DriverDetails = () => {
     dni: "",
     bdate: ""
   });
-  const [oldDetails, setOldDetails] = useState({});
+  const [oldDetails, setOldDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+    name: "",
+    dni: "",
+    bdate: ""
+  });
   const [noUser, setNoUser] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);

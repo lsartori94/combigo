@@ -20,7 +20,10 @@ export const AdditionalDetails = () => {
     name: "",
     price: ""
   });
-  const [oldDetails, setOldDetails] = useState({});
+  const [oldDetails, setOldDetails] = useState({
+    name: "",
+    price: ""
+  });
   const [noAdditional, setNoAdditional] = useState(true);
   const [creating, setCreating] = useState(false);
   const [formDirty, setFormDirty] = useState(false);
