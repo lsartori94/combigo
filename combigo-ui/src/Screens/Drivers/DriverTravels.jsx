@@ -312,7 +312,7 @@ export const DriverTravels = () => {
   return (
     <div>
       { loading && <Spinner /> }
-      { !loading &&  renderTravels(travels) }
+      { !loading &&  renderTravels(travels.sort( (a,b) => new Date(a.dateAndTime) - new Date(b.dateAndTime) )) }
     </div>
   );
 };
