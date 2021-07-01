@@ -34,7 +34,13 @@ export const TravelDetails = () => {
     status: TRAVEL_STATES.NOT_STARTED,
     availableAdditionals: []
   });
-  const [oldDetails, setOldDetails] = useState({});
+  const [oldDetails, setOldDetails] = useState({
+    dateAndTime: "",
+    route: "",
+    passengers: [],
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: []
+  });
   const [availableAdditionals, setAvailableAdditionals] = useState([]);
   const [availableRoutes, setAvailableRoutes] = useState([]);
   const [noTravel, setNoTravel] = useState(true);
