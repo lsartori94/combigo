@@ -10,7 +10,8 @@ import {
   MoreIcon,
   PlusIcon,
   Pane,
-  Dialog
+  Dialog,
+  Badge
 } from 'evergreen-ui';
 
 import './travels.css';
@@ -107,6 +108,21 @@ export const Travels = () => {
       )
   }
 
+  const decideStatusColor = (status) => {
+    let color = "";
+    switch(status) {
+      case TRAVEL_STATES.NOT_STARTED:
+        color = "blue";
+        break;
+      case TRAVEL_STATES.IN_PROGRESS:
+        color = "green";
+        break;
+      default:
+        color = "neutral";
+    }
+    return color;
+  };
+
   const renderTravels = (travels) => {
     if (travels.length < 1) {
       return renderPlaceholder();
@@ -181,7 +197,7 @@ export const Travels = () => {
                     <Link to={`/vehicles/${travel.vehicle}`}>{travel.vehicle}</Link>) || "No asignado"}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travel.status}
+                  <Badge color={decideStatusColor(travel.status)} marginRight={8}> {travel.status} </Badge>
                 </Table.TextCell>
                 <Table.TextCell>
                   {travel.availableAdditionals.length}

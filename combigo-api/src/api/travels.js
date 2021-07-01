@@ -578,7 +578,6 @@ router.put('/:id/updateLegalStatus', (req, res) => {
 
     //cancelar proximos 15 dias
     travels[exists].passengers[passengerExists].bookingStatus = BOOKING_STATES.CANCELED; //Cambie status a bookingStatus
-    travels[exists].stock += 1; //Se lo acabo de agregar
 
     users[userExists].travelHistory.forEach(t => {
 

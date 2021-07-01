@@ -12,7 +12,6 @@ import {
 import { getClientWithEmail, getATravelDetails, createApprovedBooking, createUserByDefault } from './driversStore';
 import { VIP_STATUS, BOOKING_STATES, LEGAL_STATUS, ROLES } from "../../constants";
 
-
 export const AddNewPassanger = () => {
   let { travelId } = useParams();
   const [loading, setLoading] = useState(true);

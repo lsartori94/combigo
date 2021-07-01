@@ -9,12 +9,13 @@ import {
   Checkbox,
   PlusIcon,
   Popover,
+  Badge,
   toaster
 } from 'evergreen-ui';
 
 import QrReader from 'react-qr-reader';
 
-import { LEGAL_STATUS, TRAVEL_STATES } from '../../constants.js';
+import { LEGAL_STATUS, TRAVEL_STATES, BOOKING_STATES } from '../../constants.js';
 
 import { getATravelDetails, getClients, acceptPassenger } from './driversStore';
 
@@ -172,6 +173,36 @@ export const ListPassengers = () => {
   </Pane>
   );
 
+  const decideBookingStatusColor = (status) => {
+    let color = "";
+    switch(status) {
+      case BOOKING_STATES.PENDING:
+        color = "blue";
+        break;
+      default:
+        color = "neutral";
+    }
+    return color;
+  };
+
+  const decideLegalStatusColor = (status) => {
+    let color = "";
+    switch(status) {
+      case LEGAL_STATUS.PENDING:
+        color = "blue";
+        break;
+      case LEGAL_STATUS.APPROVED:
+        color = "green";
+        break;
+      case LEGAL_STATUS.REJECTED:
+        color = "red";
+        break;
+      default:
+        color = "neutral";
+    }
+    return color;
+  };
+
   const renderPassangers = (travel, clients) => {
     if ( !travelsLoaded ) {
       return renderPlaceholder();
@@ -218,10 +249,10 @@ export const ListPassengers = () => {
                   {travelsLoaded && ClientsLoaded && clients.find( cl => cl.id === passenger.id ).name}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travelsLoaded && passenger.bookingStatus}
+                  {travelsLoaded && (<Badge color={decideBookingStatusColor(passenger.bookingStatus)} marginRight={8}> {passenger.bookingStatus} </Badge>)}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travelsLoaded && passenger.legalStatus}
+                  {travelsLoaded && (<Badge color={decideLegalStatusColor(passenger.legalStatus)} marginRight={8}> {passenger.legalStatus} </Badge>)}
                 </Table.TextCell>
                 <Table.TextCell>
                   <Checkbox
