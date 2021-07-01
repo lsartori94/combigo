@@ -604,7 +604,7 @@ router.put('/:id/updateLegalStatus', (req, res) => {
     if (userBlacklisted === -1) {
       blacklist.push({userId, startDate, endDate, history: []});
     } else {
-      blacklist[userBlacklisted].history.push({startDate: blacklist[userBlacklisted].startDate, endDate: blacklist[userBlacklisted].startDate});
+      blacklist[userBlacklisted].history.push({startDate: blacklist[userBlacklisted].startDate, endDate: blacklist[userBlacklisted].endDate});
       blacklist[userBlacklisted].startDate = startDate;
       blacklist[userBlacklisted].endDate = endDate;
     }

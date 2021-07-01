@@ -238,6 +238,10 @@ router.delete('/:uname/card', (req, res) => {
     return res.status(409).send(`Usuario no encontrado`);
   }
 
+  if (users[exists].vip.status === CONSTANTS.VIP_STATUS.ENROLLED) {
+    mailer.vipSubscriptionEndedEmail(users[exists].email);
+  }
+
   users[exists].creditCard = {};
   users[exists].vip.status = CONSTANTS.VIP_STATUS.NOT_ENROLLED;
   users[exists].vip.startDate = '';

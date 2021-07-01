@@ -169,7 +169,32 @@ let users = [
     role: ROLES.CLIENT,
     active: true,
     registerDate: '2021-04-20T09:12:00'
+  },
+  {
+    id: 'CGOU8',
+    username: 'mario.kempes',
+    email: 'mariok@gmail.com',
+    name: 'Mario',
+    password: '123@Pass',
+    bdate: '1986-06-06',
+    dni: '32744452',
+    travelHistory: [], 
+    creditCard: {
+      issuer: 'Visa',
+      number: '4444555566667777',
+      cardHolder: 'Carlos Lopez',
+      expDate: '2022-11-12',
+      cvv:'153'
+    },
+    vip: {
+      status: VIP_STATUS.NOT_ENROLLED,
+      startDate: ''
+    },
+    role: ROLES.CLIENT,
+    active: true,
+    registerDate: '2021-06-20T09:12:00'
   }
+  //END CLIENTS
 ];
 
 let vehicles = [
@@ -227,7 +252,9 @@ let routes = [
     distanceKm: 600,
     durationMin: 400,
     travels: [
-      'CGOT6'
+      'CGOT6',
+      'CGOT7',
+      'CGOT9'
     ],
     active: true
   },
@@ -250,7 +277,8 @@ let routes = [
     distanceKm: 300,
     durationMin: 200,
     travels: [
-      'CGOT4'
+      'CGOT4',
+      'CGOT8'
     ],
     active: true
   }
@@ -355,7 +383,7 @@ let travels = [
   },
   {
     id: 'CGOT4',
-    dateAndTime: '2021-06-30T09:20', //07-01
+    dateAndTime: '2021-07-01T09:20', //----------------------------------------------> 07-01
     route: 'CGOR4',
     stock: 11,
     passengers: [
@@ -382,25 +410,52 @@ let travels = [
     active: true
   },
   {
+    id: 'CGOT6',
+    dateAndTime: '2021-07-02T12:00',
+    route: 'CGOR2',
+    stock: 20,
+    passengers: [],
+    driver: 'CGOU3',
+    vehicle: 'CGOV3',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      'CGOA1'
+    ],
+    price: 400,
+    active: true
+  },
+  {
+    id: 'CGOT7',
+    dateAndTime: '2021-07-04T15:00',
+    route: 'CGOR2',
+    stock: 20,
+    passengers: [],
+    driver: 'CGOU3',
+    vehicle: 'CGOV3',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      'CGOA1'
+    ],
+    price: 400,
+    active: true
+  },
+  {
     id: 'CGOT5',
-    dateAndTime: '2021-07-08T22:40',
+    dateAndTime: '2021-07-08T10:20',
     route: 'CGOR1',
     stock: 2,
     passengers: [],
     driver: 'CGOU1',
     vehicle: 'CGOV4',
     status: TRAVEL_STATES.NOT_STARTED,
-    availableAdditionals: [
-      'CGOA1',
-      'CGOA3'
-    ],
+    availableAdditionals: [],
     price: 100,
     active: true
   },
   {
-    id: 'CGOT6',
-    dateAndTime: '2021-08-24T12:00',
-    route: 'CGOR2',
+    id: 'CGOT8',
+    dateAndTime: '2021-07-11T12:00',
+    route: 'CGOR4',
     stock: 20,
     passengers: [],
     driver: 'CGOU2',
@@ -409,6 +464,21 @@ let travels = [
     availableAdditionals: [
       'CGOA1',
       'CGOA3'
+    ],
+    price: 400,
+    active: true
+  },
+  {
+    id: 'CGOT9',
+    dateAndTime: '2021-08-20T14:00',
+    route: 'CGOR2',
+    stock: 20,
+    passengers: [],
+    driver: 'CGOU3',
+    vehicle: 'CGOV3',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      'CGOA1'
     ],
     price: 400,
     active: true
