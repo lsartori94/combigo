@@ -90,7 +90,7 @@ let users = [
     },
     role: ROLES.CLIENT,
     active: true,
-    registerDate: '2021-10-01T12:24:00'
+    registerDate: '2021-04-01T12:24:00'
   },
   {
     id: 'CGOU6',
@@ -226,7 +226,9 @@ let routes = [
     destination: 'Cordoba',
     distanceKm: 600,
     durationMin: 400,
-    travels: [],
+    travels: [
+      'CGOT6'
+    ],
     active: true
   },
   {
@@ -353,7 +355,7 @@ let travels = [
   },
   {
     id: 'CGOT4',
-    dateAndTime: '2021-07-01T09:20',
+    dateAndTime: '2021-06-30T09:20', //07-01
     route: 'CGOR4',
     stock: 11,
     passengers: [
@@ -381,7 +383,7 @@ let travels = [
   },
   {
     id: 'CGOT5',
-    dateAndTime: '2021-08-24T22:40',
+    dateAndTime: '2021-07-08T22:40',
     route: 'CGOR1',
     stock: 2,
     passengers: [],
@@ -393,6 +395,22 @@ let travels = [
       'CGOA3'
     ],
     price: 100,
+    active: true
+  },
+  {
+    id: 'CGOT6',
+    dateAndTime: '2021-08-24T12:00',
+    route: 'CGOR2',
+    stock: 20,
+    passengers: [],
+    driver: 'CGOU2',
+    vehicle: 'CGOV3',
+    status: TRAVEL_STATES.NOT_STARTED,
+    availableAdditionals: [
+      'CGOA1',
+      'CGOA3'
+    ],
+    price: 400,
     active: true
   },
 ];
@@ -445,9 +463,9 @@ let additionals = [
 // lista de users rechazados
 let blacklist = [
   {
-    userId: 'CGOU2',
-    startDate: '2021-06-01T21:10:38.299Z',
-    endDate: '2021-06-15T21:10:38.299Z',
+    userId: 'CGOU5',
+    startDate: '2021-06-05T08:10',
+    endDate: '2021-06-20T08:10',
     history: []
   }
 ];

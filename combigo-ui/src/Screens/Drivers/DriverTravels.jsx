@@ -10,6 +10,7 @@ import {
   MoreIcon,
   Pane,
   Dialog,
+  Badge
 } from 'evergreen-ui';
 
 import { getDriverTravels, getAvailableRoutes, cancelTravel, startTravel, finishTravel } from './driversStore';
@@ -138,6 +139,21 @@ export const DriverTravels = () => {
     let hoursLeft = Math.floor((travelDate - now) / (1000*60*60));
     if (hoursLeft >= 0) return true;
     return false;
+  };
+
+  const decideStatusColor = (status) => {
+    let color = "";
+    switch(status) {
+      case TRAVEL_STATES.NOT_STARTED:
+        color = "blue";
+        break;
+      case TRAVEL_STATES.IN_PROGRESS:
+        color = "green";
+        break;
+      default:
+        color = "neutral";
+    }
+    return color;
   };
   
   const renderRowMenu = (atravel) => {
@@ -269,7 +285,7 @@ export const DriverTravels = () => {
                   {travelsLoaded && routes.find(rou =>rou.travels.includes(travel.id)).destination}
                 </Table.TextCell>
                 <Table.TextCell>
-                  {travelsLoaded && travel.status}
+                  {travelsLoaded && (<Badge color={decideStatusColor(travel.status)} marginRight={8}> {travel.status} </Badge>) }
                 </Table.TextCell>
                 <Table.TextCell>
                   {travelsLoaded && travel.passengers.filter( p => p.accepted ).length}

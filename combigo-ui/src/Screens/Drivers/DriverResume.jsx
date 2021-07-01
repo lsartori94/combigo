@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import {
   Pane,
   TextInputField,
   Spinner,
-  Button,
   BackButton,
-  SmallCrossIcon,
-  SavedIcon,
   FormField,
-  Alert,
   Table,
-  Combobox,
+  Combobox
 } from 'evergreen-ui';
 
-import { getDriverDetails, getDriverHistory, getAvailableRoutes, getDriverUsername } from './driversStore';
+import { getDriverHistory, getAvailableRoutes, getDriverUsername } from './driversStore';
 import { TRAVEL_STATES } from '../../constants';
 
 export const DriverResume = () => {
@@ -29,7 +25,7 @@ export const DriverResume = () => {
   const history = useHistory();
 
   const [year, setYear] = useState( new Date().getFullYear().toString() );
-  const [availableYears, setAvailableYears] = useState([
+  const [availableYears, setAvailableYears] = useState([  // eslint-disable-line
     '2021', '2022', '2023', '2024', '2025'
   ]);
 
